@@ -1,0 +1,424 @@
+body {
+  color: white;
+  background-color: #202124;
+}
+::-moz-selection {
+  background: blue;
+  color: #fff;
+  text-shadow: none;
+}
+::selection {
+  background: red;
+  color: #fff;
+  text-shadow: none;
+}
+hr {
+  border-top: 3px dotted blue;
+}
+code {
+  background-color: lightblue;
+  color: black;
+  text-decoration: bold;
+  padding: 0.1em 0.2em;
+}
+pre {
+  background-color: #272822;
+  line-height: 1.4;
+  overflow-x: auto;
+  padding: 1em;
+}
+blockquote {
+  border-color: blue;
+}
+h1 {
+  color: #ddd;
+  &::before {
+    color: var(--darkMaincolor);
+    content: "# ";
+  }
+}
+h2 {
+  color: #ddd;
+  &::before {
+    color: var(--darkMaincolor);
+    content: "## ";
+  }
+}
+h3 {
+  color: #ddd;
+  &::before {
+    color: var(--darkMaincolor);
+    content: "### ";
+  }
+}
+h4 {
+  color: #ddd;
+  &::before {
+    color: var(--darkMaincolor);
+    content: "#### ";
+  }
+}
+h5 {
+  color: #ddd;
+  &::before {
+    color: var(--darkMaincolor);
+    content: "##### ";
+  }
+}
+h6 {
+  color: #ddd;
+  &::before {
+    color: var(--darkMaincolor);
+    content: "###### ";
+  }
+}
+a {
+  border-bottom: 3px solid var(--darkMaincolor);
+  color: inherit;
+  &:hover {
+    background-color: var(--darkMaincolor);
+    color: black;
+  }
+}
+.site-description {
+  a {
+    color: #ddd;
+    &:hover {
+      color: black;
+    }
+  }
+}
+.tags {
+  a {
+    border-bottom: 3px solid var(--darkMaincolor);
+    &:hover {
+      background-color: var(--darkMaincolor);
+      color: black;
+    }
+  }
+}
+.site-title {
+  a {
+    color: white;
+    text-decoration: none !important;
+  }
+}
+.header {
+  nav {
+    border-color: #333;
+  }
+}
+.footer {
+  border-color: #333;
+}
+.highlight {
+  background-color: #333;
+  pre {
+    code[class="language-javaScript"] {
+      &::before {
+        content: "js";
+        background: #f7df1e;
+        color: black;
+      }
+    }
+    code[class="language-js"] {
+      &::before {
+        content: "js";
+        background: #f7df1e;
+        color: black;
+      }
+    }
+    code[class*="language-yml"] {
+      &::before {
+        content: "yaml";
+        background: #f71e6a;
+        color: white;
+      }
+    }
+    code[class*="language-yaml"] {
+      &::before {
+        content: "yaml";
+        background: #f71e6a;
+        color: white;
+      }
+    }
+    code[class*="language-shell"] {
+      &::before {
+        content: "shell";
+        background: green;
+        color: white;
+      }
+    }
+    code[class*="language-bash"] {
+      &::before {
+        content: "shell";
+        background: green;
+        color: white;
+      }
+    }
+    code[class*="language-sh"] {
+      &::before {
+        content: "shell";
+        background: green;
+        color: white;
+      }
+    }
+    code[class*="language-json"] {
+      &::before {
+        content: "json";
+        background: dodgerblue;
+        color: #000000;
+      }
+    }
+    code[class*="language-python"] {
+      &::before {
+        content: "py";
+        background: blue;
+        color: yellow;
+      }
+    }
+    code[class*="language-py"] {
+      &::before {
+        content: "py";
+        background: blue;
+        color: yellow;
+      }
+    }
+    code[class*="language-css"] {
+      &::before {
+        content: "css";
+        background: cyan;
+        color: black;
+      }
+    }
+    code[class*="language-go"] {
+      &::before {
+        content: "Go";
+        background: cyan;
+        color: royalblue;
+      }
+    }
+    code[class*="language-md"] {
+      &::before {
+        content: "Markdown";
+        content: "Markdown";
+        background: royalblue;
+        background: royalblue;
+        color: whitesmoke;
+        color: whitesmoke;
+      }
+    }
+  }
+}
+.soc {
+  &:hover {
+    color: black;
+  }
+}
+.draft-label {
+  color: var(--darkMaincolor);
+  background-color: blue;
+}
+.chroma {
+  color: #f8f8f2;
+  background-color: #282a36;
+  .lntd {
+    vertical-align: top;
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+  .lntable {
+    border-spacing: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: auto;
+    overflow: auto;
+    display: block;
+  }
+  .hl {
+    display: block;
+    width: 100%;
+    background-color: #ffffcc;
+  }
+  .lnt {
+    margin-right: 0.4em;
+    padding: 0 0.4em 0 0.4em;
+    color: #7f7f7f;
+  }
+  .ln {
+    margin-right: 0.4em;
+    padding: 0 0.4em 0 0.4em;
+    color: #7f7f7f;
+  }
+  .k {
+    color: #ff79c6;
+  }
+  .kc {
+    color: #ff79c6;
+  }
+  .kd {
+    color: #8be9fd;
+    font-style: italic;
+  }
+  .kn {
+    color: #ff79c6;
+  }
+  .kp {
+    color: #ff79c6;
+  }
+  .kr {
+    color: #ff79c6;
+  }
+  .kt {
+    color: #8be9fd;
+  }
+  .na {
+    color: #50fa7b;
+  }
+  .nb {
+    color: #8be9fd;
+    font-style: italic;
+  }
+  .nc {
+    color: #50fa7b;
+  }
+  .nf {
+    color: #50fa7b;
+  }
+  .nl {
+    color: #8be9fd;
+    font-style: italic;
+  }
+  .nt {
+    color: #ff79c6;
+  }
+  .nv {
+    color: #8be9fd;
+    font-style: italic;
+  }
+  .vc {
+    color: #8be9fd;
+    font-style: italic;
+  }
+  .vg {
+    color: #8be9fd;
+    font-style: italic;
+  }
+  .vi {
+    color: #8be9fd;
+    font-style: italic;
+  }
+  .s {
+    color: #f1fa8c;
+  }
+  .sa {
+    color: #f1fa8c;
+  }
+  .sb {
+    color: #f1fa8c;
+  }
+  .sc {
+    color: #f1fa8c;
+  }
+  .dl {
+    color: #f1fa8c;
+  }
+  .sd {
+    color: #f1fa8c;
+  }
+  .s2 {
+    color: #f1fa8c;
+  }
+  .se {
+    color: #f1fa8c;
+  }
+  .sh {
+    color: #f1fa8c;
+  }
+  .si {
+    color: #f1fa8c;
+  }
+  .sx {
+    color: #f1fa8c;
+  }
+  .sr {
+    color: #f1fa8c;
+  }
+  .s1 {
+    color: #f1fa8c;
+  }
+  .ss {
+    color: #f1fa8c;
+  }
+  .m {
+    color: #bd93f9;
+  }
+  .mb {
+    color: #bd93f9;
+  }
+  .mf {
+    color: #bd93f9;
+  }
+  .mh {
+    color: #bd93f9;
+  }
+  .mi {
+    color: #bd93f9;
+  }
+  .il {
+    color: #bd93f9;
+  }
+  .mo {
+    color: #bd93f9;
+  }
+  .o {
+    color: #ff79c6;
+  }
+  .ow {
+    color: #ff79c6;
+  }
+  .c {
+    color: #6272a4;
+  }
+  .ch {
+    color: #6272a4;
+  }
+  .cm {
+    color: #6272a4;
+  }
+  .c1 {
+    color: #6272a4;
+  }
+  .cs {
+    color: #6272a4;
+  }
+  .cp {
+    color: #ff79c6;
+  }
+  .cpf {
+    color: #ff79c6;
+  }
+  .gd {
+    color: #8b080b;
+  }
+  .ge {
+    text-decoration: underline;
+  }
+  .gh {
+    font-weight: bold;
+  }
+  .gi {
+    font-weight: bold;
+  }
+  .go {
+    color: #44475a;
+  }
+  .gu {
+    font-weight: bold;
+  }
+  .gl {
+    text-decoration: underline;
+  }
+}

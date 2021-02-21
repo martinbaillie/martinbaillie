@@ -1,0 +1,53 @@
+baseURL = "https://martin.baillie.id/"
+languageCode = "en-au"
+title = "Martin Baillie"
+copyright = "© Martin Baillie"
+paginate = 20
+disableHugoGeneratorInject = true
+pygmentsstyle = "algol"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+pygmentsuseclasses = true
+pluralizelisttitles="false"
+
+[outputs]
+home = ["HTML", "RSS"]
+
+[params]
+mode="auto"
+description='''Martin Baillie. SWE/SRE/Architect. Cloud platforms and distributed systems. Personal website surfacing contact information and technical fieldnotes.'''
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/martinbaillie"
+[[params.social]]
+name = "LinkedIn"
+icon = "linkedin"
+url = "https://linkedin.com/in/martinbaillie"
+[[params.social]]
+name = "Twitter"
+icon = "twitter"
+url = "https://twitter.com/martinbaillie"
+[[params.social]]
+name = "Email"
+icon = "mail"
+url = "mailto:martin@baillie.id"
+[[menu.main]]
+name = "$id"
+url = "/id"
+weight = 1
+[[menu.main]]
+name = "fieldnotes"
+url = "/"
+weight = 2
+
+[module]
+  [[module.mounts]]
+    source = "assets"
+    target = "assets"
+  [[module.mounts]]
+    source = "node_modules/feather-icons"
+    target = "assets/js/vendor/feather-icons"
+  [[module.mounts]]
+    source = "node_modules/webfontloader"
+    target = "assets/js/vendor/webfontloader"

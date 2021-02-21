@@ -1,0 +1,28 @@
+<footer>
+<hr>
+{{- range $index, $key := .Site.Params.Social -}}
+<a class="soc" href="{{ $key.url }}" title="{{ $key.name }}"><i data-feather="{{ $key.icon }}"></i></a>
+{{- end -}}
+<a class="soc gpg" href="https://github.com/martinbaillie.gpg" title="GPG Public Key">C2F0 79DE D64B 7361 006A  A099 2A56 EA64 591E 15E4</a>
+
+{{ $current := . }}
+{{ $activeId :=  1 }}
+{{ if (eq .Type "id") }}
+{{ $activeId = 0 }}
+{{ end }}
+{{ range $i, $_z := .Site.Menus.main }}
+{{ if (eq $i $activeId) }}
+<span class="active menu">{{ .Name }}</span>
+{{ else }}
+<a class="menu" href="{{ .URL }}">{{ .Name }}</a>
+{{ end }}
+{{ end }}
+</footer>
+{{ if (and .Site.IsServer (not (in (slice (getenv "HUGO_ENV") hugo.Environment) "production"))) }}
+{{ $footerJS := resources.Get "js/footer.js" | babel -}} 
+<script src="{{ $footerJS.Permalink }}" async></script>
+{{ else -}}
+{{ $footerJS := resources.Get "js/footer.js" | babel | minify -}} 
+{{ $secureFooterJS := $footerJS | resources.Fingerprint "sha512" -}}
+<script src="{{ $secureFooterJS.Permalink }}" integrity="{{ $secureFooterJS.Data.Integrity }}" crossorigin="anonymous" async></script>
+{{ end -}}

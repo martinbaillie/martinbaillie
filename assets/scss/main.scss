@@ -1,0 +1,812 @@
+/* Themes */
+html,
+html[data-theme="light"] {
+  --col: rgb(73, 79, 92);
+  --backgroundcol: none;
+  --maincol: lightblue;
+  --quotecol: #657b83;
+  --bordercol: rgb(73, 79, 92);
+  --hovercol: rgb(73, 79, 92);
+}
+html[data-theme="dark"] {
+  --col: #eceff4;
+  --backgroundcol: #4c566a;
+  --maincol: #88c0d0;
+  --quotecol: #d8dee9;
+  --bordercol: #eceff4;
+  --hovercol: #eceff4;
+}
+@media (prefers-color-scheme: dark) {
+  html,
+  html[data-theme="dark"] {
+    --col: #eceff4;
+    --backgroundcol: #4c566a;
+    --maincol: #88c0d0;
+    --quotecol: #d8dee9;
+    --bordercol: #eceff4;
+    --hovercol: #eceff4;
+  }
+  html[data-theme="light"] {
+    --col: rgb(73, 79, 92);
+    --backgroundcol: none;
+    --maincol: lightblue;
+    --quotecol: #657b83;
+    --bordercol: rgb(73, 79, 92);
+    --hovercol: rgb(73, 79, 92);
+  }
+}
+/* Fonts */
+@font-face {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/font/RobotoMono.woff) format("woff");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+  /* unicode-range: U+0020-007F; Including accented */
+}
+.copy-code-button {
+  background-color: var(--backgroundcol);
+  border-radius: 0 0 0 0.25rem;
+  padding: 0.2rem 0.2rem;
+  position: absolute;
+  right: 0rem;
+  border: none;
+  white-space: nowrap;
+  cursor: pointer;
+  z-index: 0;
+  &:hover {
+    z-index: 1;
+  }
+  &:focus {
+    z-index: 1;
+  }
+  &:active {
+    z-index: 1;
+    &:hover {
+      z-index: 1;
+    }
+  }
+}
+.copyable-text-area {
+  position: absolute;
+  height: 0;
+  z-index: -1;
+}
+.meta {
+  float: right;
+}
+@media only screen and (max-width: 600px) {
+  .meta {
+    display: none;
+  }
+  .gpg {
+    width: 25%;
+  }
+}
+header {
+  .main {
+    position: relative;
+    z-index: 1;
+    font-size: 1.5rem;
+    &:after {
+      background-color: var(--maincol);
+      bottom: -4px;
+      content: " ";
+      display: block;
+      height: 60%;
+      left: 7px;
+      opacity: 1;
+      position: absolute;
+      width: calc(100% + 30px);
+      z-index: -1;
+    }
+    &:hover {
+      width: 70%;
+    }
+    a {
+      &:hover {
+        background: none;
+      }
+    }
+  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 1em 0;
+}
+
+body {
+  color: var(--col);
+  background: var(--backgroundcol);
+  font-family: "Roboto Mono", Consolas, Monospace, Courier;
+  font-size: 15px;
+  line-height: 1.55555em;
+  display: block;
+  margin: 8px;
+}
+* {
+  -webkit-tap-highlight-color: rgb(73, 79, 92);
+}
+::selection {
+  background: var(--maincol);
+}
+a {
+  font-family: "Roboto Mono", Consolas, Monospace, Courier;
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  &:before {
+    content: "";
+    background-color: var(--hovercol);
+    height: 100%;
+    top: 0;
+    width: 0;
+    position: absolute;
+    left: auto;
+    right: 0;
+    transition: all 0.25s ease-in-out;
+    z-index: -1;
+  }
+}
+
+hr {
+  border-top: 1px solid --var(bordercol);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.single {
+  margin-top: 2.5em;
+  hr {
+    &:before {
+      appearance: none;
+      display: block;
+      width: 100%;
+      text-align: center;
+      content: "🙾 🙾 🙾";
+      opacity: 0.95;
+      visibility: visible;
+    }
+  }
+  hr {
+    border: 1px;
+    width: 100%;
+    display: block;
+    font-family: "Zapf Dingbats";
+    visibility: visible;
+    appearance: none;
+    color: var(--bordercol);
+    font-size: 1.5em;
+    margin: 1.3rem 0;
+  }
+  ul {
+    li {
+      &::before {
+        content: "▶ ";
+      }
+    }
+  }
+}
+
+a code {
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+p a {
+  position: relative;
+  z-index: 1;
+  &::after {
+    background-color: var(--maincol);
+    bottom: 0;
+    content: " ";
+    display: block;
+    height: 40%;
+    left: 4px;
+    opacity: 0.6;
+    position: absolute;
+    transition: all 0.12s linear;
+    width: calc(100%);
+    z-index: -1;
+  }
+
+  &:hover {
+    &::after {
+      left: -6px;
+      opacity: 1;
+      width: calc(100% + 15px);
+    }
+  }
+}
+
+blockquote {
+  border-left: 8px solid var(--bordercol);
+  color: var(--quotecol);
+  font-style: italic;
+  margin: 0;
+  padding-left: 0.5em;
+}
+ul {
+  list-style: none;
+  padding-left: 2ch;
+  li {
+    text-indent: -2ch;
+    z-index: 1;
+  }
+  .post {
+    a {
+      &:before {
+        background-color: var(--maincol);
+      }
+      &:hover {
+        &::before {
+          left: 0;
+          right: auto;
+          width: 100%;
+        }
+        border-left: 8px solid var(--maincol);
+      }
+      border-left: 8px solid var(--bordercol);
+      padding-left: 5px;
+      color: inherit;
+      text-decoration: none;
+      position: relative;
+    }
+  }
+}
+img {
+  max-width: 100%;
+}
+figure {
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 0;
+  max-width: 100%;
+  img {
+    max-height: 500px;
+  }
+  h4 {
+    font-size: 1rem;
+    margin: 0;
+    margin-bottom: 1em;
+    &::before {
+      content: "↳ ";
+    }
+  }
+}
+.active {
+  position: relative;
+  z-index: 1;
+  &:after {
+    background-color: var(--maincol);
+    content: " ";
+    height: 50%;
+    opacity: 1;
+    position: absolute;
+    right: 6px;
+    top: 3px;
+    width: 100%;
+    z-index: -1;
+  }
+}
+
+a code {
+  border-right: none;
+  border-left: none;
+  &:hover {
+    border-bottom: none;
+  }
+}
+code {
+  padding: 0.1em 0.2em;
+  text-align: justify;
+  border: 1px dotted var(--bordercol);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+pre {
+  background-color: var(--backgroundcol);
+  line-height: 1.4;
+  overflow-x: auto;
+  padding: 0 0 0 0.8em;
+  margin-right: 1.5rem;
+  code {
+    background-color: transparent;
+    color: inherit;
+    font-size: 100%;
+    padding: 0;
+  }
+}
+.highlight {
+  pre {
+    &::selection {
+      color: inherit;
+    }
+    background-color: var(--backgroundcol);
+    code[class*="language-"] {
+      border: none;
+      white-space: pre;
+      word-wrap: normal;
+      &::before {
+        background: var(--bordercol);
+        border-radius: 0 0 0 0.25rem;
+        color: white;
+        font-size: 12px;
+        letter-spacing: 0.025rem;
+        padding: 0.1rem 0.5rem;
+        position: absolute;
+        right: 0rem;
+        text-align: right;
+        text-transform: uppercase;
+        top: 0;
+      }
+    }
+  }
+  border: 1px solid var(--bordercol);
+  border-radius: 2px;
+  position: relative;
+}
+.content {
+  margin-bottom: 4em;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+  padding: 0 1ch;
+  word-wrap: break-word;
+}
+h1 {
+  position: relative;
+  z-index: 1;
+}
+h2 {
+  position: relative;
+  z-index: 1;
+  margin-top: 1.4em;
+}
+h3 {
+  position: relative;
+  z-index: 1;
+  font-size: 1.15rem;
+}
+.title {
+  h1 {
+    margin-top: 1.75em;
+    margin-bottom: 0;
+    &:after {
+      background-color: var(--maincol);
+      bottom: 2px;
+      content: " ";
+      display: block;
+      height: 45%;
+      left: -8px;
+      opacity: 0.5;
+      position: absolute;
+      width: calc(100% + 8px);
+      z-index: -1;
+    }
+  }
+}
+footer {
+  margin-top: 1em;
+}
+.soc {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  &:hover {
+    color: white;
+    background-color: var(--hovercol);
+    &::before {
+      left: 0;
+      right: auto;
+      width: 100%;
+    }
+  }
+}
+.menu {
+  &:hover {
+    &::before {
+      left: 0;
+      right: auto;
+      width: 100%;
+    }
+  }
+  float: right;
+  margin-left: 0.8em;
+}
+.site-description {
+  display: flex;
+  justify-content: space-between;
+}
+.tags {
+  line-height: 1.8em;
+  a {
+    position: relative;
+    z-index: 1;
+    &::after {
+      background-color: var(--maincol);
+      bottom: 0;
+      content: " ";
+      display: block;
+      height: 40%;
+      left: 3.5px;
+      opacity: 0.6;
+      position: absolute;
+      transition: all 0.12s linear;
+      width: calc(100%);
+      z-index: -1;
+    }
+    &:hover {
+      &::after {
+        left: -6px;
+        opacity: 1;
+        width: calc(100% + 15px);
+      }
+    }
+  }
+}
+svg {
+  max-height: 16px;
+  vertical-align: sub;
+}
+.draft-label {
+  color: var(--bordercol);
+  text-decoration: none;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin-left: 6px;
+  background-color: #f9f2f4;
+}
+.chroma {
+  background-color: --var(backgroundcol);
+}
+/* Other */
+.chroma .x {
+}
+/* Error */
+.chroma .err {
+}
+/* LineTableTD */
+.chroma .lntd {
+  vertical-align: top;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+/* LineTable */
+.chroma .lntable {
+  border-spacing: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  width: auto;
+  overflow: auto;
+  display: block;
+}
+/* LineHighlight */
+.chroma .hl {
+  display: block;
+  width: 100%;
+  background-color: var(--hovercol);
+}
+/* LineNumbersTable */
+.chroma .lnt {
+  margin-right: 0.4em;
+  padding: 0 0.4em 0 0.4em;
+  color: var(--col);
+}
+/* LineNumbers */
+.chroma .ln {
+  margin-right: 0.4em;
+  padding: 0 0.4em 0 0.4em;
+  color: var(--col);
+}
+/* Keyword */
+.chroma .k {
+  font-weight: bold;
+  text-decoration: underline;
+}
+/* KeywordConstant */
+.chroma .kc {
+  font-weight: bold;
+  text-decoration: underline;
+}
+/* KeywordDeclaration */
+.chroma .kd {
+  font-weight: bold;
+  font-style: italic;
+  text-decoration: underline;
+}
+/* KeywordNamespace */
+.chroma .kn {
+  font-weight: bold;
+  text-decoration: underline;
+}
+/* KeywordPseudo */
+.chroma .kp {
+  font-weight: bold;
+  text-decoration: underline;
+}
+/* KeywordReserved */
+.chroma .kr {
+  font-weight: bold;
+  text-decoration: underline;
+}
+/* KeywordType */
+.chroma .kt {
+  font-weight: bold;
+  text-decoration: underline;
+}
+/* Name */
+.chroma .n {
+}
+/* NameAttribute */
+.chroma .na {
+}
+/* NameBuiltin */
+.chroma .nb {
+  font-weight: bold;
+  font-style: italic;
+}
+/* NameBuiltinPseudo */
+.chroma .bp {
+  font-weight: bold;
+  font-style: italic;
+}
+/* NameClass */
+.chroma .nc {
+  color: var(--col);
+  font-weight: bold;
+  font-style: italic;
+}
+/* NameConstant */
+.chroma .no {
+  color: var(--col);
+  font-weight: bold;
+  font-style: italic;
+}
+/* NameDecorator */
+.chroma .nd {
+}
+/* NameEntity */
+.chroma .ni {
+}
+/* NameException */
+.chroma .ne {
+}
+/* NameFunction */
+.chroma .nf {
+  color: var(--col);
+  font-weight: bold;
+  font-style: italic;
+}
+/* NameFunctionMagic */
+.chroma .fm {
+}
+/* NameLabel */
+.chroma .nl {
+}
+/* NameNamespace */
+.chroma .nn {
+  color: var(--col);
+  font-weight: bold;
+  font-style: italic;
+}
+/* NameOther */
+.chroma .nx {
+}
+/* NameProperty */
+.chroma .py {
+}
+/* NameTag */
+.chroma .nt {
+}
+/* NameVariable */
+.chroma .nv {
+  color: var(--col);
+  font-weight: bold;
+  font-style: italic;
+}
+/* NameVariableClass */
+.chroma .vc {
+}
+/* NameVariableGlobal */
+.chroma .vg {
+}
+/* NameVariableInstance */
+.chroma .vi {
+}
+/* NameVariableMagic */
+.chroma .vm {
+}
+/* Literal */
+.chroma .l {
+}
+/* LiteralDate */
+.chroma .ld {
+}
+/* LiteralString */
+.chroma .s {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringAffix */
+.chroma .sa {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringBacktick */
+.chroma .sb {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringChar */
+.chroma .sc {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringDelimiter */
+.chroma .dl {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringDoc */
+.chroma .sd {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringDouble */
+.chroma .s2 {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringEscape */
+.chroma .se {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringHeredoc */
+.chroma .sh {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringInterpol */
+.chroma .si {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringOther */
+.chroma .sx {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringRegex */
+.chroma .sr {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringSingle */
+.chroma .s1 {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralStringSymbol */
+.chroma .ss {
+  color: var(--col);
+  font-style: italic;
+}
+/* LiteralNumber */
+.chroma .m {
+}
+/* LiteralNumberBin */
+.chroma .mb {
+}
+/* LiteralNumberFloat */
+.chroma .mf {
+}
+/* LiteralNumberHex */
+.chroma .mh {
+}
+/* LiteralNumberInteger */
+.chroma .mi {
+}
+/* LiteralNumberIntegerLong */
+.chroma .il {
+}
+/* LiteralNumberOct */
+.chroma .mo {
+}
+/* Operator */
+.chroma .o {
+}
+/* OperatorWord */
+.chroma .ow {
+  font-weight: bold;
+}
+/* Punctuation */
+.chroma .p {
+}
+/* Comment */
+.chroma .c {
+  color: var(--quotecol);
+  font-style: italic;
+}
+/* CommentHashbang */
+.chroma .ch {
+  color: var(--quotecol);
+  font-style: italic;
+}
+/* CommentMultiline */
+.chroma .cm {
+  color: var(--quotecol);
+  font-style: italic;
+}
+/* CommentSingle */
+.chroma .c1 {
+  color: var(--quotecol);
+  font-style: italic;
+}
+/* CommentSpecial */
+.chroma .cs {
+  color: var(--quotecol);
+  font-weight: bold;
+}
+/* CommentPreproc */
+.chroma .cp {
+  color: var(--quotecol);
+  font-weight: bold;
+}
+/* CommentPreprocFile */
+.chroma .cpf {
+  color: var(--quotecol);
+  font-weight: bold;
+}
+/* Generic */
+.chroma .g {
+}
+/* GenericDeleted */
+.chroma .gd {
+}
+/* GenericEmph */
+.chroma .ge {
+}
+/* GenericError */
+.chroma .gr {
+}
+/* GenericHeading */
+.chroma .gh {
+}
+/* GenericInserted */
+.chroma .gi {
+}
+/* GenericOutput */
+.chroma .go {
+}
+/* GenericPrompt */
+.chroma .gp {
+}
+/* GenericStrong */
+.chroma .gs {
+}
+/* GenericSubheading */
+.chroma .gu {
+}
+/* GenericTraceback */
+.chroma .gt {
+}
+/* GenericUnderline */
+.chroma .gl {
+}
+/* TextWhitespace */
+.chroma .w {
+}
+.feather {
+  stroke: var(--bordercol);
+}
+.tldr {
+  font-style: italic;
+}

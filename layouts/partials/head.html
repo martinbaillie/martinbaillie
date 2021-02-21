@@ -1,0 +1,102 @@
+<head>
+	<!-- Misc meta -->
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Styles -->
+	<script>if (localStorage.theme != "") document.documentElement.setAttribute("data-theme", localStorage.theme)</script>
+{{ if (and .Site.IsServer (not (in (slice (getenv "HUGO_ENV") hugo.Environment) "production"))) }}
+	{{ $options := (dict "targetPath" "main.css" "enableSourceMap" true "includePaths" (slice "node_modules")) -}}
+	{{ $css := resources.Get "scss/main.scss" | toCSS $options -}}
+	<link rel="stylesheet preload prefetch" as="style" type="text/css" media="screen" href="{{ $css.Permalink }}" crossorigin="anonymous"/>
+{{ else -}}
+	{{ $options := (dict "targetPath" "main.css" "outputStyle" "compressed" "includePaths" (slice "node_modules")) -}}
+	{{ $css := resources.Get "scss/main.scss" | toCSS $options | postCSS (dict "config" "postcss.config.js") -}}
+	{{ $secureCSS := $css | resources.Fingerprint "sha512" -}}
+	<link rel="stylesheet preload prefetch" as="style" type="text/css" media="screen" href="{{ $secureCSS.Permalink }}" integrity="{{ $secureCSS.Data.Integrity }}" crossorigin="anonymous"/>
+{{ end -}}
+
+	<!-- Title -->
+	{{- $siteTitle := ( .Site.Title ) -}}
+	{{- $title := ( .Title ) -}}
+	{{- $fullTitle := ( delimit (slice $siteTitle "Fieldnotes") " | " ) }}
+	{{- if (not .IsHome) -}}
+	{{- $fullTitle = ( delimit (slice $siteTitle $title ) " | " ) }}
+	{{- end -}}
+	<title>{{ $fullTitle -}}</title>
+
+	<!-- SEO and social -->
+	{{ if eq .Kind "404" -}}
+	<meta name="robots" content="noindex, follow">
+	{{ else -}}
+	{{ with .Params.robots -}}
+		<meta name="robots" content="{{ . }}">
+	{{ else -}}
+		<meta name="robots" content="index, follow">
+		<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+		<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+	{{ end -}}
+	{{ end -}}
+
+	{{ if $.Scratch.Get "paginator" }}
+	<link rel="canonical" href="{{ .Paginator.URL | absURL }}">
+	{{ if .Paginator.HasPrev -}}
+		<link rel="prev" href="{{ .Paginator.Prev.URL | absURL }}">
+	{{ end -}}
+	{{ if .Paginator.HasNext -}}
+		<link rel="next" href="{{ .Paginator.Next.URL | absURL }}">
+	{{ end -}}
+	{{ else  -}}
+	<link rel="canonical" href="{{ .Permalink }}">
+	{{ end -}}
+
+	<meta property="og:title" content="{{ $title }}" />
+	<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
+	<meta property="og:image" content="{{ .Site.BaseURL }}/img/me.jpg"/>
+	<meta itemprop="name" content="{{ $title }}" />
+	<meta name="application-name" content="{{ $siteTitle }}" />
+	<meta property="og:site_name" content="{{ $siteTitle }}" />
+	{{- template "_internal/opengraph.html" . -}}
+	{{- template "_internal/twitter_cards.html" . -}}
+	<meta name="twitter:site" content="@martinbaillie">
+	<meta name="twitter:creator" content="@martinbaillie">
+	<meta name="twitter:image" content="{{ .Site.BaseURL }}/img/me.jpg"/>
+
+	<!-- RSS -->
+	{{ with .OutputFormats.Get "RSS" -}}
+	{{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+	{{ end -}}
+
+	<!-- Icons -->
+	<link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="/img/favicon/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+	<link rel="manifest" href="/img/favicon/manifest.json">
+	<meta name="msapplication-TileImage" content="/img/favicon/ms-icon-144x144.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="theme-color" content="#ffffff">
+
+{{ $featherJS := resources.Get "js/vendor/feather-icons/dist/feather.min.js" -}}
+{{ $webfontJS := resources.Get "js/vendor/webfontloader/webfontloader.js" -}}
+{{ if (and .Site.IsServer (not (in (slice (getenv "HUGO_ENV") hugo.Environment) "production"))) }}
+	{{ $mainJS := resources.Get "js/main.js" | babel -}}
+	{{ $js := slice $webfontJS $featherJS $mainJS | resources.Concat "main.js" -}}
+	<script src="{{ $js.Permalink }}" async></script>
+{{ else -}}
+{{ $mainJS := resources.Get "js/main.js" | babel | minify -}}
+{{ $js := slice $webfontJS $featherJS $mainJS | resources.Concat "main.js" -}}
+{{ $secureJS := $js | resources.Fingerprint "sha512" -}}
+	<script src="{{ $secureJS.Permalink }}" integrity="{{ $secureJS.Data.Integrity }}" crossorigin="anonymous" async></script>
+{{ end -}}
+</head>

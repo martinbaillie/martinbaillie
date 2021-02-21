@@ -1,0 +1,1689 @@
+#+seq_todo: TODO DRAFT DONE
+#+property: header-args :eval never-export
+#+startup: indent
+#+author: Martin Baillie
+#+hugo_base_dir: ./
+
+* Table of Contents :TOC_3:noexport:
+- [[#id][ID]]
+  - [[#locale][Locale]]
+  - [[#master-of-none][Master of none]]
+    - [[#platform-engineering][Platform Engineering]]
+  - [[#contact][Contact]]
+  - [[#this-site][This Site]]
+- [[#wrote][Wrote]]
+  - [[#fieldnotes][Fieldnotes]]
+  - [[#ephemeral-github-tokens-via-hashicorp-vault][Ephemeral GitHub Tokens via HashiCorp Vault]]
+    - [[#github][GitHub]]
+    - [[#vault][Vault]]
+    - [[#vaultgithub-plugin][Vault<>GitHub plugin]]
+  - [[#tailscale-support-for-openbsd][Tailscale Support for OpenBSD]]
+    - [[#tailscale][Tailscale]]
+    - [[#support-for-openbsd][Support for OpenBSD]]
+    - [[#installing-tailscale-on-openbsd][Installing Tailscale on OpenBSD]]
+  - [[#tailscale-support-for-nixos][Tailscale Support for NixOS]]
+    - [[#installing-tailscale-on-nixos][Installing Tailscale on NixOS]]
+  - [[#your-local-deserves-ci-too][Your Local Deserves CI, too]]
+    - [[#nix][Nix]]
+    - [[#continuous-integration][Continuous Integration]]
+  - [[#emacs-evil-motion-training][Emacs Evil Motion Training]]
+    - [[#evil-mode][Evil Mode]]
+    - [[#proficiency][Proficiency]]
+    - [[#evil-motion-trainer][Evil Motion Trainer]]
+  - [[#envoy-wasm-filters-in-rust][Envoy WASM Filters in Rust]]
+    - [[#wasm][WASM]]
+    - [[#envoy][Envoy]]
+    - [[#example-writing-a-http-header-augmenting-filter][Example: Writing a HTTP Header Augmenting Filter]]
+  - [[#controlling-client-sni-with-hyper][Controlling Client SNI with Hyper]]
+    - [[#but-why][But why?]]
+    - [[#hyper][Hyper]]
+    - [[#cross-platform-builds][Cross-platform builds]]
+  - [[#git-signature-operations-via-hashicorp-vault][Git Signature Operations via HashiCorp Vault]]
+    - [[#code-provenance][Code Provenance]]
+    - [[#vault-1][Vault]]
+    - [[#vaultsign][Vaultsign]]
+  - [[#avoiding-libinput-hysteresis-on-a-thinkpad][Avoiding Libinput Hysteresis on a ThinkPad]]
+    - [[#disable-wobbling-detection][Disable wobbling detection]]
+    - [[#a-note-on-synaptics-rmi4-over-smbus][A note on Synaptics RMI4 over SMBus]]
+  - [[#emacs-tramp-over-aws-ssm-apis][Emacs TRAMP over AWS SSM APIs]]
+    - [[#cattle-not-pets][Cattle not pets]]
+    - [[#aws-ssm][AWS SSM]]
+    - [[#ssh][SSH]]
+    - [[#emacs-tramp][Emacs TRAMP]]
+  - [[#capturing-aws-iam-usage][Capturing AWS IAM Usage]]
+  - [[#clichéd-meta-post][Clichéd Meta Post]]
+
+* DONE ID
+CLOSED: [2020-01-03 Fri 21:44]
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: id
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_LAYOUT: single
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Sort of like my LinkedIn profile but with sentences.
+:END:
+** Locale
+Growing up on the west coast of Scotland and only having English as a
+language (barely, some have noted), I sampled parts of the USA after graduating
+before settling in Australia where I have stayed since 2009 (Sydney 2014—).
+** Master of none
+Professionally I am fond of the saying /"Jack of all trades, master of none"/. I
+suppose I feel it either reflects my staunch attempts to stay relevant as an
+individual contributor or my pursuit of being ever more "M" shaped in my
+discipline (literally speaking however, I am very much beanpole shaped). As a
+compound sentence, though, I prefer the second clause because its connotation is
+less presumptuous about me knowing the answer to something.
+
+Career-wise I am a (recovering) enterprise Java person of many years currently
+enjoying a prolonged excursion in the still nascent field of platform
+engineering.
+
+*** Platform Engineering
+As it has transpired, the upshot of spending my earlier career with a CRM
+consultancy spruiking some fairly esoteric tech is that I have always built and
+run my own stuff. Constructing production stacks on client sites from scratch
+and subsequently owning the code deployed to them has always been a thing for
+me; dedicated Ops teams a foreign concept.
+
+I started as a product engineer but soon shifted to being across multiple teams
+in a technical capacity either as a floating tech lead or architect (this title
+having been prefixed with "solutions", "systems", and "software" depending on
+the gig).
+
+Around 2015 and on the back of what I jokingly refer to as the /great Australian
+"DevOps enterprise transformation movement"/, I had the opportunity to lead
+different kind of team. We were tasked with building out a self-servicable
+hybrid cloud platform for other product engineers to consume—billed as an
+internal Heroku at the time. ThoughtWorks would later call these teams [[https://www.thoughtworks.com/radar/techniques/platform-engineering-product-teams][platform
+product engineering teams]] which I think is apt because if you are not treating
+these things like internal products you +will+ may have a bad time.
+
+Anyway, my last two contracts have been at the helm of such teams building these
+internal platforms from the ground up. Both times the task has been to enable
+modern ([[https://en.wikipedia.org/wiki/Microservices][micro]]-)SOAs atop secure and reliable cloud platform foundations that
+have been tailored for easy self-service, continuous delivery and runtime
+observability. The goal is always enabling product engineers to have acute focus
+on business logic by having the platform handle as many non-differentiating,
+cross-cutting concerns as is technically feasible.
+
+So this is the sort of role I find myself in for the time being and there are
+lots of organisations that need the help in this space. Nevertheless, at some
+point I would like to return to true full-stack product engineering roles where
+my customers are the organisation's customers.
+
+** Contact
+It might be helpful at this juncture to know that I do actually maintain the
+industry-requisite [[https://linkedin.com/in/martinbaillie][LinkedIn]] profile and keep the dot points somewhat aligned to
+my movements.
+
+Otherwise, I am also on [[https://keybase.io/martinbaillie][Twitter/Mastodon]] but, fair warning, predominately as a
+consumer and re-tweet/toot-er. If you are expecting smoking hot takes on why I
+think your microservices are the wrong size or why you need Kubernetes and Istio
+you will probably be disappointed. With that said, I do enjoy shooting the
+breeze about tech and my DMs are open, as they say. I can be reached by other
+means too (see: footer).
+** This Site
+The main purpose of this site is to surface what I have opted to call
+/[[/wrote/fieldnotes][Fieldnotes]]/.
+
+Because I switch my own system themes depending on the time of day, this site
+likewise has a dark and light theme. It is automatically chosen based on your
+system preference but you can override with the wee icon at the top right.
+
+Notwithstanding the slightly brutalist design, I'll strive to keep this site
+otherwise as accessible as possible, and respecting of your privacy. If you
+think I am dropping the ball on this please let me know.
+* Wrote
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: wrote
+:END:
+** DONE Fieldnotes :meta:
+CLOSED: [2020-01-03 Fri 21:45]
+:PROPERTIES:
+:EXPORT_FILE_NAME: fieldnotes
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr This site's existential justification.
+:END:
+Well here we are! I had held off from spewing words onto the internet in
+long-form until now. That I have made it this far with a new site and first post
+has been the culmination of:
+
+1. The compound guilt felt as a practiced user of other people's technical
+   writing to my professional advantage.
+2. The accidental consumption of multiple /"why you should write a technical
+   blog"/-themed posts in quickfire succession from my feeds.
+3. The turn of a new year (though I won't go as far as to say it is a
+  resolution).
+
+I have opted to refer to the writing section /Fieldnotes/ as because I predict
+the [[https://en.wikipedia.org/wiki/Fieldnotes][definition]] will best represent the style of content that will unfold. That
+is, the posts will likely be overwhelmingly technical in nature and cover
+something I have learned or been playing with recently in the hope that someone
+else finds some value in it or, at the very least, help me to better understand
+the topic by way of the Feynman technique.
+
+I personally prefer reading posts with technical content. The same goes for
+conference presentations as it happens (especially those that dare to live
+demo). So while I can't promise I won't waffle on in the posts, I will commit to
+most or all of them having something technically concrete to add to the greater
+internet—new OSS releases, how-tos, gotchas and so on. I've even added a =tl;dr=
+construct to help the reader decide if they will get value from the gist.
+
+If nothing else, I'm looking forward to having a space to share content and
+contact information in a decentralised manner, off social platforms. I've made
+the promise to myself that I'll keep the writing consistent for at least a year
+and I'm optimistic that the posts will be more coherent and valuable to me than
+just another random =.org= file in my Dropbox.
+
+The site itself is generated with an old familiar: [[https://gohugo.io][Hugo]] (even though I'm reading
+good things about [[https://www.getzola.org/][Zola]]). I've used Hugo for many years to produce internal
+documentation sites at my day jobs. There's also something to be said about the
+special synergy you get when combining Hugo and Emacs Org mode ([[https://ox-hugo.scripter.co/][ox-hugo]]). Well
+maybe there is something to be said. If I do manage to keep this up then I'm
+sure I will write one of those clichéd meta posts about the whole build and
+deploy setup, or at least a colophon section.
+
+** DONE Ephemeral GitHub Tokens via HashiCorp Vault :vault:github:security:release:
+CLOSED: [2020-01-06 Mon 08:39]
+:PROPERTIES:
+:EXPORT_FILE_NAME: ephemeral-github-tokens-via-hashicorp-vault
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Improve your GitHub security posture with a Vault plugin.
+:END:
+*** GitHub
+I have found that performing automation against GitHub APIs often necessitates
+the creation of [[https://help.github.com/en/github/extending-github/git-automation-with-oauth-tokens][OAuth Tokens]] (nb. GitHub refers to these as Personal Access
+Tokens or PATs). These tokens are tied to a user account, have /very/
+coarsely-scoped permissions and do not expire.
+
+The more automation-savvy users in an organisation will likely have created many
+such tokens with powerful permissions which are being neither rotated nor
+deleted.
+
+The organisation will also commonly have wasted at least one of their GitHub
+seats on a [[https://help.github.com/en/github/getting-started-with-github/types-of-github-accounts#personal-user-accounts][robot/machine user]] for CI/CD purposes. These users share similar
+access token and SSH key fates as the human users do but additionally need their
+credentials managed and rotated on their behalf (a feat that is arguably made
+even more awkward when federating GitHub access through an third party IdP).
+
+-----
+
+[[https://developer.github.com/apps/building-github-apps/][GitHub Apps]] offer a better approach to this automation problem:
+1. They do not consume a seat (license) nor need credential management.
+2. They have /much/ finer-grained [[https://developer.github.com/v3/apps/permissions/][permissions]] available to the access tokens.
+3. The tokens they issue expire after an hour.
+
+However, and this is the tricky part, GitHub Apps require the management of at
+least one private key used to mint the JWTs used for the [[https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation][App installation
+authentication]] token request flow.
+*** Vault
+I am a big fan of HashiCorp's [[https://www.vaultproject.io/][Vault]] product. I think it is a versatile security
+tool for an organisation to have in their armoury and I have been intimately
+involved with getting it deployed on my last two contracts.
+
+Sure, over the years I've seen some of its feature set being tackled by the
+major clouds as one might expect, and as a platform guy I'm always weighing up
+managed services in a perpetual quest to run less non-differentiating
+infrastructure. However, in my opinion Vault is still very much worth it if you
+have a range of security requirements needing solved. Nothing comes close to its
+range nor flexibility. It is also not inconceivable for HashiCorp to eventually
+offer it as a managed service themselves (ala. Terraform Cloud) or otherwise
+partner with the major clouds on doing so.
+
+Anyhow, it's that flexibility that really shines here. An organisation's Vault
+deployment is (or at least *should* be) one of the most secure systems in their
+landscape and storing secrets is its bread and butter. What a perfect home for
+that GitHub App private key from earlier!
+
+But then, if a private key exists in the woods, can anyone +hear it+ use it to
+sign a JWT?
+
+Let's take a gander at some other useful security aspects of that organisation's
+Vault deployment:
+- Auth backends
+
+
+  The organisation's preferred authZ/N backends are presumably already
+  configured. Vault supports a multitude of these, including but not exclusive
+  to: any OIDC compliant IdP, all major cloud IAM, LDAP, Kubernetes, TLS and
+  even GitHub (for those chicken-and-egg vibes).
+
+- Secret backends
+
+
+  A pluggable secrets backend construct with CRUD-mapped RESTful semantics
+  fronted by the same highly available API protected by those auth backends.
+  There's even the concept of secret leases.
+
+- RBAC
+
+
+  Strong declarative identity and unified ACL concept permeated throughout
+  all actions in the API surface.
+
+*** Vault<>GitHub plugin
+So, if you have clocked on to my thinly veiled setup, it logically follows that
+someone might try to marry these Vault security strengths with a GitHub App to
+plug the perceived GitHub PAT weakness, and that is exactly what I've done with
+[[https://github.com/martinbaillie/vault-plugin-secrets-github][=vault-plugin-secrets-github=]].
+
+Using this plugin you can broker requests to a GitHub App through Vault:
+#+attr_html: :alt Vault GitHub Plugin
+[[./img/vault_github_plugin.png]]
+
+Here the user authenticates with Vault and makes a request to the plugin's
+configured mount point. This is a projected request that can include any manner
+of GitHub [[https://docs.github.com/en/free-pro-team@latest/rest/reference/permissions-required-for-github-apps][permissions]] or repository IDs.
+
+The plugin then mints a JWT from the securely stashed private key and uses it to
+ask the installed GitHub App for a token constrained by those same permissions and/or repository IDs.
+
+Presuming the App is configured with the superset of the requested permissions,
+an access token is granted by GitHub and is valid for 1 hour. It can be used for
+GitHub API and remote authenticated =git= operations, and the plugin can work
+with either GitHub SaaS or Enterprise editions.
+
+#+begin_quote
+Full installation instructions and API spec are kept up-to-date in the [[https://github.com/martinbaillie/vault-plugin-secrets-github][README]].
+#+end_quote
+
+**** Permissions
+For now, unless you mount the plugin many times each for a different use case
+(i.e. many GitHub Apps), you will need to give your primary GitHub App the
+superset of all anticipated permissions needed by your users. This is /still/
+better than those users being allowed to create their own PATs because the
+plugin issued tokens only last for an hour.
+
+In any case, you now arguably have a much stronger RBAC system at your disposal:
+Vault's.
+
+It is possible to craft tight Vault policies to constrain user capabilities on
+the GitHub plugin (and by extension GitHub), and then map that to your Vault
+user/role structure however you see fit.
+
+-----
+
+As an example, imagine I have deployed the plugin to my Vault and I have
+configured the associated GitHub App to have access to all repositories as well
+as full write permissions on GitHub's =administration=, =contents=, =issues= and
+=pull_requests= APIs.
+
+Since Vault is deny by default, no authenticated user can access the
+=/github/token= plugin endpoint until permissive policy is attached.
+
+Suppose I then wanted to allow a user to have GitHub API access, but only to
+create pull requests on the repository ID =69857131=. I would first craft a
+policy that encapsulates this use case.
+#+begin_src shell
+; vault policy write github-only-prs - <<EOF
+path "github/token" {
+  capabilities = ["update"]
+  required_parameters = ["permissions","repository_ids"]
+  allowed_parameters = {
+    "repository_ids" = ["69857131"]
+    "permissions"= ["pull_requests=write"]
+  }
+}
+EOF
+#+end_src
+My policy mandates that both =permissions= and =repository_ids= parameters are
+present and that they have certain fixed values.
+
+I would then attach the policy to a user or group construct in my Vault setup.
+#+begin_src shell
+; vault auth enable userpass
+; vault write auth/userpass/users/martin password=baillie policies="github-only-prs"
+#+end_src
+
+This contrived user would then only be able to send that exact stipulated
+request to Vault.
+#+begin_src shell
+# Login.
+; vault login -method=userpass username=martin password=baillie
+# Successfully create a token.
+; vault write /github/token repository_ids=69857131 permissions=pull_requests=write
+# Permission denied:
+; vault write -f /github/token
+; vault write /github/token permissions=pull_requests=write
+; vault write /github/token repository_ids=69857131 permissions=administration=read
+; vault write /github/token repository_ids=123 permissions=pull_requests=write
+; vault write /github/token repository_ids=69857131
+#+end_src
+**** Metrics
+David Wheeler's age-old aphorism, aka. the /[[https://en.wikipedia.org/wiki/Fundamental_theorem_of_software_engineering]["fundamental theorem of software
+engineering"]]/ goes:
+#+begin_quote
+"All problems in computer science can be solved by another level of indirection."
+#+end_quote
+
+And here we are once again proxying network requests for profit. At least we can
+use it to our advantage by gleaning better insight into how the organisation is
+utilising GitHub automation through metrics—something else that GitHub's audit
+log falls short on.
+
+Notwithstanding Vault's own audit log which enumerates all API access in detail
+(/and you do have this streaming to some kind of SIEM product, right?/), the
+GitHub plugin also offers up an additional metrics endpoint in the
+Prometheus/OpenMetrics exposition format. Details are in the [[https://github.com/martinbaillie/vault-plugin-secrets-github#metrics][README]] and a sample
+Grafana [[https://github.com/martinbaillie/vault-plugin-secrets-github/blob/master/dashboard.json][dashboard]] is provided.
+
+#+attr_html: :alt Vault GitHub Plugin Dashboard
+[[./img/vault_github_plugin_dashboard.png]]
+
+** DONE Tailscale Support for OpenBSD :openbsd:tailscale:go:wireguard:security:
+CLOSED: [2020-02-05 Wed 20:29]
+:PROPERTIES:
+:EXPORT_FILE_NAME: tailscale-support-for-openbsd
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Learn how to configure Tailscale on OpenBSD.
+:END:
+*** Tailscale
+A service called [[https://tailscale.com][Tailscale]] launched at the beginning of the month and promises
+to be the /"easiest, most secure way to use WireGuard and 2FA"/.
+
+As an early beta tester of [[https://www.wireguard.com/][WireGuard]] and someone who has been carefully tracking
+its progress towards mainline Linux (currently in =net-next=, [[https://www.phoronix.com/scan.php?page=news_item&px=WireGuard-Net-Next-Lands][scheduled for
+5.6]]!), I am especially excited to see people much smarter than me start to build
+next generation VPN businesses centred around it.
+
+WireGuard will allow the Tailscale folks to eschew traditional hub-and-spoke VPN
+models and have their customers construct their own private meshed (P2P)
+networks. This is similar in a sense to the features offered up by [[https://www.zerotier.com/][ZeroTier]] or
+what you might be able to presumably cobble together with the likes of Slack's
+recently announced [[https://slack.engineering/introducing-nebula-the-open-source-global-overlay-network-from-slack/][Nebula]], though neither are based on WireGuard.
+
+If Tailscale is executed well it could bring WireGuard to the masses and
+hopefully even usher in a bit of a paradigm shift for cloud networking:
+decentralised [[https://beyondcorp.com/][BeyondCorp-styled]] zero trust networking for the rest of us. That
+is, looking past perimeter-based security and not just for the usual case of
+privileged staff access. Why continue to build our backend SOAs out of all these
+layered VPCs with their NACLs, security groups and reverse proxying load
+balancers when some smart DNS and meshed WireGuard tunnels will suffice?
+
+Anyway, idealist gushing aside, they do have their work cut out. The hard part
+in all of this is not the WireGuard data plane, but the control plane that
+manages it. I had a small side project going at work last year to allow temporal
+privileged access to cloud resources for our platform engineers using WireGuard,
+and solving the keypair distribution/rotation and tunnel auto-configuration for
+multiple OSes was /not/ trivial! For Tailscale there's also the issue of IAM /
+2FA, DNS support and not least the tedious NAT traversal tricks that will be
+required for them to become a universally useful end-user SaaS. Good luck to
+them!
+*** Support for OpenBSD
+
+I've been using [[https://www.openbsd.org/][OpenBSD]] on and off since I was a teenager. It is without a doubt
+my favourite OS, and while I don't use it as my daily driver anymore, it has
+remained steadfast at the helm of my [[https://github.com/martinbaillie/homebrew-openbsd-pcengines-router][homebrew router]] for many years.
+
+I've also been using WireGuard to interconnect all of my machines for a while,
+but after switching them over to Tailscale last week my OpenBSD router was a
+/notable omission/.
+
+-----
+
+Fret not! Thankfully Tailscale's core is open source and on [[https://github.com/tailscale/tailscale][GitHub]]. It happened
+to utilise the same [[https://git.zx2c4.com/wireguard-go/about/][=wireguard-go=]] userspace library I was already familiar with
+from my work side project. Happily, they accepted my [[https://github.com/tailscale/tailscale/pull/36][pull request]] and now
+Tailscale knows OpenBSD!
+
+#+attr_html: :alt OpenBSD support for Tailscale
+#+attr_html: :width 50%
+[[./img/tailscale_openbsd.png]]
+
+Fair warning, it does not take advantage of OpenBSD's standout [[https://man.openbsd.org/pledge.2][=pledge(2)=]] /
+[[https://man.openbsd.org/unveil][=unveil(2)=]] security features yet but it should be able to given Go has the
+requisite syscall support ([[https://github.com/golang/sys/blob/master/unix/pledge_openbsd.go][pledge]], [[https://github.com/golang/sys/blob/master/unix/unveil_openbsd.go][unveil]]).
+
+The rest of this post will go into how you can get yourself hooked upto
+Tailscale from an OpenBSD userspace.
+
+*** Installing Tailscale on OpenBSD
+There is no native WireGuard in the OpenBSD kernel yet, and anyway Tailscale
+runs off a temporary fork of the [[https://github.com/tailscale/wireguard-go][=wireguard-go=]] implementation for now (which,
+incidentally, also means you cannot use the upstream version from OpenBSD's
+ports).
+
+#+BEGIN_QUOTE
+20200621 UPDATE: WireGuard has since landed natively in OpenBSD-CURRENT as
+[[https://man.openbsd.org/wg.4][=wg(4)=]]! I have yet to have a play but it will be in 6.8-STABLE.
+#+END_QUOTE
+
+So, and accepting the arguably negligible hit for crossing the kernel<>userspace
+border for each packet, the first thing you'll want to do is grab the latest
+Tailscale source code for local compilation.
+
+#+BEGIN_SRC shell
+; git clone --depth 1 https://github.com/tailscale/tailscale.git
+#+END_SRC
+
+You will also need a sufficiently modern Go toolchain (but do not necessarily
+need to be on an OpenBSD host).
+
+#+BEGIN_QUOTE
+20201012 UPDATE: As I rebuilt to latest Tailscale for my own router I noticed
+their repository has changed slightly. I've updated the following instructions
+to match the current structure as of this date.
+#+END_QUOTE
+
+Build OpenBSD compatible Tailscale binaries and move them to your target machine
+(presuming you're not already on it):
+#+BEGIN_SRC shell
+; cd tailscale
+; GOOS=openbsd go build ./cmd/tailscale
+; GOOS=openbsd go build ./cmd/tailscaled
+; scp tailscale{,d} root@openbsd:/usr/local/bin
+#+END_SRC
+
+On OpenBSD, =tailscaled= will correctly use =/var/db/tailscale= as its state
+directory and =/var/run/tailscale/tailscale.sock= for its UNIX socket.
+
+This is the rc script I use (=/etc/rc.d/tailscaled=). Don't forget to make it
+executable!
+#+BEGIN_SRC shell
+#!/bin/ksh
+daemon="/usr/local/bin/tailscaled"
+
+. /etc/rc.d/rc.subr
+
+rc_start() {
+    ${rcexec} "${daemon} ${daemon_flags} 2>&1 | logger -t tailscaled &"
+}
+
+rc_cmd $1
+#+END_SRC
+
+Pair this with an entry in =/etc/rc.conf.local=, optionally passing any
+Tailscale daemon flags (or use =rcctl enable tailscaled=):
+#+BEGIN_SRC shell
+tailscaled_flags=""
+#+END_SRC
+
+Start the daemon to make sure it is working:
+#+BEGIN_SRC shell
+; doas rcctl start tailscaled
+# tailscaled(ok)
+#+END_SRC
+
+And that's it! You should have Tailscale logs streaming in =/var/log/messages=
+and have a plumbed =tunX= device by now.
+
+I've had my Tailscale state db configured for a while, but if you see
+authentication errors in the logs then you may need to run an initial:
+#+BEGIN_SRC shell
+; tailscale up
+#+END_SRC
+** DONE Tailscale Support for NixOS :nix:tailscale:wireguard:security:
+CLOSED: [2020-03-20 Fri 18:24]
+:PROPERTIES:
+:EXPORT_FILE_NAME: tailscale-support-for-nixos
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Learn how to configure Tailscale on NixOS.
+:END:
+I have been [[/wrote/tailscale-support-for-openbsd][continuing]] to run with Tailscale instead of hand-cranked WireGuard
+on various devices, including my daily driver ThinkPad which runs my /other/
+favourite OS—[[https://nixos.org/][NixOS]]!
+
+However, until now the configuration was not particularly idiomatic due to there
+being no upstream Tailscale Nix expressions in [[https://github.com/NixOS/nixpkgs][nixpkgs]].
+
+As it transpired, Dan Anderson of Tailscale is also a NixOS user and with his
+support I was able to shepherd in a [[https://github.com/NixOS/nixpkgs/pull/82537][quick PR]] to introduce a Tailscale [[https://search.nixos.org/options?query=tailscale][module]]. I
+actually think NixOS ended up being their first Linux flavoured package!
+
+Like the previous OpenBSD post, the rest of this post will walk you through how
+to set up Tailscale on NixOS.
+*** Installing Tailscale on NixOS
+It's simple!
+#+BEGIN_SRC nix
+services.tailscale.enable = true;
+
+# Optional (default: 41641):
+services.tailscale.port = 12345;
+#+END_SRC
+
+You can choose to make it easier for Tailscale by opening up the UDP port.
+#+BEGIN_SRC nix
+networking.firewall.allowedUDPPorts = [ ${services.tailscale.port} ];
+#+END_SRC
+
+Depending on your setup, you may need to make the =tailscale= CLI available to
+all users.
+#+BEGIN_SRC nix
+environment.systemPackages = with pkgs; [ tailscale ];
+#+END_SRC
+
+That's the configuration out of the way. If you perform a =rebuild-switch=, you
+should find a Tailscale daemon running.
+#+BEGIN_SRC shell
+; systemctl status tailscale
+#+END_SRC
+
+Finally, perform an initial authentication for this machine and you're done.
+#+BEGIN_SRC shell
+; tailscale up
+#+END_SRC
+
+You should be able to see a successfully plumbed device, and Tailscale logs
+scrolling.
+#+BEGIN_SRC shell
+; ip link show tailscale0
+; journalctl -fu tailscale
+#+END_SRC
+** DONE Your Local Deserves CI, too :nix:github:
+CLOSED: [2020-06-06 Sat 15:01]
+:PROPERTIES:
+:EXPORT_FILE_NAME: your-local-deserves-ci-too
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Build your local Nix environments using free CI.
+:EXPORT_DATE: <2020-06-06 Sat>
+:END:
+*** Nix
+Early last year, after teetering on the edge for a while, I finally took the
+plunge into the world of [[https://nixos.org][Nix]]. It always seemed to be the logical conclusion to
+my declarative over imperative leanings and it has not disappointed.
+
+I would classify myself as a semi-retired OS [[https://en.wiktionary.org/wiki/bikeshedding][bikeshedder]] these days. I no longer
+obsess over [[https://old.reddit.com/r/unixporn/wiki/themeing/dictionary#wiki_rice][ricing]] my prompt nor switch tiling WMs like they're going out of
+style. Instead, my prompt is a simple exit code coloured semi-colon and I spend
+the majority of time in either Firefox or Emacs (+vterm). On NixOS I am using
+the Sway Wayland compositor and on macOS I am usually just running native
+fullscreen, ⌘↹ing between the two previously mentioned apps.
+
+All in, this means my recent [[https://github.com/martinbaillie/dotfiles][dotfiles]] are much less sprawling than they have
+been in the past and were therefore easy to convert to Nix expressions.
+
+The expressions are organised into platform-agnostic "modules" that leverage the
+likes of the [[https://github.com/nixos/nixpkgs][nixpkgs]], [[https://github.com/nix-community/home-manager][home-manager]] and [[https://github.com/LnL7/nix-darwin][nix-darwin]] channels to fully configure
+the OS and userspace from scratch.
+
+On top of basic software provisioning Nix expressions, I've written a simple
+theming system that I use to switch various things between light and dark mode,
+and a "secrets" attribute set (kept encrypted in a private repository) is used to
+wire secrets throughout.
+
+I'm very happy with the result. The expressions work flawlessly between NixOS
+and macOS, and I'm able to go from fresh install to /mise en place/ with the
+flick of a [[https://github.com/martinbaillie/dotfiles/blob/master/Makefile][=Makefile=]] target. I might try to find the time to convert my so-called
+modules to proper boolean flagged, [[https://search.nixos.org/options][nixpkgs-styled options]], and the [[https://github.com/NixOS/rfcs/pull/49][Flakes RFC]]
+looks very promising and solves my main criticism of Nix, but otherwise I am
+feeling pretty zen about it all with no immediate desire to touch things (for a
+change!).
+*** Continuous Integration
+Something I could not find many people doing, publicly at least, was building
+their Nix dotfile repositories on push using the popular free CI services.
+
+There are many ways to skin this cat but my approach was to build as native to
+the target environment as I can get. Currently this looks like a combination of:
++ GitHub Actions (macOS)
+GitHub Actions are great and have generous amounts of free macOS minutes on true
+Apple hardware-based runners, so this was a no brainer.
+
++ Travis CI (NixOS, by way of QEMU)
+Alas, GitHub do not provide access to underlying hardware virtualisation on
+their SaaS Actions runners (at least at the time of writing this), and their
+Linux runners are exclusively Ubuntu to boot. Since I really want to build a
+NixOS VM to truly test every aspect of my expressions this means switching up to
+Travis for these builds.
+
+**** Building
+My parlour trick for covering all bases is to generate a special CI machine that
+imports every one of my modules:
+#+BEGIN_SRC nix
+{ pkgs, lib, ... }:
+# For CI, import every module but select a single theme, ultimately testing both
+# themes over the course of the NixOS and macOS CI runs. Also filter out any
+# system specific modules that are not for the current system.
+let
+  inherit (builtins) readDir concatLists filter match;
+  inherit (lib) mapAttrsToList hasSuffix;
+  inherit (lib.systems.elaborate { system = builtins.currentSystem; }) isLinux;
+  nixFilesIn = dir:
+    let
+      children = readDir dir;
+      f = path: type:
+        let absPath = dir + "/${path}";
+        in if type == "directory" then
+          nixFilesIn absPath
+        else if hasSuffix ".nix" (baseNameOf path) then
+          [ absPath ]
+        else
+          [ ];
+    in concatLists (mapAttrsToList f children);
+  modules = filter (n:
+    match
+    ("(.*/themes/.*|.*." + (if isLinux then "darwin" else "linux") + ".nix$)")
+    (toString n) == null) (nixFilesIn <modules>);
+  theme = (if isLinux then <modules/themes/light> else <modules/themes/dark>);
+in { imports = [ ../../. theme ] ++ modules; }
+#+END_SRC
+Using this pseudo machine, I can derive either a NixOS VM (via QEMU) on Travis
+or simply build on a fresh Darwin Actions runner VM (in the case of macOS). Over
+the course of both builds combined, all my Nix expressions are exercised.
+
+#+begin_src make
+# CI targets.
+# $(GITHUB_ACTIONS) == true
+# $(TRAVIS) == true
+ci: dep channels update
+ifeq ($(SYSTEM),Linux)
+	NIX_PATH=$(HOME)/.nix-defexpr/channels$${NIX_PATH:+:}$(NIX_PATH) \
+	&& $(NIX_BUILD) '<nixpkgs/nixos>' -A vm -k \
+		-I nixos-config=$(WORKDIR)/machines/ci/vm.nix
+else
+	if test -e /etc/static/bashrc; then . /etc/static/bashrc; fi \
+	&& $(MAKE) test HOSTNAME=ci
+endif
+.PHONY: ci
+#+end_src
+**** Caching
+The resultant binaries are pushed to Cachix and subsequently become available
+for any of my other machines thus saving a lot of wasted CPU cycles!
+** DONE Emacs Evil Motion Training :emacs:release:
+CLOSED: [2020-06-28 Sun 10:33]
+:PROPERTIES:
+:EXPORT_FILE_NAME: evil-motion-training-for-emacs
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Punish yourself for poorly chosen evil motions in Emacs.
+:END:
+I made the switch to Emacs last year after having been a resolute vim user ever
+since I dual booted Slackware on my family's first computer as an early teen.
+
+Needless to say the power of the Emacs pseudo [[https://en.wikipedia.org/wiki/Lisp_machine][lisp machine]] quickly opened my
+eyes. I immediately lunged into consolidating practically all my text use cases
+sans browsing into Emacs: programming, note taking, RSS, mail, =git= porcelain,
+GitHub PRs and issues, IRC/Slack. I even entirely replaced my use of a separate
+terminal emulator. My browser has since clawed back the mail, Slack and /some/
+GitHub use cases from Emacs' grasp, but if it weren't for me staunchly trying to
+stick to Wayland I am quite sure I'd be writing this from inside [[https://github.com/ch11ng/exwm][EXWM]] by now.
+
+However, the old adage goes:
+#+BEGIN_QUOTE
+"Emacs is a great operating system missing a great editor."
+#+END_QUOTE
+
+And it was true for me, but fixable.
+
+*** Evil Mode
+
+I tried Emacs native key chords for all of a day or two before giving up and
+enabling [[https://github.com/emacs-evil/evil][evil mode]]. It could be that I'm too far gone, but I simply could not
+live without modal editing and the intuitive verb-object =vi= key bindings that I
+had become accustomed to.
+
+For me, having [[*Proficiency][proficiency]] at moving around a buffer and manipulating text in
+this manner means anything else feels like a bit of a regression. What's more,
+I've always used =vi= styled bindings anywhere I can, be it in terminal readline
+mode, my tiling window manager [[https://swaywm.org/][du jour]], or Firefox ([[https://github.com/tridactyl/tridactyl][Tridactyl]] is my pick of the
+post-[[https://en.wikipedia.org/wiki/XUL][XUL era]] bunch). Even back in my enterprise Java days, when forced to dip into
+the heavyweight IDE world with the likes of Eclipse and IntelliJ IDEA, I'd still
+reach for a plugin.
+
+-----
+
+I think with evil mode and Emacs you're truly getting the best of both worlds.
+Emacs can be the great editor (neo)vi(m) is. It can be just as snappy (see
+[[https://www.emacswiki.org/emacs/GccEmacs][native-comp]]), start just as fast (see [[https://www.emacswiki.org/emacs/EmacsClient][emacsclient]] / [[https://github.com/hlissner/doom-emacs][Doom]]'s optimisations), and
+has all the modern trimmings you would expect in an editor (e.g. [[https://github.com/emacs-lsp/lsp-mode][LSP]], [[https://lists.gnu.org/archive/html/emacs-devel/2019-06/msg00123.html][ligatures]],
+[[https://github.com/masm11/emacs][pgtk]]).
+
+It is, however, the famed Emacs extensibility that sets it apart from the crowd
+for me. Vimscript, Neovim's Lua extensions, even VSCode's extensions API are—to
+butcher [[https://en.wikipedia.org/wiki/Greenspun%27s_tenth_rule][Greenspun's aphorism]]—just /ad hoc, informally-specified, bug-ridden,
+slow implementations of half of/ +Common Lisp+ /Elisp/.
+
+With Elisp packages, Emacs can become a cybernetic extension of your arm. Though
+package authors are not really writing an extension, they're just writing more
+Emacs. That, I think, is the crux of it.
+
+Speaking of packages, there are of course all the usual big hitter packages that
+you'll find on any list, like [[https://magit.vc/][Magit]], [[https://orgmode.org/][Org]], [[https://www.emacswiki.org/emacs/TrampMode][TRAMP]], [[https://github.com/bbatsov/projectile][Projectile]], [[https://github.com/abo-abo/swiper][Ivy]] and [[https://www.emacswiki.org/emacs/DiredMode][Dired]] to
+name a few. However, today I'm showcasing a small package to improve proficiency
+in evil motions.
+
+*** Proficiency
+Not long before my switch to Emacs I had started trying to kick some bad habits
+with vim. Let's call them lazy motions. I /knew/ better ways of moving the
+cursor from a to b, but the cognitive overhead, or lack of muscle memory
+perhaps, was too much to overcome. If you're also a vim user then there's a
+chance you know what I mean: =hhhhhhhhhhhhjjjjjjjjkkkkkllllhjk=. That is,
+favouring a single character/line oriented movement over a more esoteric (but
+known to you!) and undeniably precise movement.
+
+The word-wise motions (e.g. =wW=, =bB=, =eE=, =ge=), character searches (e.g.
+=fF=, =tT=, =,=, =;=) and line jumps (e.g. =10j= =5k=) will almost always get
+you where you want to be with less keystrokes.
+
+I was slowly beginning to fix this through a somewhat Pavlovian vim plugin
+called [[https://github.com/takac/vim-hardtime][=vim-hardtime=]] which would tase me when I repeatedly used these keys in
+succession. Unfortunately I lost this with the switch to Emacs and the return to
+familiar modal surroundings in evil mode, and sure enough the bad habits came
+back.
+
+To my dismay I could not find a directly equivalent Emacs package so today I'm
+releasing the [[https://github.com/martinbaillie/evil-motion-trainer][=evil-motion-trainer=]] on GitHub.
+
+*** Evil Motion Trainer
+Just like the vim plugin, entering =evil-motion-trainer-mode= means Emacs will
+drop lazily repeated hjkl-based motions after a configurable threshold, forcing
+you to think about a more efficient motion:
+
+[[./img/evil_motion_trainer.gif]]
+**** Configuration
+Enable in a buffer with:
+#+BEGIN_SRC elisp
+(evil-motion-trainer-mode)
+#+END_SRC
+
+Turn on for all buffers:
+#+BEGIN_SRC elisp
+(global-evil-motion-trainer-mode 1)
+#+END_SRC
+
+Configure the number of permitted repeated key presses:
+#+BEGIN_SRC elisp
+(setq evil-motion-trainer-threshold 6)
+#+END_SRC
+
+Enable a super annoying mode that pops a warning in a buffer:
+#+BEGIN_SRC elisp
+(setq evil-motion-trainer-super-annoying-mode t)
+#+END_SRC
+
+Add to the suggested alternatives for a key:
+#+BEGIN_SRC emacs-lisp
+(emt-add-suggestion 'evil-next-line 'evil-avy-goto-char-timer)
+;; See also: (emt-add-suggestions)
+#+END_SRC
+** DONE Envoy WASM Filters in Rust :rust:wasm:envoy:istio:kubernetes:release:
+CLOSED: [2020-08-17 Mon 08:01]
+:PROPERTIES:
+:EXPORT_FILE_NAME: envoy-wasm-filters-in-rust
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Example filter for conditionally adding HTTP headers on-the-fly.
+:END:
+*** WASM
+I have had a renewed interest in WASM ever since I read the Mozilla WASI
+[[https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/][announcement]] and some of its supporting literature. A few things clicked for me
+after that, most prominently the potential for use beyond the browser. The
+compile once, run anywhere aspects echo the Linux container revolution of the
+last decade, but with true sandboxing, faster starts and without the baggage of
+a Linux userspace.
+
+The poster child of that revolution was of course Docker. It arguably ushered in
+a new paradigm for packaging and deploying software to cloud and enterprise
+computing landscapes that was both efficient and cost-effective. Sure, the
+backing company is an omnishambles, but its tech concepts live on in various
+forms.
+
+Docker achieved all of this despite not being the first to utilise the Linux
+kernel's =cgroups(7)= and =namespaces(7)= features in a cohesive manner, nor Linux even
+being the first to offer such virtualised isolation at all. Other OSes have
+famously had similar offerings since the early noughties, notably FreeBSD's
+[[https://www.freebsd.org/doc/handbook/jails.html][Jails]] and Solaris' [[https://en.wikipedia.org/wiki/Solaris_Containers][Zones]] (which hold a special place in my heart from my time
+interning at Sun).
+
+So why, then, did Docker beat the others? The answer I often see touted
+elsewhere and that I personally believe is */developer experience/*. It
+democratised those Linux container primitives through an abstraction, provided a
+simplistic product engineer focused CLI workflow, and defined an immutable image
+format solving for the /"works on my machine"/ problem. Those product engineers
+could now build, ship and run their workloads on any server with a Docker
+daemon.
+
+WASI implementers will face this same hurdle to become successful on the server,
+but can benefit from being more integrated to tooling and platforms. This can
+already be seen with the burgeoning support for compile targets in the
+toolchains of languages like Rust, C++, Go and AssemblyScript (a TypeScript
+subset), as well as edge compute platforms like Fastly's Lucet and Cloudflare's
+Workers, Ethereum through [[https://ewasm.readthedocs.io/en/mkdocs/][eWasm]] and even good ol' Kubernetes through [[https://github.com/deislabs/krustlet][Krustlet]].
+
+> Incidentally, Krustlet now supports multiple providers ([[https://wasmtime.dev/][Wasmtime]], [[https://wascc.dev/][waSCC]]) but
+I view this (in keeping with the container metaphor) as being less analogous
+to the orchestration system wars of Kubernetes/Mesos/Rancher/Swarm/Nomad and
+more to container runtime e.g. Docker/runc/CRI-O/Rocket. Wasmtime aims for
+strict adherence to WASI, and waSCC is an interesting approach based on the
+Actor model, though I'm not clear on its relationship to the WASI spec.
+
+*** Envoy
+Envoy has supported WASM extensions for a while now (even predating WASI, but
+there are plans afoot to re-align). It does this by implementing the
+=proxy-wasm= [[https://github.com/proxy-wasm/spec][spec]], an open standard ABI for interoperability between WASM VMs
+and a host proxy. The idea being that in the future if a great extension exists
+for say HAProxy, then it would also be usable in Envoy, Nginx and any other
+proxy also implementing this spec. An ambitious venture for sure.
+
+Anyway, Envoy is leading the charge on this by a long shot at the moment and
+this is useful for me because it is fast becoming the universal data plane for
+services meshes, including the one we operate at my current gig as our platform
+SOA backbone: Istio.
+
+Being early adopters of Istio we now have a few hundred services in our
+platform's mesh. We built the platform atop Kubernetes and have found the pod a
+useful axiom for offering cross-cutting functionality to our users through the
+sidecar pattern. For example: injecting secrets, pub/sub over CloudEvents or
+rotating DB credentials.
+
+Taking care of common technological concerns like these allow our users to have
+increased focus on building differentiating product features.
+
+-----
+
+Now, to automatically bolt-on these functional building blocks we invariably
+utilise Kubernetes controllers or mutating webhooks to inject /*additional*/
+containers alongside the "primary" container during admission. To make that
+concrete to the more Kubernetes-initiated reader, =6/6 Running= is not an
+uncommon sight in a =kubectl get pods= output from our platform.
+
+Despite the overwhelming majority of the sidecars we write (or reuse from the
+community) being in Go, and even after careful attention being paid to ensuring
+low and stable resource requirements, they do still add up. This is especially
+true when you have large clusters full of workloads utilising them (a curse of
+success I suppose).
+
+However, since we are using Istio there is another avenue that avoids additional
+containers (for bolting on network related functionality at least) and that is
+the /*Envoy filter*/.
+
+**** Envoy Filters
+In an Istio-enabled pod there is a necessary Envoy sidecar container (so if
+you're following, that's =2/2 Running= on our platform by default!). It acts as
+the gatekeeper to the pod's network thanks to a Kubernetes CNI plugin
+manipulating the pod =iptables=. So all pod packets ingress and egress route
+through that Envoy, and Envoy filters can be used manipulate them as they
+traverse the proxy's internal network and application protocol processing stack.
+
+It is worth mentioning that Envoy has a strong catalogue of native [[https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/http_filters][filters]]
+available and Istio in turn has facilities for enabling them through the
+[[https://istio.io/latest/docs/reference/config/networking/envoy-filter/][=EnvoyFilter=]] CRD. So that should always be your first port of call. But what do
+you do if you have a use case that is not covered in a native filter?
+
+You have two options:
+1. Write a new filter into Envoy's source and compile a custom version.
+
+    This is tried and true, but requires you to maintain a custom supply chain
+   for Envoy and keep it rebased. You are also limited to C++ in terms of
+   languages (unless you get creative) given that is what Envoy is written in.
+
+2. Write a new filter and dynamically load it at runtime using a WASM VM.
+
+    This is why I'm writing this fieldnote today. Doing this is becoming
+   increasingly accessible to your average Joe like me. Through the =proxy-wasm=
+   spec implementation, Envoy is allowing embedded but securely isolated binary
+   extension without the need to hack up the source. You can do this right now
+   with SDKs in [[https://github.com/proxy-wasm/proxy-wasm-rust-sdk][Rust]] [[https://github.com/proxy-wasm/proxy-wasm-cpp-sdk][C++]], [[https://github.com/yskopets/envoy-wasm-assemblyscript-sdk][AssemblyScript]] and even early [[https://github.com/tetratelabs/proxy-wasm-go-sdk][Go]] support.
+
+*** Example: Writing a HTTP Header Augmenting Filter
+Earlier I was talking about functional building blocks offered to our platform
+users. One such example is an injected sidecar that refreshes tokens from an IdP
+and supplies them to the primary container, either via a UNIX file descriptor or
+by POST'ing to a local HTTP endpoint. The primary container can subsequently use
+the token in RPCs to upstream integrations without concerning itself with
+token lifecycle.
+
+#+attr_html: :alt Sidecar use case
+[[./img/sidecar_full.png]]
+
+> NOTE: There's absolutely no need to do this for inter-mesh RPCs of course.
+Istio ([[https://spiffe.io/][SPIFFE]]) workload identity is state-of-the-art. The use case here is to
+federate workload identity beyond the mesh itself across multiple network hops
+e.g. to legacy on-premises services.
+
+Now I should start by saying this /ain't broke/ and I'm not paid to fix things
+that /ain't broke/ at work. We wrote it quickly and it does its thing.
+
+On the other hand, it is objectively sub-optimal. For one, it is yet another
+sidecar container. Worse than that, though, it puts the onus of responsibility
+back on the product engineers to write code that either polls or uses
+=inotify(7)= on that token file, or otherwise uses a dedicated HTTP handler to
+receive the tokens.
+
+-----
+
+I had been revisiting Rust recently and so last weekend I wanted to see if I
+could improve on this use case with an Envoy filter, using the nascent Rust
+=proxy-wasm= SDK.
+
+As it transpired, it is entirely possible to get rid of that additional sidecar
+container and instead utilise the one sidecar container that cannot be gotten
+rid of (Envoy) to procure, refresh and conditionally add the IdP token to
+outbound HTTP headers.
+
+So that's no additional platform sidecar overhead, no additional coding for
+product engineers:
+
+#+attr_html: :alt Sidecar-less use case
+[[./img/sidecar_less.png]]
+
+To prove the concept I implemented a generic HTTP filter that can augment
+requests with additional headers automatically discovered from a 3rd party
+endpoint at regular intervals. The full example is on [[https://github.com/martinbaillie/envoy-wasm-header-augmenting-filter][GitHub]] but I'll talk
+through some key parts below.
+
+> NOTE: the header-providing 3rd party service can be any configured Envoy
+cluster. So in an Istio context, this could be another sidecar available over
+loopback in the same pod, or some external centralised service perhaps in the
+greater mesh authorising based on SPIFFE identity, or even outside of the mesh
+authorising on Kubernetes service account token or cloud IAM for example, all
+the while benefiting from circuit breakers, retries, load balancing and other
+usual Istio-Envoy goodness.
+
+**** Getting booted
+I found the documentation sparse but the [[https://github.com/proxy-wasm/proxy-wasm-rust-sdk/blob/master/src/traits.rs][traits]] easy enough to decipher. The key
+thing to know is there's seemingly 3 "Contexts" available:
+1. Root
+2. HTTP
+3. Stream
+
+Root is a singleton that should be initialised as the WASM VM boots. It is the
+right place to setup shared data and timers. HTTP and Stream are called during
+HTTP and TCP filter chains respectively, though I suspect the latter is more
+nuanced than that. I only made use of the Root and HTTP contexts in my example.
+
+To register context implementations there's the special =_start()= function called by the Envoy host when initialising.
+
+#+begin_src rust
+pub fn _start() {
+    proxy_wasm::set_log_level(LogLevel::Trace);
+    proxy_wasm::set_root_context(|context_id| -> Box<dyn RootContext> {
+        CONFIGS.with(|configs| {
+            configs
+                .borrow_mut()
+                .insert(context_id, FilterConfig::default());
+        });
+
+        Box::new(RootHandler { context_id })
+    });
+    proxy_wasm::set_http_context(|_context_id, _root_context_id| -> Box<dyn HttpContext> {
+        Box::new(HttpHandler {})
+    })
+}
+#+end_src
+
+This is also seemed to be the most fitting place for me to set the log level.
+
+**** Configuring the filter
+For my configuration I created a [[https://github.com/serde-rs/json][Serde]] type to deserialise from JSON because JSON works best with how the host Envoy wants to do configuration.
+
+#+begin_src rust
+#[derive(Deserialize, Debug)]
+#[serde(default)]
+struct FilterConfig {
+    /// The Envoy cluster name housing a HTTP service that will provide headers
+    /// to add to requests.
+    header_providing_service_cluster: String,
+
+    /// The path to call on the HTTP service providing headers.
+    header_providing_service_path: String,
+
+    /// The authority to set when calling the HTTP service providing headers.
+    header_providing_service_authority: String,
+
+    /// The length of time to keep headers cached.
+    #[serde(with = "serde_humanize_rs")]
+    header_cache_expiry: Duration,
+}
+#+end_src
+
+To get some configuration values into the filter there's an =on_configure()=
+hook method called on the =RootContext= as the WASM VM boots, and this can be
+married with the =get_configuration()= method for actually getting the configuration bytes.
+
+**** Populating the token
+Another useful method on the =RootContext= is =on_tick()= which is a ticker
+controlled by =set_tick_period()=. I use it to dispatch calls to the header
+providing endpoint (e.g. the IdP) on an interval.
+
+#+begin_src rust
+fn on_tick(&mut self) {
+        // Log the action that is about to be taken.
+        match self.get_shared_data(CACHE_KEY) {
+            (None, _) => debug!("initialising cached headers"),
+            (Some(_), _) => debug!("refreshing cached headers"),
+        }
+
+        CONFIGS.with(|configs| {
+            configs.borrow().get(&self.context_id).map(|config| {
+                ...
+                // Dispatch an async HTTP call to the configured cluster.
+                self.dispatch_http_call(
+                    &config.header_providing_service_cluster,
+                    vec![
+                        (":method", "GET"),
+                        (":path", &config.header_providing_service_path),
+                        (":authority", &config.header_providing_service_authority),
+                    ],
+                    None,
+                    vec![],
+                    Duration::from_secs(5),
+                )
+                .map_err(|e| {
+                    ...
+                })
+            })
+        });
+    }
+#+end_src
+
+However this is not your typical RPC. It is async from the caller's perspective and you have to play ball with Envoy's internal processing stack. The other side can be grabbed when the =on_http_call_response()= hook method triggers.
+
+#+begin_src rust
+fn on_http_call_response(
+        &mut self,
+        _token_id: u32,
+        _num_headers: usize,
+        body_size: usize,
+        _num_trailers: usize,
+    ) {
+        // Gather the response body of previously dispatched async HTTP call.
+        let body = match self.get_http_call_response_body(0, body_size) {
+            Some(body) => body,
+            None => {
+                ...
+            }
+        };
+
+        // Store the body in the shared cache.
+        match self.set_shared_data(CACHE_KEY, Some(&body), None) {
+            ...
+        }
+    }
+}
+#+end_src
+
+**** Using shared data
+The snippets above make passing reference to "shared data". There are facilities
+in the =proxy-wasm= ABI for storing and retrieving data in a safe manner. In
+this example I refresh the headers to be added to outbound requests on a
+recurring tick, and cache them in shared data in the =RootContext=, out-of-band
+from the HTTP filter chains.
+
+The final piece of the puzzle is to retrieve the currently cached, to-be-inserted
+headers during the hot path of an outbound request, and insert them into the
+payload.
+
+This is done on the =HttpContext=, when the =on_http_request_headers()= hook method triggers on the outbound request.
+
+#+begin_src rust
+impl HttpContext for HttpHandler {
+    fn on_http_request_headers(&mut self, _num_headers: usize) -> Action {
+        match self.get_shared_data(CACHE_KEY) {
+            (Some(cache), _) => {
+                debug!(
+                    "using existing header cache: {}",
+                    String::from_utf8(cache.clone()).unwrap()
+                );
+
+                match self.parse_headers(&cache) {
+                    Ok(headers) => {
+                        for (name, value) in headers {
+                            self.set_http_request_header(&name, value.as_str())
+                        }
+                    }
+                    ...
+                }
+
+                Action::Continue
+            }
+            ...
+#+end_src
+
+**** Deploying it
+In the [[https://github.com/martinbaillie/envoy-wasm-header-augmenting-filter/tree/master/hack][hack directory]] I have a Docker compose stack complete with source,
+destination and header providing containers, and an Envoy container configured
+with the currently compiled filter. It mimics the Kubernetes/Istio pod network
+setup and I found it useful for locally developing the filter.
+
+Testing the real deal was a little trickier. Manually distributing the Envoy
+filter binary to a test Kubernetes cluster such that it could be utilised by an
+Istio =EnvoyFilter= resource necessitated jumping through a few hoops, but only
+because I like making things difficult it seems. For the record there are
+promising tools like Solo.io's [[https://docs.solo.io/web-assembly-hub/latest/reference/cli/wasme/][=wasme=]] suite and [[https://webassemblyhub.io/][AssemblyHub]] solving the filter
+distribution problem. Additionally, with OCI registries like AWS's ECR starting
+to support [[https://github.com/opencontainers/artifacts/blob/master/artifact-authors.md][OCI artifact types]], there is nothing stopping use of them as a WASM
+module registry in addition to your typical OCI images.
+
+Anyway, my approach was simply to use a =ConfigMap= to hold the WASM binary. The
+=binaryData= field is esoteric but has actually existed since Kubernetes 1.10.
+Doing it this way went a bit sideways when I realised the =ConfigMap= resource
+has a size limit of 1mb, presumably hamstrung by =etcd= value limits, and my
+un-optimised Rust compiler was producing WASM binaries in excess of that. What
+followed was a few rounds of optimisation:
+1. 2.1mb --> 1.7mb after reducing macro usage in the code.
+2. 1.7mb --> 372kb when compiled with =lto=true= and =opt-level=s=.
+3. 372kb --> 131kb when compiled through [[https://github.com/rustwasm/wasm-pack][=wasm-pack=]].
+
+Nice. That was more than enough for Kubernetes to accept my WASM binary as a
+=ConfigMap=. I made use of Kustomize's [[https://github.com/martinbaillie/envoy-wasm-header-augmenting-filter/blob/master/hack/kustomization.yaml#L15-L17][files feature]] to do the serialisation on the fly.
+
+-----
+
+So now that the binary was in a binary =ConfigMap= in my cluster, I needed to
+get it loaded into the target pod's Envoy. This is not as simple as editing a
+=Deployment= spec's mounts because that Envoy is itself injected by Istio.
+
+Fortunately there's a handy mount annotation that can be put on the =Deployment=
+spec.
+
+#+begin_src yaml
+template:
+  metadata:
+    annotations:
+      sidecar.istio.io/userVolumeMount: >
+        '{ "filter":{"mountPath":"/etc/filter.wasm","subPath":"filter.wasm"} }'
+#+end_src
+
+This reflects in the injected Envoy container stanza. Then all you need is to mount the =ConfigMap= to the pod.
+
+#+begin_src yaml
+      volumes:
+        - name: filter
+          configMap:
+            name: filter
+#+end_src
+
+With that done, the Envoy container has the custom filter available to its
+userspace at =/etc/filter.wasm=. The final piece is to tell the Envoy process to
+use it, and this is done by selecting it with an =EnvoyFilter= CRD loaded with
+our custom configuration.
+
+#+begin_src yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: sourceworkload
+spec:
+  configPatches:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        listener:
+          filterChain:
+            filter:
+              name: envoy.http_connection_manager
+              subFilter:
+                name: envoy.router
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          config:
+            config:
+              configuration: |
+                {
+                  "header_providing_service_cluster": "inbound|8081|mgmt-8081|mgmtCluster",
+                  "header_providing_service_authority": "localhost"
+                }
+              name: header_augmenting_filter
+              rootId: header_augmenting_filter
+              vmConfig:
+                code:
+                  local:
+                    filename: /etc/filter.wasm
+                runtime: envoy.wasm.runtime.v8
+                allow_precompiled: true
+          name: envoy.filters.http.wasm
+  workloadSelector:
+    labels:
+      app: sourceworkload
+#+end_src
+
+In this example I am sliding the filter into the HTTP outbound chain and using
+the existing =mgmt= cluster to call the header providing container over
+loopback. As mentioned at the start of this section, there are many ways to skin
+that cat.
+** DONE Controlling Client SNI with Hyper :rust:hyper:security:
+CLOSED: [2020-09-27 Sun 19:09]
+:PROPERTIES:
+:EXPORT_FILE_NAME: controlling-client-sni-with-hyper
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr There is at least one way to take control of client SNI in Rust.
+:END:
+I recently revisited Rust after a few years hiatus and in one project I found
+myself needing to provide a different Server Name Indicator (SNI) when
+initiating a TLS connection to a remote host.
+
+In Go this is as simple as setting the =ServerName= field on the standard
+library's TLS configuration struct.
+#+BEGIN_SRC go
+(&http.Client{
+    Transport: &http.Transport{
+        TLSClientConfig: &tls.Config{
+            ServerName: "somewhere.com",
+        },
+    },
+}).Get("https://somewhere-else.com")
+#+END_SRC
+
+And is also what you can achieve with the =openssl= and =curl= CLIs for example.
+#+BEGIN_SRC shell
+; openssl s_client -connect somewhere-else.com:443 -servername somewhere.com
+; curl --resolve somewhere.com:443:<somewhere-else.com IP> https://somewhere.com
+#+END_SRC
+
+However, to my surprise, getting the equivalent in Rust was quite awkward. My
+search for copypasta-able prior art failed to uncover anything usable and so I
+thought I would document at least /one/ way of doing it, with [[https://github.com/hyperium/hyper][Hyper]], in case it
+helps a future weary traveler.
+
+#+begin_quote
+My project actually started out higher up the abstraction stack with [[https://github.com/seanmonstar/reqwest][Reqwest]] but
+at this level there's little in the way of control provided over the underlying
+TLS settings. This forces dipping into the likes of Hyper.
+#+end_quote
+
+*** But why?
+In my experience passing a different SNI is a somewhat typical requirement for
+proxies doing virtual hosting or gateways doing [[https://en.wikipedia.org/wiki/Domain_fronting][domain fronting]].
+
+In my particular case, I needed to send an HTTPS request to an [[https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-privatelink.html][AWS PrivateLink]]
+address but present a different SNI such that the application layer load
+balancer on the other side of the link knew which certificate to present and how
+to route the requests. I should note that I did not have the environmental
+permissions to create a private DNS zone to CNAME or Alias the true hostname to
+the PrivateLink one.
+
+*** Hyper
+You can achieve this feat with Hyper (and by extension Tokio) *but* I found I
+needed to switch from the default TLS implementation to the Rust's native
+OpenSSL bindings so I could link against =SSL_set_tlsext_host_name= in the FFI
+of the build system's OpenSSL install.
+
+In the [[https://docs.rs/crate/openssl/0.10.30][rust-openssl]] bindings library this corresponds to
+[[https://docs.rs/openssl/0.10.30/openssl/ssl/struct.SslRef.html#method.set_hostname][=openssl::ssl:SslRef::set_hostname()=]].
+
+In addition to the bindings, you will also need to switch Hyper to use
+[[https://docs.rs/hyper-openssl/0.8.1/hyper_openssl/][=hyper-openssl=]] crate.
+
+In your =Cargo.toml= this looks something like:
+#+BEGIN_SRC toml
+[dependencies]
+hyper = "0.13.8"
+hyper-openssl = "0.8.0"
+openssl = "0.10.30"
+#+END_SRC
+
+Then take control of the connector and set a callback as you construct your
+Hyper client:
+#+BEGIN_SRC rust
+let mut conn = HttpsConnector::new()?;
+conn.set_callback(move |c, _| {
+    // Prevent native TLS lib from inferring and verifying a default SNI.
+    c.set_use_server_name_indication(false);
+    c.set_verify_hostname(false);
+
+    // And set a custom SNI instead.
+    c.set_hostname("somewhere.com")
+});
+Client::builder()
+    .build::<_, Body>(conn)
+    .request(Request::get("somewhere-else.com").body(())?)
+    .await?;
+#+END_SRC
+
+That's it! If you capture the TLS =ClientHello= packet you can confirm the SNI
+has changed:
+#+attr_html: :alt WireShark TLS ClientHello
+[[./img/client_hello_wireshark.png]]
+
+*** Cross-platform builds
+Using native OpenSSL is not without its pitfalls. YMMV with this but with my
+attempts at statically linking for each target platform, even when I could get
+the right incantations of the =OPENSSL_STATIC=, =OPENSSL_LIB_DIR= and
+=OPENSSL_INCLUDE_DIR= variables to produce a true static binary from a =ldd=
+perspective, I still found the bindings reaching for a system-provided OpenSSL
+at runtime and subsequently segfaulting on Linux/amd64.
+
+I eventually gave up with glibc and opted to use the musl libc counterparts.
+However compiling musl versions of OpenSSL, zlib and friends is itself a rabbit
+hole I did not have time for. Fortunately someone did and I can highly recommend
+[[https://github.com/clux/muslrust][=clux/muslrust=]] container image for getting this task done.
+
+I also had some issues with the binary being unable to find the CA certificates
+on the host system. Solving this was easy thanks to the handy [[https://docs.rs/openssl-probe/0.1.2/openssl_probe/][=openssl-probe=]]
+crate.
+** DONE Git Signature Operations via HashiCorp Vault :vault:git:security:release:
+CLOSED: [2020-10-04 Sun 12:59]
+:PROPERTIES:
+:EXPORT_FILE_NAME: git-signature-operations-via-hashicorp-vault
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Vaultsign is a helper tool for performing Git signature operations using Vault.
+:END:
+The typical modern software supply chain starts with an input changeset of
+source commits triggering a whole raft of manual and automated code checks in a
+CI environment: peer reviews; full testing pyramid; dependency vetting;
+automated static analysis and so on.
+
+The outputs of this step are invariably deployable artefacts such as binaries,
+container images, interpreted/byte code archives or [[https://en.wikipedia.org/wiki/Infrastructure_as_code][IaC]] that subsequently need
+to progress their way through a delivery pipeline comprising at least a
+pre-production/staging environment (again, typically) before landing in
+production.
+
+To achieve that last part necessitates putting the production-bound artefacts on
+/ice/ (object store, OCI registry, SCM repository tag etc.) whilst instances of
+it are validated in the N pre-production environments in the delivery pipeline.
+This is fine for most organisations, but an additional code provenance strategy
+is sometimes required in regulated and other high security environments.
+
+*** Code Provenance
+My definition of code provenance here is the proof that those artefacts
+deployed to production have been through all prior CI and pre-production steps,
+and have additionally retained authenticity and integrity whilst in cold storage
+between environments. Sort of like a software /[[https://en.wikipedia.org/wiki/Chain_of_custody][chain of custody]]/.
+
+The tried and tested approach is to manually sign a checksum of the artefacts
+and verify at each stage. This is a concise way to check integrity and
+authenticity in one shot, but starts to fall down in modern automated contexts
+because of the key distribution and identity problem. That is, an organisation's
+engineers can still sign individual commits with their own keys, but it is
+ultimately the identity of the automated CI environment that is collating and
+producing the deployable artefacts.
+
+So with identified engineers landing commits, the next link in that chain of
+custody is the CI system. It needs to prove it was /responsible/ for producing
+those deployable artefacts, and the following runtime stages needing to verify
+that fact.
+
+-----
+
+There are many options in this space but generally speaking it involves the CI
+system following the same approach as would have been followed by a human:
+produce and sign a checksum of the deployable artefacts. This time, however,
+there is the added complexity of the CI system needing to securely identify
+itself (machine-to-machine) to some signing service, or otherwise storage
+service in order to access the asymmetric key material needed for signing.
+
+Checksumming strategies can further benefit from reproducible (aka.
+deterministic) builds which are within reach these days with the right choice of
+language and build system. Then there are specifications like [[https://github.com/theupdateframework/specification/blob/master/tuf-spec.md#the-update-framework-specification][The Update
+Framework (TUF)]] laying foundations for securely tracking origin authenticity,
+with tools like [[https://www.vaultproject.io/][Vault]], [[https://docs.docker.com/notary/getting_started/][Notary]], [[https://www.openpolicyagent.org/][OPA]]/[[https://github.com/open-policy-agent/gatekeeper][Gatekeeper]], and cloud services like [[https://cloud.google.com/binary-authorization][GCP
+Binary Authorization]], and [[https://docs.aws.amazon.com/signer/latest/api/Welcome.html][AWS Signer]] all able to help in this regard.
+
+*** Vault
+This post is about using HashiCorp's Vault in the previously outlined context of
+code provenance.
+
+With a Vault deployment there are numerous machine authentication options that a
+CI system's agents can leverage to securely identify themselves, including but
+not exclusive to: all major cloud IAM; Kubernetes SAs; AppRole; JWT/OIDC; or TLS
+certificates.
+
+Once authenticated, the agents can utilise Vault's "encryption as a service"
+related backends and plugins ([[https://www.vaultproject.io/docs/secrets/transit][=transit=]], [[https://github.com/LeSuisse/vault-gpg-plugin][=gpg=]]) to sign checksums or raw data.
+
+This constitutes as quite a strong code provenance strategy especially given
+Vault's additional RBAC and audit features, provided the subsequent steps in the
+software supply chain (... /of custody/) have the requisite network access to
+the non-sensitive verify endpoints (or otherwise cached public key).
+
+------
+
+While the process outlined works well for deployable artefacts like binaries,
+things get more awkward when some or all of the deployment collateral is say,
+interpreted IaC files (Terraform, Pulumi etc.). In my experience, these are
+commonly located on and directly deployed from a branch or tag, both of which
+are of course /*mutable*/.
+
+A solution here is to tarball all the IaC files and sign/store/verify them like
+the other artefacts, or even just sign/store/verify the branch head commit or
+tag SHA.
+
+Another is to make use of a tool I am releasing today called [[https://github.com/martinbaillie/vaultsign][=vaultsign=]]!
+
+*** Vaultsign
+
+=vaultsign= is a small CLI that can be used as a Git helper to sign (and verify)
+commits and tags using HashiCorp’s Vault.
+
+It does so by implementing just enough of the GPG CLI interface and status
+protocol to proxy the Git originating sign and verify requests onwards to your
+specified Vault endpoint, and works with both the previously mentioned [[https://www.vaultproject.io/docs/secrets/transit][transit
+backend]] and [[https://github.com/LeSuisse/vault-gpg-plugin][GPG plugins]] you may already be using for other code provenance
+purposes.
+
+With it, the CI system can sign a commit or, more commonly, a release tag at the
+same time and using the same role and key material as the other deployable
+artefacts in the release. Then they can then all be verified together during the
+subsequent runtime steps in the chain. All the usual signature related Git
+porcelain continues to function and you can even have forges like GitHub verify
+and show the coveted green tick if you take the Vault GPG plugin option.
+
+**** Example Usage
+#+begin_src sh
+# Login to vault.
+; export VAULT_ADDR=https://production.vault.acme.corp
+; vault login
+
+# Tell git to use vaultsign.
+; git config --local gpg.program /path/to/vaultsign
+
+# Sign a commit and tag.
+; export VAULT_SIGN_PATH=transit/sign/test/sha2-256
+; git commit -m "test signed commit" -S
+; git tag -m "test signed tag" -s test
+
+# Verify the same commit and tag.
+; export VAULT_VERIFY_PATH=transit/verify/test
+; git verify-commit HEAD
+; git log -1 --show-signature
+; git verify-tag test
+#+end_src
+
+** DONE Avoiding Libinput Hysteresis on a ThinkPad :nix:
+CLOSED: [2020-12-20 Sun 16:21]
+:PROPERTIES:
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Avoid triggering hysteresis with this one dirty trick.
+:EXPORT_FILE_NAME: avoiding-libinput-hysteresis-on-a-thinkpad
+:END:
+
+Making a touchpad work on Linux as well as it does on macOS/Windows. It's a
+problem as old as time itself, or at least as old as the /"year of Linux on the
+desktop"/ meme.
+
+The days of calibrating obscure values that I don't fully understand on the old
+X11 =synaptics= driver were supposed to be a thing of the past with =libinput=,
+and to be fair they have been, /for the most part/. Things are definitely more
+in tune with what you've come to expect from other OSes out of the box.
+
+Unfortunately I seem to have landed myself a ThinkPad with a touchpad (clickpad)
+revision that triggers a hysteresis in =libinput= unnecessarily, making it
+difficult to conduct precise, narrow gestures (like carefully circling a small
+number of pixels for example).
+
+This is a core issue being [[https://gitlab.freedesktop.org/libinput/libinput/-/issues/286][tracked]] by the =libinput= developers that is
+prevalent in various ThinkPad revisions but not yet resolved. The gist seems to
+be yet unexplained heuristics causing wobbling detection to trigger a hysteresis
+instantly. This is probably a hard thing to fix and way beyond me. However,
+turning off wobbling detection altogether is not. And while a quick, temporary
+and dirty fix, it /does/ seem to help!
+
+*** Disable wobbling detection
+To do so requires a /very/ simple patch.
+#+begin_src diff
+--- a/src/evdev-mt-touchpad.c 2020-12-20 12:16:11.039665884 +1100
++++ b/src/evdev-mt-touchpad.c 2020-12-20 12:16:02.846795394 +1100
+@@ -1754,7 +1754,7 @@
+
+ 		tp_thumb_update_touch(tp, t, time);
+ 		tp_palm_detect(tp, t, time);
+-		tp_detect_wobbling(tp, t, time);
++		// tp_detect_wobbling(tp, t, time);
+ 		tp_motion_hysteresis(tp, t);
+ 		tp_motion_history_push(t);
+#+end_src
+
+With this in place I no longer have hysteresis issues and haven't noticed any
+negative effects of disabled wobbling protection.
+
+Apply the above patch to a recent =libinput= source and compile then install in
+a way that suits your OS.
+
+**** Nix
+
+Below is an excerpt from how I do both in my NixOS package overlays.
+
+#+begin_src nix
+nixpkgs.overlays = [
+    (self: super: {
+        libinput = super.libinput.overrideAttrs
+            (o: { patches = o.patches ++ [ libinput.patch ]; });
+    })
+];
+#+end_src
+
+This means any Nix expression in my system making use of =libinput= gets my
+patched version.
+
+*** A note on Synaptics RMI4 over SMBus
+As I was digging into this problem I realised that my ThinkPad's Synaptics
+clickpad runs their RMI4 protocol. This is a native protocol that has had Linux
+kernel support as of 4.6 and means you can ditch the HID/PS2 emulation
+(=psmouse= module).
+
+This should have been automatic for me but it seems my device's PnP ID is not in
+the current kernel's [[https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/tree/drivers/input/mouse/synaptics.c#n164][list]]. I can force it with the kernel parameter
+=psmouse.synaptics_intertouch=1= but then it seems I then hit another [[https://gitlab.freedesktop.org/libinput/libinput/-/issues/402][issue]] in
+=libinput= that causes my clickpad buttons to not get discovered by the probing
+code.
+
+Alas, the situation is still good enough that I don't need to reach for the
+=synaptics= driver, and there is better [[https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.10-Synaptics-RMI4-F3A][support]] landing in the 5.10 kernels so
+I'm happy to hold out for now.
+
+** DONE Emacs TRAMP over AWS SSM APIs :emacs:aws:
+CLOSED: [2021-02-07 Sun 15:18]
+:PROPERTIES:
+:EXPORT_FILE_NAME: emacs-tramp-over-aws-ssm-apis
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Securely preside over your EC2 darlings with TRAMP mode.
+:END:
+*** Cattle not pets
+The majority of AWS EC2 I need to operate these days are members of Kubernetes
+clusters. For remote access to them I'm more commonly authenticating to the Kube
+API to spawn a privileged ephemeral debugger pod rather than accessing the host
+directly. I have little need for host access even for the remaining minority of
+ancillary EC2 services I'm responsible for because all the observability pillars
+are pulled or pushed somewhere else, and if something is misbehaving or needing
+replaced I'm more likely to shoot it than debug or patch it.
+
+To be clear, I think this is a good thing. It is a testament to the efficacy of
+the immutable infrastructure pattern, infrastructure as code and modern platform
+tooling.
+
+So the preface here is I rarely need to pop a shell on an EC2 instance, and
+*very* rarely need to extract a file from one.
+
+However, one of these very rare occurrences presented itself last week and
+prompted my writing of this quick [[/wrote/fieldnotes][fieldnote]], if for no one else but myself!
+
+*** AWS SSM
+For a good wee while now, AWS SSM (or AWS Systems Manager as I see they are
+calling it nowadays) has arguably been the most secure way to permit controlled
+and audited access to an EC2 instance.
+
+#+begin_quote
+NOTE: You can also run the SSM agent on other cloud or on-premises VMs. I have
+used to the latter in a hybrid context to good effect at a previous client. For
+the former, most other clouds have their own solutions and those are probably
+the smarter choice.
+#+end_quote
+
+If you /are/ in AWS then some features to like about the SSM approach over
+traditional SSH are:
+- No direct network path required. There is no need to punch holes in your
+  VPC layers and chain bastions.
+- Instance authentication controlled through IAM and by extension whichever IdP
+  you may be federating human access with.
+- Initial access and every userspace command audited and logged. To create
+  break-glass alerts or "taint" instances that have been accessed is a breeze.
+
+When compared to an SSH session there is no notable performance difference when
+accessing an instance over the SSM APIs either. I do recall some lag in the
+early days of the service but that seems fixed if you're doing run-of-the-mill
+sysadmin things. Just don't go pasting many megabytes of junk into the pty from
+your clipboard!
+
+The only downside I feel is the need for an opaque client-side binary called the
+[[https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html][=ssm-session-manager-plugin=]] which is paired with the =aws= CLI (presuming you
+want to use your terminal rather than a window in the AWS console).
+
+#+begin_quote
+NOTE: I packaged the plugin binary for Nix/NixOS a while back. It's currently
+in [[https://search.nixos.org/packages?channel=unstable&show=ssm-session-manager-plugin&from=0&size=50&sort=relevance&query=ssm-session-manager-plugin][stable]].
+#+end_quote
+
+*** SSH
+Perhaps more interesting, though, is that for the last couple of years AWS has
+supported tunneling the SSH protocol over their SSM APIs if you use the SSM
+"document" called =AWS-StartSSHSession=.
+
+They do this by proxying the SSH data arriving at the =amazon-ssm-agent= on the
+target host laterally to the =sshd= on the same host over loopback. So while
+this means you need to run an SSH daemon again, you only need to bind it on a
+local interface.
+
+As above, there's not much to be gained for an interactive SSH session (that I'm
+aware of) since the SSM sessions are good enough performance wise. Plus, you
+actually lose a fair amount of the benefits listed above and you have the hassle
+of getting your public key into the target host user's =authorized_keys= if it's
+not already baked in.
+
+What it /does/ do, however, is open up =scp=! You can now copy files to and fro
+that target host which is something you couldn't do before with a pure SSM
+session.
+
+**** How?
+Presuming your public key is already trusted by the target user on the host, all
+you need to do is to modify your local SSH config (normally =~/.ssh/config=) to
+tell it to proxy all session requests headed towards AWS instance names via the
+AWS CLI.
+#+begin_src sh
+host i-* mi-*
+ProxyCommand sh -c "aws ssm start-session \
+    --target %h \
+    --document-name AWS-StartSSHSession \
+    --parameters 'portNumber=%p'"
+#+end_src
+
+With that done, and with an IAM session in tow, you can =ssh
+user@i-00deadbeef= or =scp user@i-00deadbeef=.
+
+#+begin_quote
+NOTE: It's not the scope of this post, but you could conceivably configure SSH
+tunnels here as well. There's also a =AWS-StartPortForwardingSession= document
+that uses pure SSM to similar effect, and is probably more optimised.
+#+end_quote
+*** Emacs TRAMP
+My work scenario from mid-week had me copying files to and from different
+locations on an EC2 instance. Fortunately I tried good old TRAMP mode on a whim
+and learned that it works flawlessly using SSH proxied over SSM (I am not sure
+why I was surprised by that).
+
+In a stock Emacs, =C-x C-f /ssh:user@i-00deadbeef:path= can be used to pop a
+remote Dired directory buffer or edit a target file in whatever major mode is
+appropriate.
+
+#+attr_html: :alt TRAMP Dired
+[[./img/tramp_dired.png]]
+
+You can also move around the remote filesystem as if it were local, and the
+likes of =M-x dired-do-copy= and friends can be used to transparently copy files
+between local and remote.
+
+#+attr_html: :alt TRAMP Minibuffer
+[[./img/tramp_minibuffer.png]]
+** TODO Capturing AWS IAM Usage :aws:
+:PROPERTIES:
+:EXPORT_FILE_NAME: capturing-aws-iam-usage
+:END:
+
+Love hate with IAM. Incredibly powerful and aid least privilege principle
+immensely, but filled with many sharp edges in typical AWS UX style. Also
+dangerous.
+
+** TODO Clichéd Meta Post :meta:
+:PROPERTIES:
+:EXPORT_FILE_NAME: cliched-meta-post
+:END:
+Split into two:
+- Why
+https://jvns.ca/blog/2016/05/22/how-do-you-write-blog-posts/
+Tidbits gotchas howtos demos, software releases
+Less
+- How
+Ox Hugo
+
+Comfort of org mode
+Pandoc export
+Uncommitted markdown and ultimately html
+Auto generation through Dir Locals and Hugo navigateToChanged
+Nix shell provides everything needed

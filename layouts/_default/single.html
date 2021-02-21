@@ -1,0 +1,41 @@
+{{ define "main" }}
+{{- $readingTime := (math.Round (mul .ReadingTime 1.8)) -}}
+<main>
+	<article>
+		<div class="title">
+			{{ if eq .Type "wrote" }}
+			{{ end }}
+			<h1>{{ .Title }}</h1>
+		</div>
+		<div class="meta">
+		<div class="posted"><i data-feather="edit-3"></i>{{ dateFormat "20060102" .Date }}{{ if .Draft }} <span class="draft-label">DRAFT</span> {{ end }}</div>
+		<div class="reading"><i data-feather="clock"></i>{{ if gt $readingTime 9 }}~{{ $readingTime }} mins {{ else }}~0{{ $readingTime }} mins{{ end }}</div>
+		</div>
+		{{ if isset .Params "tldr" }}
+		<div class="tldr">
+			<strong>tl;dr:</strong>
+			{{ .Params.tldr }}
+		</div>{{ end }}
+
+		<section class="body">
+			<div class="single">
+			{{ .Content }}
+			</div>
+		</section>
+
+		<div class="post-tags">
+			{{ if eq .Type "wrote" }}
+			{{ if gt .Params.tags 0 }}
+			<nav class="nav tags">
+				<ul class="tags">
+					{{ range .Params.tags }}
+					<li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
+					{{ end }}
+				</ul>
+			</nav>
+			{{ end }}
+			{{ end }}
+		</div>
+	</article>
+</main>
+{{ end }}

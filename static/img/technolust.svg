@@ -1,0 +1,71 @@
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="990"
+   height="765"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="technolust_printable-yellow.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffff00"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.4406643"
+     inkscape:cx="308.4783"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1278"
+     inkscape:window-height="1419"
+     inkscape:window-x="2560"
+     inkscape:window-y="19"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-287.36218)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.39097691px;line-height:104.99999523%;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:-1.03258145px;word-spacing:92.13722229px;fill:#000000;fill-opacity:1;stroke:none"
+       x="69.78569"
+       y="537.36688"
+       id="text2985"
+       sodipodi:linespacing="105%"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="69.78569"
+         y="537.36688"
+         style="font-size:178.63658142px;line-height:104.99999523%;font-family:Helvetica;-inkscape-font-specification:Helvetica;letter-spacing:-1.03258145px;word-spacing:92.13724518px"
+         dx="1.0325814">Trust your</tspan><tspan
+         sodipodi:role="line"
+         x="69.78569"
+         y="719.01685"
+         id="tspan2989"
+         style="font-size:178.63658142px;line-height:104.99999523%;font-family:Helvetica;-inkscape-font-specification:Helvetica;letter-spacing:-1.03258145px;word-spacing:92.13724518px">technolust.</tspan></text>
+  </g>
+</svg>
