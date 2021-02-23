@@ -1,0 +1,289 @@
+<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Martin Baillie | Envoy WASM Filters in Rust</title><meta name=robots content="index, follow"><meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><link rel=canonical href=https://martin.baillie.id/wrote/envoy-wasm-filters-in-rust/><meta property="og:title" content="Martin Baillie | Envoy WASM Filters in Rust"><meta name=description content="WASM I have had a renewed interest in WASM ever since I read the Mozilla WASI announcement and some of its supporting literature. A few things clicked for me after that, most prominently the potential for use beyond the browser. The compile once, run anywhere aspects echo the Linux container revolution of the last decade, but with true sandboxing, faster starts and without the baggage of a Linux userspace.
+The poster child of that revolution was of course Docker."><meta property="og:image" content="https://martin.baillie.id//img/me.jpg"><meta itemprop=name content="Martin Baillie | Envoy WASM Filters in Rust"><meta name=application-name content="Martin Baillie"><meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Envoy WASM Filters in Rust"><meta property="og:description" content="WASM I have had a renewed interest in WASM ever since I read the Mozilla WASI announcement and some of its supporting literature. A few things clicked for me after that, most prominently the potential for use beyond the browser. The compile once, run anywhere aspects echo the Linux container revolution of the last decade, but with true sandboxing, faster starts and without the baggage of a Linux userspace.
+The poster child of that revolution was of course Docker."><meta property="og:type" content="article"><meta property="og:url" content="https://martin.baillie.id/wrote/envoy-wasm-filters-in-rust/"><meta property="article:published_time" content="2020-08-17T00:00:00+10:00"><meta property="article:modified_time" content="2020-08-17T00:00:00+10:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Envoy WASM Filters in Rust"><meta name=twitter:description content="WASM I have had a renewed interest in WASM ever since I read the Mozilla WASI announcement and some of its supporting literature. A few things clicked for me after that, most prominently the potential for use beyond the browser. The compile once, run anywhere aspects echo the Linux container revolution of the last decade, but with true sandboxing, faster starts and without the baggage of a Linux userspace.
+The poster child of that revolution was of course Docker."><meta name=twitter:site content="@martinbaillie"><meta name=twitter:creator content="@martinbaillie"><meta name=twitter:image content="https://martin.baillie.id//img/me.jpg"><link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png><link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png><link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png><link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png><link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png><link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png><link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png><link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png><link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png><link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png><link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png><link rel=manifest href=/img/favicon/manifest.json><meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png"><meta name=msapplication-TileColor content="#ffffff"><meta name=theme-color content="#ffffff"><script src=https://martin.baillie.id/main.7e4f48e8542b3b653a252ce4bc2041e90ebc755bd0811624bf4209201afc184d39c2507eab1b75ef7883bc5f968e13bd392dc6df7840375b224be41eb25a70cd.js integrity="sha512-fk9I6FQrO2U6JSzkvCBB6Q68dVvQgRYkv0IJIBr8GE05wlB+qxt173iDvF+WjhO9OS3G33hAN1siS+QeslpwzQ==" crossorigin=anonymous onload="WebFont.load({custom:{families:['Roboto Mono']}});feather.replace();" defer></script><link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.1a92a966a2a8f7588c617b795cff11e8b0e38fca99a44048a51198066a1894610096b89c16e109d9f38f37ebe4e9db238df38d7f190459089474dbe9c7d02cb3.css integrity="sha512-GpKpZqKo91iMYXt5XP8R6LDjj8qZpEBIpRGYBmoYlGEAlricFuEJ2fOPN+vk6dsjjfONfxkEWQiUdNvpx9Assw==" crossorigin=anonymous></head><body><div class=content><header><div class=main><a href=https://martin.baillie.id/>Martin Baillie</a></div><nav><a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a><a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a><a class=soc id=mode href=javascript:toggleMode(); title="Switch Theme"><i data-feather=moon></i></a></nav></header><main><article><div class=title><h1>Envoy WASM Filters in Rust</h1></div><div class=meta><div class=posted><i data-feather=edit-3></i>20200817</div><div class=reading><i data-feather=clock></i>~20 mins</div></div><div class=tldr><strong>tl;dr:</strong>
+Example filter for conditionally adding HTTP headers on-the-fly.</div><section class=body><div class=single><h2 id=wasm>WASM</h2><p>I have had a renewed interest in WASM ever since I read the Mozilla WASI
+<a href=https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/>announcement</a> and some of its supporting literature. A few things clicked for me
+after that, most prominently the potential for use beyond the browser. The
+compile once, run anywhere aspects echo the Linux container revolution of the
+last decade, but with true sandboxing, faster starts and without the baggage of
+a Linux userspace.</p><p>The poster child of that revolution was of course Docker. It arguably ushered in
+a new paradigm for packaging and deploying software to cloud and enterprise
+computing landscapes that was both efficient and cost-effective. Sure, the
+backing company is an omnishambles, but its tech concepts live on in various
+forms.</p><p>Docker achieved all of this despite not being the first to utilise the Linux
+kernel&rsquo;s <code>cgroups(7)</code> and <code>namespaces(7)</code> features in a cohesive manner, nor Linux even
+being the first to offer such virtualised isolation at all. Other OSes have
+famously had similar offerings since the early noughties, notably FreeBSD&rsquo;s
+<a href=https://www.freebsd.org/doc/handbook/jails.html>Jails</a> and Solaris' <a href=https://en.wikipedia.org/wiki/Solaris%5FContainers>Zones</a> (which hold a special place in my heart from my time
+interning at Sun).</p><p>So why, then, did Docker beat the others? The answer I often see touted
+elsewhere and that I personally believe is <strong><em>developer experience</em></strong>. It
+democratised those Linux container primitives through an abstraction, provided a
+simplistic product engineer focused CLI workflow, and defined an immutable image
+format solving for the <em>&ldquo;works on my machine&rdquo;</em> problem. Those product engineers
+could now build, ship and run their workloads on any server with a Docker
+daemon.</p><p>WASI implementers will face this same hurdle to become successful on the server,
+but can benefit from being more integrated to tooling and platforms. This can
+already be seen with the burgeoning support for compile targets in the
+toolchains of languages like Rust, C++, Go and AssemblyScript (a TypeScript
+subset), as well as edge compute platforms like Fastly&rsquo;s Lucet and Cloudflare&rsquo;s
+Workers, Ethereum through <a href=https://ewasm.readthedocs.io/en/mkdocs/>eWasm</a> and even good ol' Kubernetes through <a href=https://github.com/deislabs/krustlet>Krustlet</a>.</p><blockquote><p>Incidentally, Krustlet now supports multiple providers (<a href=https://wasmtime.dev/>Wasmtime</a>, <a href=https://wascc.dev/>waSCC</a>) but
+I view this (in keeping with the container metaphor) as being less analogous
+to the orchestration system wars of Kubernetes/Mesos/Rancher/Swarm/Nomad and
+more to container runtime e.g. Docker/runc/CRI-O/Rocket. Wasmtime aims for
+strict adherence to WASI, and waSCC is an interesting approach based on the
+Actor model, though I&rsquo;m not clear on its relationship to the WASI spec.</p></blockquote><h2 id=envoy>Envoy</h2><p>Envoy has supported WASM extensions for a while now (even predating WASI, but
+there are plans afoot to re-align). It does this by implementing the
+<code>proxy-wasm</code> <a href=https://github.com/proxy-wasm/spec>spec</a>, an open standard ABI for interoperability between WASM VMs
+and a host proxy. The idea being that in the future if a great extension exists
+for say HAProxy, then it would also be usable in Envoy, Nginx and any other
+proxy also implementing this spec. An ambitious venture for sure.</p><p>Anyway, Envoy is leading the charge on this by a long shot at the moment and
+this is useful for me because it is fast becoming the universal data plane for
+services meshes, including the one we operate at my current gig as our platform
+SOA backbone: Istio.</p><p>Being early adopters of Istio we now have a few hundred services in our
+platform&rsquo;s mesh. We built the platform atop Kubernetes and have found the pod a
+useful axiom for offering cross-cutting functionality to our users through the
+sidecar pattern. For example: injecting secrets, pub/sub over CloudEvents or
+rotating DB credentials.</p><p>Taking care of common technological concerns like these allow our users to have
+increased focus on building differentiating product features.</p><hr><p>Now, to automatically bolt-on these functional building blocks we invariably
+utilise Kubernetes controllers or mutating webhooks to inject <em><strong>additional</strong></em>
+containers alongside the &ldquo;primary&rdquo; container during admission. To make that
+concrete to the more Kubernetes-initiated reader, <code>6/6 Running</code> is not an
+uncommon sight in a <code>kubectl get pods</code> output from our platform.</p><p>Despite the overwhelming majority of the sidecars we write (or reuse from the
+community) being in Go, and even after careful attention being paid to ensuring
+low and stable resource requirements, they do still add up. This is especially
+true when you have large clusters full of workloads utilising them (a curse of
+success I suppose).</p><p>However, since we are using Istio there is another avenue that avoids additional
+containers (for bolting on network related functionality at least) and that is
+the <em><strong>Envoy filter</strong></em>.</p><h3 id=envoy-filters>Envoy Filters</h3><p>In an Istio-enabled pod there is a necessary Envoy sidecar container (so if
+you&rsquo;re following, that&rsquo;s <code>2/2 Running</code> on our platform by default!). It acts as
+the gatekeeper to the pod&rsquo;s network thanks to a Kubernetes CNI plugin
+manipulating the pod <code>iptables</code>. So all pod packets ingress and egress route
+through that Envoy, and Envoy filters can be used manipulate them as they
+traverse the proxy&rsquo;s internal network and application protocol processing stack.</p><p>It is worth mentioning that Envoy has a strong catalogue of native <a href=https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http%5Ffilters/http%5Ffilters>filters</a>
+available and Istio in turn has facilities for enabling them through the
+<a href=https://istio.io/latest/docs/reference/config/networking/envoy-filter/><code>EnvoyFilter</code></a> CRD. So that should always be your first port of call. But what do
+you do if you have a use case that is not covered in a native filter?</p><p>You have two options:</p><ol><li><p>Write a new filter into Envoy&rsquo;s source and compile a custom version.</p><p>This is tried and true, but requires you to maintain a custom supply chain
+for Envoy and keep it rebased. You are also limited to C++ in terms of
+languages (unless you get creative) given that is what Envoy is written in.</p></li><li><p>Write a new filter and dynamically load it at runtime using a WASM VM.</p><p>This is why I&rsquo;m writing this fieldnote today. Doing this is becoming
+increasingly accessible to your average Joe like me. Through the <code>proxy-wasm</code>
+spec implementation, Envoy is allowing embedded but securely isolated binary
+extension without the need to hack up the source. You can do this right now
+with SDKs in <a href=https://github.com/proxy-wasm/proxy-wasm-rust-sdk>Rust</a> <a href=https://github.com/proxy-wasm/proxy-wasm-cpp-sdk>C++</a>, <a href=https://github.com/yskopets/envoy-wasm-assemblyscript-sdk>AssemblyScript</a> and even early <a href=https://github.com/tetratelabs/proxy-wasm-go-sdk>Go</a> support.</p></li></ol><h2 id=example-writing-a-http-header-augmenting-filter>Example: Writing a HTTP Header Augmenting Filter</h2><p>Earlier I was talking about functional building blocks offered to our platform
+users. One such example is an injected sidecar that refreshes tokens from an IdP
+and supplies them to the primary container, either via a UNIX file descriptor or
+by POST&rsquo;ing to a local HTTP endpoint. The primary container can subsequently use
+the token in RPCs to downstream integrations without concerning itself with
+token lifecycle.</p><figure><img src=/ox-hugo/sidecar_full.png alt="Sidecar use case"></figure><blockquote><p>NOTE: There&rsquo;s absolutely no need to do this for inter-mesh RPCs of course.
+Istio (<a href=https://spiffe.io/>SPIFFE</a>) workload identity is state-of-the-art. The use case here is to
+federate workload identity beyond the mesh itself across multiple network hops
+e.g. to legacy on-premises services.</p></blockquote><p>Now I should start by saying this <em>ain&rsquo;t broke</em> and I&rsquo;m not paid to fix things
+that <em>ain&rsquo;t broke</em> at work. We wrote it quickly and it does its thing.</p><p>On the other hand, it is objectively sub-optimal. For one, it is yet another
+sidecar container. Worse than that, though, it puts the onus of responsibility
+back on the product engineers to write code that either polls or uses
+<code>inotify(7)</code> on that token file, or otherwise uses a dedicated HTTP handler to
+receive the tokens.</p><hr><p>I had been revisiting Rust recently and so last weekend I wanted to see if I
+could improve on this use case with an Envoy filter, using the nascent Rust
+<code>proxy-wasm</code> SDK.</p><p>As it transpired, it is entirely possible to get rid of that additional sidecar
+container and instead utilise the one sidecar container that cannot be gotten
+rid of (Envoy) to procure, refresh and conditionally add the IdP token to
+outbound HTTP headers.</p><p>So that&rsquo;s no additional platform sidecar overhead, no additional coding for
+product engineers:</p><figure><img src=/ox-hugo/sidecar_less.png alt="Sidecar-less use case"></figure><p>To prove the concept I implemented a generic HTTP filter that can augment
+requests with additional headers automatically discovered from a 3rd party
+endpoint at regular intervals. The full example is on <a href=https://github.com/martinbaillie/envoy-wasm-header-augmenting-filter>GitHub</a> but I&rsquo;ll talk
+through some key parts below.</p><blockquote><p>NOTE: the header-providing 3rd party service can be any configured Envoy
+cluster. So in an Istio context, this could be another sidecar available over
+loopback in the same pod, or some external centralised service perhaps in the
+greater mesh authorising based on SPIFFE identity, or even outside of the mesh
+authorising on Kubernetes service account token or cloud IAM for example, all
+the while benefiting from circuit breakers, retries, load balancing and other
+usual Istio-Envoy goodness.</p></blockquote><h3 id=getting-booted>Getting booted</h3><p>I found the documentation sparse but the <a href=https://github.com/proxy-wasm/proxy-wasm-rust-sdk/blob/master/src/traits.rs>traits</a> easy enough to decipher. The key
+thing to know is there&rsquo;s seemingly 3 &ldquo;Contexts&rdquo; available:</p><ol><li>Root</li><li>HTTP</li><li>Stream</li></ol><p>Root is a singleton that should be initialised as the WASM VM boots. It is the
+right place to setup shared data and timers. HTTP and Stream are called during
+HTTP and TCP filter chains respectively, though I suspect the latter is more
+nuanced than that. I only made use of the Root and HTTP contexts in my example.</p><p>To register context implementations there&rsquo;s the special <code>_start()</code> function called by the Envoy host when initialising.</p><div class=highlight><pre class=chroma><code class=language-rust data-lang=rust><span class=k>pub</span><span class=w> </span><span class=k>fn</span> <span class=nf>_start</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>    </span><span class=n>proxy_wasm</span>::<span class=n>set_log_level</span><span class=p>(</span><span class=n>LogLevel</span>::<span class=n>Trace</span><span class=p>);</span><span class=w>
+</span><span class=w>    </span><span class=n>proxy_wasm</span>::<span class=n>set_root_context</span><span class=p>(</span><span class=o>|</span><span class=n>context_id</span><span class=o>|</span><span class=w> </span>-&gt; <span class=nb>Box</span><span class=o>&lt;</span><span class=n>dyn</span><span class=w> </span><span class=n>RootContext</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>        </span><span class=n>CONFIGS</span><span class=p>.</span><span class=n>with</span><span class=p>(</span><span class=o>|</span><span class=n>configs</span><span class=o>|</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>            </span><span class=n>configs</span><span class=w>
+</span><span class=w>                </span><span class=p>.</span><span class=n>borrow_mut</span><span class=p>()</span><span class=w>
+</span><span class=w>                </span><span class=p>.</span><span class=n>insert</span><span class=p>(</span><span class=n>context_id</span><span class=p>,</span><span class=w> </span><span class=n>FilterConfig</span>::<span class=n>default</span><span class=p>());</span><span class=w>
+</span><span class=w>        </span><span class=p>});</span><span class=w>
+</span><span class=w>
+</span><span class=w>        </span><span class=nb>Box</span>::<span class=n>new</span><span class=p>(</span><span class=n>RootHandler</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>context_id</span><span class=w> </span><span class=p>})</span><span class=w>
+</span><span class=w>    </span><span class=p>});</span><span class=w>
+</span><span class=w>    </span><span class=n>proxy_wasm</span>::<span class=n>set_http_context</span><span class=p>(</span><span class=o>|</span><span class=n>_context_id</span><span class=p>,</span><span class=w> </span><span class=n>_root_context_id</span><span class=o>|</span><span class=w> </span>-&gt; <span class=nb>Box</span><span class=o>&lt;</span><span class=n>dyn</span><span class=w> </span><span class=n>HttpContext</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>        </span><span class=nb>Box</span>::<span class=n>new</span><span class=p>(</span><span class=n>HttpHandler</span><span class=w> </span><span class=p>{})</span><span class=w>
+</span><span class=w>    </span><span class=p>})</span><span class=w>
+</span><span class=w></span><span class=p>}</span><span class=w>
+</span></code></pre></div><p>This is also seemed to be the most fitting place for me to set the log level.</p><h3 id=configuring-the-filter>Configuring the filter</h3><p>For my configuration I created a <a href=https://github.com/serde-rs/json>Serde</a> type to deserialise from JSON because JSON works best with how the host Envoy wants to do configuration.</p><div class=highlight><pre class=chroma><code class=language-rust data-lang=rust><span class=cp>#[derive(Deserialize, Debug)]</span><span class=w>
+</span><span class=w></span><span class=cp>#[serde(default)]</span><span class=w>
+</span><span class=w></span><span class=k>struct</span> <span class=nc>FilterConfig</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>    </span><span class=sd>/// The Envoy cluster name housing a HTTP service that will provide headers
+</span><span class=sd></span><span class=w>    </span><span class=sd>/// to add to requests.
+</span><span class=sd></span><span class=w>    </span><span class=n>header_providing_service_cluster</span>: <span class=nb>String</span><span class=p>,</span><span class=w>
+</span><span class=w>
+</span><span class=w>    </span><span class=sd>/// The path to call on the HTTP service providing headers.
+</span><span class=sd></span><span class=w>    </span><span class=n>header_providing_service_path</span>: <span class=nb>String</span><span class=p>,</span><span class=w>
+</span><span class=w>
+</span><span class=w>    </span><span class=sd>/// The authority to set when calling the HTTP service providing headers.
+</span><span class=sd></span><span class=w>    </span><span class=n>header_providing_service_authority</span>: <span class=nb>String</span><span class=p>,</span><span class=w>
+</span><span class=w>
+</span><span class=w>    </span><span class=sd>/// The length of time to keep headers cached.
+</span><span class=sd></span><span class=w>    </span><span class=cp>#[serde(with = </span><span class=s>&#34;serde_humanize_rs&#34;</span><span class=cp>)]</span><span class=w>
+</span><span class=w>    </span><span class=n>header_cache_expiry</span>: <span class=nc>Duration</span><span class=p>,</span><span class=w>
+</span><span class=w></span><span class=p>}</span><span class=w>
+</span></code></pre></div><p>To get some configuration values into the filter there&rsquo;s an <code>on_configure()</code>
+hook method called on the <code>RootContext</code> as the WASM VM boots, and this can be
+married with the <code>get_configuration()</code> method for actually getting the configuration bytes.</p><h3 id=populating-the-token>Populating the token</h3><p>Another useful method on the <code>RootContext</code> is <code>on_tick()</code> which is a ticker
+controlled by <code>set_tick_period()</code>. I use it to dispatch calls to the header
+providing endpoint (e.g. the IdP) on an interval.</p><div class=highlight><pre class=chroma><code class=language-rust data-lang=rust><span class=k>fn</span> <span class=nf>on_tick</span><span class=p>(</span><span class=o>&amp;</span><span class=k>mut</span><span class=w> </span><span class=bp>self</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>        </span><span class=c1>// Log the action that is about to be taken.
+</span><span class=c1></span><span class=w>        </span><span class=k>match</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>get_shared_data</span><span class=p>(</span><span class=n>CACHE_KEY</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>            </span><span class=p>(</span><span class=nb>None</span><span class=p>,</span><span class=w> </span><span class=n>_</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=n>debug</span><span class=o>!</span><span class=p>(</span><span class=s>&#34;initialising cached headers&#34;</span><span class=p>),</span><span class=w>
+</span><span class=w>            </span><span class=p>(</span><span class=nb>Some</span><span class=p>(</span><span class=n>_</span><span class=p>),</span><span class=w> </span><span class=n>_</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=n>debug</span><span class=o>!</span><span class=p>(</span><span class=s>&#34;refreshing cached headers&#34;</span><span class=p>),</span><span class=w>
+</span><span class=w>        </span><span class=p>}</span><span class=w>
+</span><span class=w>
+</span><span class=w>        </span><span class=n>CONFIGS</span><span class=p>.</span><span class=n>with</span><span class=p>(</span><span class=o>|</span><span class=n>configs</span><span class=o>|</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>            </span><span class=n>configs</span><span class=p>.</span><span class=n>borrow</span><span class=p>().</span><span class=n>get</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>.</span><span class=n>context_id</span><span class=p>).</span><span class=n>map</span><span class=p>(</span><span class=o>|</span><span class=n>config</span><span class=o>|</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>                </span><span class=p>...</span><span class=w>
+</span><span class=w>                </span><span class=c1>// Dispatch an async HTTP call to the configured cluster.
+</span><span class=c1></span><span class=w>                </span><span class=bp>self</span><span class=p>.</span><span class=n>dispatch_http_call</span><span class=p>(</span><span class=w>
+</span><span class=w>                    </span><span class=o>&amp;</span><span class=n>config</span><span class=p>.</span><span class=n>header_providing_service_cluster</span><span class=p>,</span><span class=w>
+</span><span class=w>                    </span><span class=n>vec</span><span class=o>!</span><span class=p>[</span><span class=w>
+</span><span class=w>                        </span><span class=p>(</span><span class=s>&#34;:method&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;GET&#34;</span><span class=p>),</span><span class=w>
+</span><span class=w>                        </span><span class=p>(</span><span class=s>&#34;:path&#34;</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=n>config</span><span class=p>.</span><span class=n>header_providing_service_path</span><span class=p>),</span><span class=w>
+</span><span class=w>                        </span><span class=p>(</span><span class=s>&#34;:authority&#34;</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=n>config</span><span class=p>.</span><span class=n>header_providing_service_authority</span><span class=p>),</span><span class=w>
+</span><span class=w>                    </span><span class=p>],</span><span class=w>
+</span><span class=w>                    </span><span class=nb>None</span><span class=p>,</span><span class=w>
+</span><span class=w>                    </span><span class=n>vec</span><span class=o>!</span><span class=p>[],</span><span class=w>
+</span><span class=w>                    </span><span class=n>Duration</span>::<span class=n>from_secs</span><span class=p>(</span><span class=mi>5</span><span class=p>),</span><span class=w>
+</span><span class=w>                </span><span class=p>)</span><span class=w>
+</span><span class=w>                </span><span class=p>.</span><span class=n>map_err</span><span class=p>(</span><span class=o>|</span><span class=n>e</span><span class=o>|</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>                    </span><span class=p>...</span><span class=w>
+</span><span class=w>                </span><span class=p>})</span><span class=w>
+</span><span class=w>            </span><span class=p>})</span><span class=w>
+</span><span class=w>        </span><span class=p>});</span><span class=w>
+</span><span class=w>    </span><span class=p>}</span><span class=w>
+</span></code></pre></div><p>However this is not your typical RPC. It is async from the caller&rsquo;s perspective and you have to play ball with Envoy&rsquo;s internal processing stack. The other side can be grabbed when the <code>on_http_call_response()</code> hook method triggers.</p><div class=highlight><pre class=chroma><code class=language-rust data-lang=rust><span class=k>fn</span> <span class=nf>on_http_call_response</span><span class=p>(</span><span class=w>
+</span><span class=w>        </span><span class=o>&amp;</span><span class=k>mut</span><span class=w> </span><span class=bp>self</span><span class=p>,</span><span class=w>
+</span><span class=w>        </span><span class=n>_token_id</span>: <span class=kt>u32</span><span class=p>,</span><span class=w>
+</span><span class=w>        </span><span class=n>_num_headers</span>: <span class=kt>usize</span><span class=p>,</span><span class=w>
+</span><span class=w>        </span><span class=n>body_size</span>: <span class=kt>usize</span><span class=p>,</span><span class=w>
+</span><span class=w>        </span><span class=n>_num_trailers</span>: <span class=kt>usize</span><span class=p>,</span><span class=w>
+</span><span class=w>    </span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>        </span><span class=c1>// Gather the response body of previously dispatched async HTTP call.
+</span><span class=c1></span><span class=w>        </span><span class=kd>let</span><span class=w> </span><span class=n>body</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>match</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>get_http_call_response_body</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=w> </span><span class=n>body_size</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>            </span><span class=nb>Some</span><span class=p>(</span><span class=n>body</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=n>body</span><span class=p>,</span><span class=w>
+</span><span class=w>            </span><span class=nb>None</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>                </span><span class=p>...</span><span class=w>
+</span><span class=w>            </span><span class=p>}</span><span class=w>
+</span><span class=w>        </span><span class=p>};</span><span class=w>
+</span><span class=w>
+</span><span class=w>        </span><span class=c1>// Store the body in the shared cache.
+</span><span class=c1></span><span class=w>        </span><span class=k>match</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>set_shared_data</span><span class=p>(</span><span class=n>CACHE_KEY</span><span class=p>,</span><span class=w> </span><span class=nb>Some</span><span class=p>(</span><span class=o>&amp;</span><span class=n>body</span><span class=p>),</span><span class=w> </span><span class=nb>None</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>            </span><span class=p>...</span><span class=w>
+</span><span class=w>        </span><span class=p>}</span><span class=w>
+</span><span class=w>    </span><span class=p>}</span><span class=w>
+</span><span class=w></span><span class=p>}</span><span class=w>
+</span></code></pre></div><h3 id=using-shared-data>Using shared data</h3><p>The snippets above make passing reference to &ldquo;shared data&rdquo;. There are facilities
+in the <code>proxy-wasm</code> ABI for storing and retrieving data in a safe manner. In
+this example I refresh the headers to be added to outbound requests on a
+recurring tick, and cache them in shared data in the <code>RootContext</code>, out-of-band
+from the HTTP filter chains.</p><p>The final piece of the puzzle is to retrieve the currently cached, to-be-inserted
+headers during the hot path of an outbound request, and insert them into the
+payload.</p><p>This is done on the <code>HttpContext</code>, when the <code>on_http_request_headers()</code> hook method triggers on the outbound request.</p><div class=highlight><pre class=chroma><code class=language-rust data-lang=rust><span class=k>impl</span><span class=w> </span><span class=n>HttpContext</span><span class=w> </span><span class=k>for</span><span class=w> </span><span class=n>HttpHandler</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>    </span><span class=k>fn</span> <span class=nf>on_http_request_headers</span><span class=p>(</span><span class=o>&amp;</span><span class=k>mut</span><span class=w> </span><span class=bp>self</span><span class=p>,</span><span class=w> </span><span class=n>_num_headers</span>: <span class=kt>usize</span><span class=p>)</span><span class=w> </span>-&gt; <span class=nc>Action</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>        </span><span class=k>match</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>get_shared_data</span><span class=p>(</span><span class=n>CACHE_KEY</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>            </span><span class=p>(</span><span class=nb>Some</span><span class=p>(</span><span class=n>cache</span><span class=p>),</span><span class=w> </span><span class=n>_</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>                </span><span class=n>debug</span><span class=o>!</span><span class=p>(</span><span class=w>
+</span><span class=w>                    </span><span class=s>&#34;using existing header cache: {}&#34;</span><span class=p>,</span><span class=w>
+</span><span class=w>                    </span><span class=nb>String</span>::<span class=n>from_utf8</span><span class=p>(</span><span class=n>cache</span><span class=p>.</span><span class=n>clone</span><span class=p>()).</span><span class=n>unwrap</span><span class=p>()</span><span class=w>
+</span><span class=w>                </span><span class=p>);</span><span class=w>
+</span><span class=w>
+</span><span class=w>                </span><span class=k>match</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>parse_headers</span><span class=p>(</span><span class=o>&amp;</span><span class=n>cache</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>                    </span><span class=nb>Ok</span><span class=p>(</span><span class=n>headers</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>                        </span><span class=k>for</span><span class=w> </span><span class=p>(</span><span class=n>name</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>)</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=n>headers</span><span class=w> </span><span class=p>{</span><span class=w>
+</span><span class=w>                            </span><span class=bp>self</span><span class=p>.</span><span class=n>set_http_request_header</span><span class=p>(</span><span class=o>&amp;</span><span class=n>name</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>.</span><span class=n>as_str</span><span class=p>())</span><span class=w>
+</span><span class=w>                        </span><span class=p>}</span><span class=w>
+</span><span class=w>                    </span><span class=p>}</span><span class=w>
+</span><span class=w>                    </span><span class=p>...</span><span class=w>
+</span><span class=w>                </span><span class=p>}</span><span class=w>
+</span><span class=w>
+</span><span class=w>                </span><span class=n>Action</span>::<span class=n>Continue</span><span class=w>
+</span><span class=w>            </span><span class=p>}</span><span class=w>
+</span><span class=w>            </span><span class=p>...</span><span class=w>
+</span></code></pre></div><h3 id=deploying-it>Deploying it</h3><p>In the <a href=https://github.com/martinbaillie/envoy-wasm-header-augmenting-filter/tree/master/hack>hack directory</a> I have a Docker compose stack complete with source,
+destination and header providing containers, and an Envoy container configured
+with the currently compiled filter. It mimics the Kubernetes/Istio pod network
+setup and I found it useful for locally developing the filter.</p><p>Testing the real deal was a little trickier. Manually distributing the Envoy
+filter binary to a test Kubernetes cluster such that it could be utilised by an
+Istio <code>EnvoyFilter</code> resource necessitated jumping through a few hoops, but only
+because I like making things difficult it seems. For the record there are
+promising tools like Solo.io&rsquo;s <a href=https://docs.solo.io/web-assembly-hub/latest/reference/cli/wasme/><code>wasme</code></a> suite and <a href=https://webassemblyhub.io/>AssemblyHub</a> solving the filter
+distribution problem. Additionally, with OCI registries like AWS&rsquo;s ECR starting
+to support <a href=https://github.com/opencontainers/artifacts/blob/master/artifact-authors.md>OCI artifact types</a>, there is nothing stopping use of them as a WASM
+module registry in addition to your typical OCI images.</p><p>Anyway, my approach was simply to use a <code>ConfigMap</code> to hold the WASM binary. The
+<code>binaryData</code> field is esoteric but has actually existed since Kubernetes 1.10.
+Doing it this way went a bit sideways when I realised the <code>ConfigMap</code> resource
+has a size limit of 1mb, presumably hamstrung by <code>etcd</code> value limits, and my
+un-optimised Rust compiler was producing WASM binaries in excess of that. What
+followed was a few rounds of optimisation:</p><ol><li>2.1mb &ndash;> 1.7mb after reducing macro usage in the code.</li><li>1.7mb &ndash;> 372kb when compiled with <code>lto=true</code> and <code>opt-level=s</code>.</li><li>372kb &ndash;> 131kb when compiled through <a href=https://github.com/rustwasm/wasm-pack><code>wasm-pack</code></a>.</li></ol><p>Nice. That was more than enough for Kubernetes to accept my WASM binary as a
+<code>ConfigMap</code>. I made use of Kustomize&rsquo;s <a href=https://github.com/martinbaillie/envoy-wasm-header-augmenting-filter/blob/master/hack/kustomization.yaml#L15-L17>files feature</a> to do the serialisation on the fly.</p><hr><p>So now that the binary was in a binary <code>ConfigMap</code> in my cluster, I needed to
+get it loaded into the target pod&rsquo;s Envoy. This is not as simple as editing a
+<code>Deployment</code> spec&rsquo;s mounts because that Envoy is itself injected by Istio.</p><p>Fortunately there&rsquo;s a handy mount annotation that can be put on the <code>Deployment</code>
+spec.</p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>template</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>annotations</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>sidecar.istio.io/userVolumeMount</span><span class=p>:</span><span class=w> </span><span class=p>&gt;</span><span class=sd>
+</span><span class=sd>        </span><span class=w>        </span><span class=s1>&#39;{ &#34;filter&#34;:{&#34;mountPath&#34;:&#34;/etc/filter.wasm&#34;,&#34;subPath&#34;:&#34;filter.wasm&#34;} }&#39;</span><span class=w>
+</span></code></pre></div><p>This reflects in the injected Envoy container stanza. Then all you need is to mount the <code>ConfigMap</code> to the pod.</p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>filter</span><span class=w>
+</span><span class=w>    </span><span class=nt>configMap</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>filter</span><span class=w>
+</span></code></pre></div><p>With that done, the Envoy container has the custom filter available to its
+userspace at <code>/etc/filter.wasm</code>. The final piece is to tell the Envoy process to
+use it, and this is done by selecting it with an <code>EnvoyFilter</code> CRD loaded with
+our custom configuration.</p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>networking.istio.io/v1alpha3</span><span class=w>
+</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>EnvoyFilter</span><span class=w>
+</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>sourceworkload</span><span class=w>
+</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>configPatches</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>applyTo</span><span class=p>:</span><span class=w> </span><span class=l>HTTP_FILTER</span><span class=w>
+</span><span class=w>      </span><span class=nt>match</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>context</span><span class=p>:</span><span class=w> </span><span class=l>SIDECAR_OUTBOUND</span><span class=w>
+</span><span class=w>        </span><span class=nt>listener</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=nt>filterChain</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span><span class=nt>filter</span><span class=p>:</span><span class=w>
+</span><span class=w>              </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>envoy.http_connection_manager</span><span class=w>
+</span><span class=w>              </span><span class=nt>subFilter</span><span class=p>:</span><span class=w>
+</span><span class=w>                </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>envoy.router</span><span class=w>
+</span><span class=w>      </span><span class=nt>patch</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>operation</span><span class=p>:</span><span class=w> </span><span class=l>INSERT_BEFORE</span><span class=w>
+</span><span class=w>        </span><span class=nt>value</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=nt>config</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span><span class=nt>config</span><span class=p>:</span><span class=w>
+</span><span class=w>              </span><span class=nt>configuration</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
+</span><span class=sd>                {
+</span><span class=sd>                  &#34;header_providing_service_cluster&#34;: &#34;inbound|8081|mgmt-8081|mgmtCluster&#34;,
+</span><span class=sd>                  &#34;header_providing_service_authority&#34;: &#34;localhost&#34;
+</span><span class=sd>                }</span><span class=w>                
+</span><span class=w>              </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>header_augmenting_filter</span><span class=w>
+</span><span class=w>              </span><span class=nt>rootId</span><span class=p>:</span><span class=w> </span><span class=l>header_augmenting_filter</span><span class=w>
+</span><span class=w>              </span><span class=nt>vmConfig</span><span class=p>:</span><span class=w>
+</span><span class=w>                </span><span class=nt>code</span><span class=p>:</span><span class=w>
+</span><span class=w>                  </span><span class=nt>local</span><span class=p>:</span><span class=w>
+</span><span class=w>                    </span><span class=nt>filename</span><span class=p>:</span><span class=w> </span><span class=l>/etc/filter.wasm</span><span class=w>
+</span><span class=w>                </span><span class=nt>runtime</span><span class=p>:</span><span class=w> </span><span class=l>envoy.wasm.runtime.v8</span><span class=w>
+</span><span class=w>                </span><span class=nt>allow_precompiled</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>          </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>envoy.filters.http.wasm</span><span class=w>
+</span><span class=w>  </span><span class=nt>workloadSelector</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>sourceworkload</span><span class=w>
+</span></code></pre></div><p>In this example I am sliding the filter into the HTTP outbound chain and using
+the existing <code>mgmt</code> cluster to call the header providing container over
+loopback. As mentioned at the start of this section, there are many ways to skin
+that cat.</p></div></section><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/rust>rust</a></li><li><a href=/tags/wasm>wasm</a></li><li><a href=/tags/envoy>envoy</a></li><li><a href=/tags/istio>istio</a></li><li><a href=/tags/kubernetes>kubernetes</a></li><li><a href=/tags/release>release</a></li></ul></nav></div></article></main><footer><hr><a class=soc href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class=soc href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
+<a class=menu href=/id>$id</a>
+<span class="active menu">fieldnotes</span></footer></div></body></html>

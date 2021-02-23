@@ -1,0 +1,95 @@
+<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><title>Martin Baillie | Ephemeral GitHub Tokens via HashiCorp Vault</title><meta name=robots content="index, follow"><meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><link rel=canonical href=https://martin.baillie.id/wrote/ephemeral-github-tokens-via-hashicorp-vault/><meta property="og:title" content="Martin Baillie | Ephemeral GitHub Tokens via HashiCorp Vault"><meta name=description content="GitHub I have found that performing automation against GitHub APIs often necessitates the creation of OAuth Tokens (nb. GitHub refers to these as Personal Access Tokens or PATs). These tokens are tied to a user account, have very coarsely-scoped permissions and do not expire.
+The more automation-savvy users in an organisation will likely have created many such tokens with powerful permissions which are being neither rotated nor deleted.
+The organisation will also commonly have wasted at least one of their GitHub seats on a robot/machine user for CI/CD purposes."><meta property="og:image" content="https://martin.baillie.id//img/me.jpg"><meta itemprop=name content="Martin Baillie | Ephemeral GitHub Tokens via HashiCorp Vault"><meta name=application-name content="Martin Baillie"><meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Ephemeral GitHub Tokens via HashiCorp Vault"><meta property="og:description" content="GitHub I have found that performing automation against GitHub APIs often necessitates the creation of OAuth Tokens (nb. GitHub refers to these as Personal Access Tokens or PATs). These tokens are tied to a user account, have very coarsely-scoped permissions and do not expire.
+The more automation-savvy users in an organisation will likely have created many such tokens with powerful permissions which are being neither rotated nor deleted.
+The organisation will also commonly have wasted at least one of their GitHub seats on a robot/machine user for CI/CD purposes."><meta property="og:type" content="article"><meta property="og:url" content="https://martin.baillie.id/wrote/ephemeral-github-tokens-via-hashicorp-vault/"><meta property="article:published_time" content="2020-01-06T00:00:00+11:00"><meta property="article:modified_time" content="2020-01-06T00:00:00+11:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Ephemeral GitHub Tokens via HashiCorp Vault"><meta name=twitter:description content="GitHub I have found that performing automation against GitHub APIs often necessitates the creation of OAuth Tokens (nb. GitHub refers to these as Personal Access Tokens or PATs). These tokens are tied to a user account, have very coarsely-scoped permissions and do not expire.
+The more automation-savvy users in an organisation will likely have created many such tokens with powerful permissions which are being neither rotated nor deleted.
+The organisation will also commonly have wasted at least one of their GitHub seats on a robot/machine user for CI/CD purposes."><meta name=twitter:site content="@martinbaillie"><meta name=twitter:creator content="@martinbaillie"><meta name=twitter:image content="https://martin.baillie.id//img/me.jpg"><link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png><link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png><link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png><link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png><link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png><link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png><link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png><link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png><link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png><link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png><link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png><link rel=manifest href=/img/favicon/manifest.json><meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png"><meta name=msapplication-TileColor content="#ffffff"><meta name=theme-color content="#ffffff"><script src=https://martin.baillie.id/main.7e4f48e8542b3b653a252ce4bc2041e90ebc755bd0811624bf4209201afc184d39c2507eab1b75ef7883bc5f968e13bd392dc6df7840375b224be41eb25a70cd.js integrity="sha512-fk9I6FQrO2U6JSzkvCBB6Q68dVvQgRYkv0IJIBr8GE05wlB+qxt173iDvF+WjhO9OS3G33hAN1siS+QeslpwzQ==" crossorigin=anonymous onload="WebFont.load({custom:{families:['Roboto Mono']}});feather.replace();" defer></script><link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.1a92a966a2a8f7588c617b795cff11e8b0e38fca99a44048a51198066a1894610096b89c16e109d9f38f37ebe4e9db238df38d7f190459089474dbe9c7d02cb3.css integrity="sha512-GpKpZqKo91iMYXt5XP8R6LDjj8qZpEBIpRGYBmoYlGEAlricFuEJ2fOPN+vk6dsjjfONfxkEWQiUdNvpx9Assw==" crossorigin=anonymous></head><body><div class=content><header><div class=main><a href=https://martin.baillie.id/>Martin Baillie</a></div><nav><a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a><a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a><a class=soc id=mode href=javascript:toggleMode(); title="Switch Theme"><i data-feather=moon></i></a></nav></header><main><article><div class=title><h1>Ephemeral GitHub Tokens via HashiCorp Vault</h1></div><div class=meta><div class=posted><i data-feather=edit-3></i>20200106</div><div class=reading><i data-feather=clock></i>~11 mins</div></div><div class=tldr><strong>tl;dr:</strong>
+Improve your GitHub security posture with a Vault plugin.</div><section class=body><div class=single><h2 id=github>GitHub</h2><p>I have found that performing automation against GitHub APIs often necessitates
+the creation of <a href=https://help.github.com/en/github/extending-github/git-automation-with-oauth-tokens>OAuth Tokens</a> (nb. GitHub refers to these as Personal Access
+Tokens or PATs). These tokens are tied to a user account, have <em>very</em>
+coarsely-scoped permissions and do not expire.</p><p>The more automation-savvy users in an organisation will likely have created many
+such tokens with powerful permissions which are being neither rotated nor
+deleted.</p><p>The organisation will also commonly have wasted at least one of their GitHub
+seats on a <a href=https://help.github.com/en/github/getting-started-with-github/types-of-github-accounts#personal-user-accounts>robot/machine user</a> for CI/CD purposes. These users share similar
+access token and SSH key fates as the human users do but additionally need their
+credentials managed and rotated on their behalf (a feat that is arguably made
+even more awkward when federating GitHub access through an third party IdP).</p><hr><p><a href=https://developer.github.com/apps/building-github-apps/>GitHub Apps</a> offer a better approach to this automation problem:</p><ol><li>They do not consume a seat (license) nor need credential management.</li><li>They have <em>much</em> finer-grained <a href=https://developer.github.com/v3/apps/permissions/>permissions</a> available to the access tokens.</li><li>The tokens they issue expire after an hour.</li></ol><p>However, and this is the tricky part, GitHub Apps require the management of at
+least one private key used to mint the JWTs used for the <a href=https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-an-installation>App installation
+authentication</a> token request flow.</p><h2 id=vault>Vault</h2><p>I am a big fan of HashiCorp&rsquo;s <a href=https://www.vaultproject.io/>Vault</a> product. I think it is a versatile security
+tool for an organisation to have in their armoury and I have been intimately
+involved with getting it deployed on my last two contracts.</p><p>Sure, over the years I&rsquo;ve seen some of its feature set being tackled by the
+major clouds as one might expect, and as a platform guy I&rsquo;m always weighing up
+managed services in a perpetual quest to run less non-differentiating
+infrastructure. However, in my opinion Vault is still very much worth it if you
+have a range of security requirements needing solved. Nothing comes close to its
+range nor flexibility. It is also not inconceivable for HashiCorp to eventually
+offer it as a managed service themselves (ala. Terraform Cloud) or otherwise
+partner with the major clouds on doing so.</p><p>Anyhow, it&rsquo;s that flexibility that really shines here. An organisation&rsquo;s Vault
+deployment is (or at least <strong>should</strong> be) one of the most secure systems in their
+landscape and storing secrets is its bread and butter. What a perfect home for
+that GitHub App private key from earlier!</p><p>But then, if a private key exists in the woods, can anyone <del>hear it</del> use it to
+sign a JWT?</p><p>Let&rsquo;s take a gander at some other useful security aspects of that organisation&rsquo;s
+Vault deployment:</p><ul><li>Auth backends</li></ul><p>The organisation&rsquo;s preferred authZ/N backends are presumably already
+configured. Vault supports a multitude of these, including but not exclusive
+to: any OIDC compliant IdP, all major cloud IAM, LDAP, Kubernetes, TLS and
+even GitHub (for those chicken-and-egg vibes).</p><ul><li>Secret backends</li></ul><p>A pluggable secrets backend construct with CRUD-mapped RESTful semantics
+fronted by the same highly available API protected by those auth backends.
+There&rsquo;s even the concept of secret leases.</p><ul><li>RBAC</li></ul><p>Strong declarative identity and unified ACL concept permeated throughout
+all actions in the API surface.</p><h2 id=vault-github-plugin>Vault&lt;>GitHub plugin</h2><p>So, if you have clocked on to my thinly veiled setup, it logically follows that
+someone might try to marry these Vault security strengths with a GitHub App to
+plug the perceived GitHub PAT weakness, and that is exactly what I&rsquo;ve done with
+<a href=https://github.com/martinbaillie/vault-plugin-secrets-github><code>vault-plugin-secrets-github</code></a>.</p><p>Using this plugin you can broker requests to a GitHub App through Vault:</p><figure><img src=/ox-hugo/vault_github_plugin.png alt="Vault GitHub Plugin"></figure><p>Here the user authenticates with Vault and makes a request to the plugin&rsquo;s
+configured mount point. This is a projected request that can include any manner
+of GitHub <a href=https://docs.github.com/en/free-pro-team@latest/rest/reference/permissions-required-for-github-apps>permissions</a> or repository IDs.</p><p>The plugin then mints a JWT from the securely stashed private key and uses it to
+ask the installed GitHub App for a token constrained by those same permissions and/or repository IDs.</p><p>Presuming the App is configured with the superset of the requested permissions,
+an access token is granted by GitHub and is valid for 1 hour. It can be used for
+GitHub API and remote authenticated <code>git</code> operations, and the plugin can work
+with either GitHub SaaS or Enterprise editions.</p><blockquote><p>Full installation instructions and API spec are kept up-to-date in the <a href=https://github.com/martinbaillie/vault-plugin-secrets-github>README</a>.</p></blockquote><h3 id=permissions>Permissions</h3><p>For now, unless you mount the plugin many times each for a different use case
+(i.e. many GitHub Apps), you will need to give your primary GitHub App the
+superset of all anticipated permissions needed by your users. This is <em>still</em>
+better than those users being allowed to create their own PATs because the
+plugin issued tokens only last for an hour.</p><p>In any case, you now arguably have a much stronger RBAC system at your disposal:
+Vault&rsquo;s.</p><p>It is possible to craft tight Vault policies to constrain user capabilities on
+the GitHub plugin (and by extension GitHub), and then map that to your Vault
+user/role structure however you see fit.</p><hr><p>As an example, imagine I have deployed the plugin to my Vault and I have
+configured the associated GitHub App to have access to all repositories as well
+as full write permissions on GitHub&rsquo;s <code>administration</code>, <code>contents</code>, <code>issues</code> and
+<code>pull_requests</code> APIs.</p><p>Since Vault is deny by default, no authenticated user can access the
+<code>/github/token</code> plugin endpoint until permissive policy is attached.</p><p>Suppose I then wanted to allow a user to have GitHub API access, but only to
+create pull requests on the repository ID <code>69857131</code>. I would first craft a
+policy that encapsulates this use case.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> vault policy write github-only-prs - <span class=s>&lt;&lt;EOF
+</span><span class=s>path &#34;github/token&#34; {
+</span><span class=s>  capabilities = [&#34;update&#34;]
+</span><span class=s>  required_parameters = [&#34;permissions&#34;,&#34;repository_ids&#34;]
+</span><span class=s>  allowed_parameters = {
+</span><span class=s>    &#34;repository_ids&#34; = [&#34;69857131&#34;]
+</span><span class=s>    &#34;permissions&#34;= [&#34;pull_requests=write&#34;]
+</span><span class=s>  }
+</span><span class=s>}
+</span><span class=s>EOF</span>
+</code></pre></div><p>My policy mandates that both <code>permissions</code> and <code>repository_ids</code> parameters are
+present and that they have certain fixed values.</p><p>I would then attach the policy to a user or group construct in my Vault setup.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> vault auth <span class=nb>enable</span> userpass
+<span class=p>;</span> vault write auth/userpass/users/martin <span class=nv>password</span><span class=o>=</span>baillie <span class=nv>policies</span><span class=o>=</span><span class=s2>&#34;github-only-prs&#34;</span>
+</code></pre></div><p>This contrived user would then only be able to send that exact stipulated
+request to Vault.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># Login.</span>
+<span class=p>;</span> vault login -method<span class=o>=</span>userpass <span class=nv>username</span><span class=o>=</span>martin <span class=nv>password</span><span class=o>=</span>baillie
+<span class=c1># Successfully create a token.</span>
+<span class=p>;</span> vault write /github/token <span class=nv>repository_ids</span><span class=o>=</span><span class=m>69857131</span> <span class=nv>permissions</span><span class=o>=</span><span class=nv>pull_requests</span><span class=o>=</span>write
+<span class=c1># Permission denied:</span>
+<span class=p>;</span> vault write -f /github/token
+<span class=p>;</span> vault write /github/token <span class=nv>permissions</span><span class=o>=</span><span class=nv>pull_requests</span><span class=o>=</span>write
+<span class=p>;</span> vault write /github/token <span class=nv>repository_ids</span><span class=o>=</span><span class=m>69857131</span> <span class=nv>permissions</span><span class=o>=</span><span class=nv>administration</span><span class=o>=</span><span class=nb>read</span>
+<span class=p>;</span> vault write /github/token <span class=nv>repository_ids</span><span class=o>=</span><span class=m>123</span> <span class=nv>permissions</span><span class=o>=</span><span class=nv>pull_requests</span><span class=o>=</span>write
+<span class=p>;</span> vault write /github/token <span class=nv>repository_ids</span><span class=o>=</span><span class=m>69857131</span>
+</code></pre></div><h3 id=metrics>Metrics</h3><p>David Wheeler&rsquo;s age-old aphorism, aka. the <em><a href=https://en.wikipedia.org/wiki/Fundamental%5Ftheorem%5Fof%5Fsoftware%5Fengineering>&ldquo;fundamental theorem of software
+engineering&rdquo;</a></em> goes:</p><blockquote><p>&ldquo;All problems in computer science can be solved by another level of indirection.&rdquo;</p></blockquote><p>And here we are once again proxying network requests for profit. At least we can
+use it to our advantage by gleaning better insight into how the organisation is
+utilising GitHub automation through metrics—something else that GitHub&rsquo;s audit
+log falls short on.</p><p>Notwithstanding Vault&rsquo;s own audit log which enumerates all API access in detail
+(<em>and you do have this streaming to some kind of SIEM product, right?</em>), the
+GitHub plugin also offers up an additional metrics endpoint in the
+Prometheus/OpenMetrics exposition format. Details are in the <a href=https://github.com/martinbaillie/vault-plugin-secrets-github#metrics>README</a> and a sample
+Grafana <a href=https://github.com/martinbaillie/vault-plugin-secrets-github/blob/master/dashboard.json>dashboard</a> is provided.</p><figure><img src=/ox-hugo/vault_github_plugin_dashboard.png alt="Vault GitHub Plugin Dashboard"></figure></div></section><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/vault>vault</a></li><li><a href=/tags/github>github</a></li><li><a href=/tags/security>security</a></li><li><a href=/tags/release>release</a></li></ul></nav></div></article></main><footer><hr><a class=soc href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class=soc href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
+<a class=menu href=/id>$id</a>
+<span class="active menu">fieldnotes</span></footer></div></body></html>
