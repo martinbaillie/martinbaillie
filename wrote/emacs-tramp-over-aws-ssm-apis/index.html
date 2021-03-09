@@ -17,12 +17,12 @@ the former, most other clouds have their own solutions and those are probably
 the smarter choice.</p></blockquote><p>If you <em>are</em> in AWS then some features to like about the SSM approach over
 traditional SSH are:</p><ul><li>No direct network path required. There is no need to punch holes in your
 VPC layers and chain bastions.</li><li>Instance authentication controlled through IAM and by extension whichever IdP
-you may be federating human access with.</li><li>Initial access and every userspace command audited and logged. To break-glass
-alerts or &ldquo;taint&rdquo; instances that have been accessed is a breeze.</li></ul><p>When compared to an SSH session there is no notable performance difference when
-accessing an instance over the SSM APIs either. I recall some lag in the early
-days of the service but that seems fixed if you&rsquo;re doing run-of-the-mill
+you may be federating human access with.</li><li>Initial access and every userspace command audited and logged. To create
+break-glass alerts or &ldquo;taint&rdquo; instances that have been accessed is a breeze.</li></ul><p>When compared to an SSH session there is no notable performance difference when
+accessing an instance over the SSM APIs either. I do recall some lag in the
+early days of the service but that seems fixed if you&rsquo;re doing run-of-the-mill
 sysadmin things. Just don&rsquo;t go pasting many megabytes of junk into the pty from
-your clipboard.</p><p>The only downside I feel is the need for an opaque client-side binary called the
+your clipboard!</p><p>The only downside I feel is the need for an opaque client-side binary called the
 <a href=https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html><code>ssm-session-manager-plugin</code></a> which is paired with the <code>aws</code> CLI (presuming you
 want to use your terminal rather than a window in the AWS console).</p><blockquote><p>NOTE: I packaged the plugin binary for Nix/NixOS a while back. It&rsquo;s currently
 in <a href="https://search.nixos.org/packages?channel=unstable&show=ssm-session-manager-plugin&from=0&size=50&sort=relevance&query=ssm-session-manager-plugin">stable</a>.</p></blockquote><h2 id=ssh>SSH</h2><p>Perhaps more interesting, though, is that for the last couple of years AWS has
