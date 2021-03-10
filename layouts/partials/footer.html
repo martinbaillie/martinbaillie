@@ -1,7 +1,7 @@
 <footer>
 <hr>
 {{- range $index, $key := .Site.Params.Social -}}
-<a class="soc" href="{{ $key.url }}" title="{{ $key.name }}"><i data-feather="{{ $key.icon }}"></i></a>
+<a class="soc" rel="me" href="{{ $key.url }}" title="{{ $key.name }}"><i data-feather="{{ $key.icon }}"></i></a>
 {{- end -}}
 <a class="soc gpg" href="https://github.com/martinbaillie.gpg" title="GPG Public Key">C2F0 79DE D64B 7361 006A  A099 2A56 EA64 591E 15E4</a>
 
