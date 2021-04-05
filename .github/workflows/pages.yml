@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 0    # Fetch all history for Hugo .GitInfo and .Lastmod.
 
     - name: Nix
-      uses: cachix/install-nix-action@v12
+      uses: cachix/install-nix-action@v13
 
     - name: Deps
       run: nix-shell --pure --run 'npm i'
