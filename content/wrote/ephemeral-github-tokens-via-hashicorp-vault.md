@@ -7,6 +7,8 @@ draft = false
 tldr = "Improve your GitHub security posture with a Vault plugin."
 +++
 
+> UPDATE: The plugin described in this fieldnote was recently demoed at HashiCorp's [Hashitalks 2021](https://www.youtube.com/watch?v=JuzBolDyGdg&t=17308s).
+
 ## GitHub {#github}
 
 I have found that performing automation against GitHub APIs often necessitates

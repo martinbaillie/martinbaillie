@@ -3,6 +3,7 @@
 #+startup: indent
 #+author: Martin Baillie
 #+hugo_base_dir: ./
+
 * Table of Contents :TOC_3:noexport:
 - [[#id][ID]]
   - [[#locale][Locale]]
@@ -200,6 +201,9 @@ CLOSED: [2020-01-06 Mon 08:39]
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :tldr Improve your GitHub security posture with a Vault plugin.
 :EXPORT_OPTIONS: toc:nil
 :END:
+#+begin_quote
+UPDATE: The plugin described in this fieldnote was recently demoed at HashiCorp's [[https://www.youtube.com/watch?v=JuzBolDyGdg&t=17308s][Hashitalks 2021]].
+#+end_quote
 *** GitHub
 I have found that performing automation against GitHub APIs often necessitates
 the creation of [[https://help.github.com/en/github/extending-github/git-automation-with-oauth-tokens][OAuth Tokens]] (nb. GitHub refers to these as Personal Access
