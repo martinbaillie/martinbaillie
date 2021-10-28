@@ -1,22 +1,103 @@
-<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><script>if(localStorage.theme!="")document.documentElement.setAttribute("data-theme",localStorage.theme)</script><link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous><title>Martin Baillie | Tailscale Support for OpenBSD</title><meta name=robots content="index, follow"><meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><link rel=canonical href=https://martin.baillie.id/wrote/tailscale-support-for-openbsd/><meta property="og:title" content="Tailscale Support for OpenBSD"><meta name=description content="Tailscale A service called Tailscale launched at the beginning of the month and promises to be the &ldquo;easiest, most secure way to use WireGuard and 2FA&rdquo;.
-As an early beta tester of WireGuard and someone who has been carefully tracking its progress towards mainline Linux (currently in net-next, scheduled for 5.6!), I am especially excited to see people much smarter than me start to build next generation VPN businesses centred around it."><meta property="og:image" content="https://martin.baillie.id//img/me.jpg"><meta itemprop=name content="Tailscale Support for OpenBSD"><meta name=application-name content="Martin Baillie"><meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Tailscale Support for OpenBSD"><meta property="og:description" content="Tailscale A service called Tailscale launched at the beginning of the month and promises to be the &ldquo;easiest, most secure way to use WireGuard and 2FA&rdquo;.
-As an early beta tester of WireGuard and someone who has been carefully tracking its progress towards mainline Linux (currently in net-next, scheduled for 5.6!), I am especially excited to see people much smarter than me start to build next generation VPN businesses centred around it."><meta property="og:type" content="article"><meta property="og:url" content="https://martin.baillie.id/wrote/tailscale-support-for-openbsd/"><meta property="article:published_time" content="2020-02-05T20:29:00+11:00"><meta property="article:modified_time" content="2020-02-05T20:29:00+11:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Tailscale Support for OpenBSD"><meta name=twitter:description content="Tailscale A service called Tailscale launched at the beginning of the month and promises to be the &ldquo;easiest, most secure way to use WireGuard and 2FA&rdquo;.
-As an early beta tester of WireGuard and someone who has been carefully tracking its progress towards mainline Linux (currently in net-next, scheduled for 5.6!), I am especially excited to see people much smarter than me start to build next generation VPN businesses centred around it."><meta name=twitter:site content="@martinbaillie"><meta name=twitter:creator content="@martinbaillie"><meta name=twitter:image content="https://martin.baillie.id//img/me.jpg"><link rel=authorization_endpoint href=https://indieauth.com/auth><link rel=token_endpoint href=https://tokens.indieauth.com/token><link rel=webmention href=https://webmention.io/martin.baillie.id/webmention><link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc><link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png><link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png><link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png><link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png><link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png><link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png><link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png><link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png><link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png><link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png><link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png><link rel=manifest href=/img/favicon/manifest.json><meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png"><meta name=msapplication-TileColor content="#ffffff"><meta name=theme-color content="#ffffff"><script src=https://martin.baillie.id/main.2886ed11170936a33d9c58c04cac23204ead8d0a4e228982a00ba971f39d3b391b3cdc6dadb283cdc42af9286068e8901d6998bff909b9edb6482bc2629ebb92.js integrity="sha512-KIbtERcJNqM9nFjATKwjIE6tjQpOIomCoAupcfOdOzkbPNxtrbKDzcQq+ShgaOiQHWmYv/kJue22SCvCYp67kg==" crossorigin=anonymous async></script></head><body><div class=content><header><div class=main><a href=https://martin.baillie.id/>Martin Baillie</a></div><nav><a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a><a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a><a class=soc id=mode style=cursor:pointer onclick=toggleMode(); title="Switch Theme"><i data-feather=moon></i></a></nav></header><main><article><div class=title><h1>Tailscale Support for OpenBSD</h1></div><div class=meta><div class=posted><i data-feather=edit-3></i>20200205</div><div class=reading><i data-feather=clock></i>~07 mins</div></div><div class=tldr><strong>tl;dr:</strong>
-Learn how to configure Tailscale on OpenBSD.</div><section class=body><div class=single><h2 id=tailscale>Tailscale</h2><p>A service called <a href=https://tailscale.com>Tailscale</a> launched at the beginning of the month and promises
-to be the <em>&ldquo;easiest, most secure way to use WireGuard and 2FA&rdquo;</em>.</p><p>As an early beta tester of <a href=https://www.wireguard.com/>WireGuard</a> and someone who has been carefully tracking
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<script>localStorage.theme!=""&&document.documentElement.setAttribute("data-theme",localStorage.theme)</script>
+<link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous>
+<title>Martin Baillie | Tailscale Support for OpenBSD</title>
+<meta name=robots content="index, follow">
+<meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel=canonical href=https://martin.baillie.id/wrote/tailscale-support-for-openbsd/>
+<meta property="og:title" content="Tailscale Support for OpenBSD">
+<meta name=description content="Tailscale A service called Tailscale launched at the beginning of the month and promises to be the &ldquo;easiest, most secure way to use WireGuard and 2FA&rdquo;.
+As an early beta tester of WireGuard and someone who has been carefully tracking its progress towards mainline Linux (currently in net-next, scheduled for 5.6!), I am especially excited to see people much smarter than me start to build next generation VPN businesses centred around it.">
+<meta property="og:image" content="https://martin.baillie.id//img/me.jpg">
+<meta itemprop=name content="Tailscale Support for OpenBSD">
+<meta name=application-name content="Martin Baillie">
+<meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Tailscale Support for OpenBSD">
+<meta property="og:description" content="Tailscale A service called Tailscale launched at the beginning of the month and promises to be the &ldquo;easiest, most secure way to use WireGuard and 2FA&rdquo;.
+As an early beta tester of WireGuard and someone who has been carefully tracking its progress towards mainline Linux (currently in net-next, scheduled for 5.6!), I am especially excited to see people much smarter than me start to build next generation VPN businesses centred around it.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://martin.baillie.id/wrote/tailscale-support-for-openbsd/"><meta property="article:section" content="wrote">
+<meta property="article:published_time" content="2020-02-05T20:29:00+11:00">
+<meta property="article:modified_time" content="2020-02-05T20:29:00+11:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Tailscale Support for OpenBSD">
+<meta name=twitter:description content="Tailscale A service called Tailscale launched at the beginning of the month and promises to be the &ldquo;easiest, most secure way to use WireGuard and 2FA&rdquo;.
+As an early beta tester of WireGuard and someone who has been carefully tracking its progress towards mainline Linux (currently in net-next, scheduled for 5.6!), I am especially excited to see people much smarter than me start to build next generation VPN businesses centred around it.">
+<meta name=twitter:site content="@martinbaillie">
+<meta name=twitter:creator content="@martinbaillie">
+<meta name=twitter:image content="https://martin.baillie.id//img/me.jpg">
+<link rel=authorization_endpoint href=https://indieauth.com/auth>
+<link rel=token_endpoint href=https://tokens.indieauth.com/token>
+<link rel=webmention href=https://webmention.io/martin.baillie.id/webmention>
+<link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc>
+<link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png>
+<link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png>
+<link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png>
+<link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png>
+<link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png>
+<link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png>
+<link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png>
+<link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png>
+<link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png>
+<link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png>
+<link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png>
+<link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png>
+<link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png>
+<link rel=manifest href=/img/favicon/manifest.json>
+<meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png">
+<meta name=msapplication-TileColor content="#ffffff">
+<meta name=theme-color content="#ffffff">
+<script src=https://martin.baillie.id/main.3f3d533c804ec193a3bf2f39185925c3d1c35bbfefbcc4349c90cf1c18a2009e41c963eae886ded936140dbda2c8582f58d13a955cfb56af2eae72817fde756c.js integrity="sha512-Pz1TPIBOwZOjvy85GFklw9HDW7/vvMQ0nJDPHBiiAJ5ByWPq6Ibe2TYUDb2iyFgvWNE6lVz7Vq8urnKBf951bA==" crossorigin=anonymous async></script>
+</head>
+<body>
+<div class=content><header>
+<div class=main>
+<a href=https://martin.baillie.id/>Martin Baillie</a>
+</div>
+<nav>
+<a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a>
+<a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a>
+<a class=soc id=mode style=cursor:pointer onclick=toggleMode() title="Switch Theme"><i data-feather=moon></i></a>
+</nav>
+</header>
+<main>
+<article>
+<div class=title>
+<h1>Tailscale Support for OpenBSD</h1>
+</div>
+<div class=meta>
+<div class=posted><i data-feather=edit-3></i>20200205</div>
+<div class=reading><i data-feather=clock></i>~07 mins</div>
+</div>
+<div class=tldr>
+<strong>tl;dr:</strong>
+Learn how to configure Tailscale on OpenBSD.
+</div>
+<section class=body>
+<div class=single>
+<h2 id=tailscale>Tailscale</h2>
+<p>A service called <a href=https://tailscale.com>Tailscale</a> launched at the beginning of the month and promises
+to be the <em>&ldquo;easiest, most secure way to use WireGuard and 2FA&rdquo;</em>.</p>
+<p>As an early beta tester of <a href=https://www.wireguard.com/>WireGuard</a> and someone who has been carefully tracking
 its progress towards mainline Linux (currently in <code>net-next</code>, <a href="https://www.phoronix.com/scan.php?page=news%5Fitem&px=WireGuard-Net-Next-Lands">scheduled for
 5.6</a>!), I am especially excited to see people much smarter than me start to build
-next generation VPN businesses centred around it.</p><p>WireGuard will allow the Tailscale folks to eschew traditional hub-and-spoke VPN
+next generation VPN businesses centred around it.</p>
+<p>WireGuard will allow the Tailscale folks to eschew traditional hub-and-spoke VPN
 models and have their customers construct their own private meshed (P2P)
 networks. This is similar in a sense to the features offered up by <a href=https://www.zerotier.com/>ZeroTier</a> or
 what you might be able to presumably cobble together with the likes of Slack&rsquo;s
-recently announced <a href=https://slack.engineering/introducing-nebula-the-open-source-global-overlay-network-from-slack/>Nebula</a>, though neither are based on WireGuard.</p><p>If Tailscale is executed well it could bring WireGuard to the masses and
+recently announced <a href=https://slack.engineering/introducing-nebula-the-open-source-global-overlay-network-from-slack/>Nebula</a>, though neither are based on WireGuard.</p>
+<p>If Tailscale is executed well it could bring WireGuard to the masses and
 hopefully even usher in a bit of a paradigm shift for cloud networking:
 decentralised <a href=https://beyondcorp.com/>BeyondCorp-styled</a> zero trust networking for the rest of us. That
 is, looking past perimeter-based security and not just for the usual case of
 privileged staff access. Why continue to build our backend SOAs out of all these
 layered VPCs with their NACLs, security groups and reverse proxying load
-balancers when some smart DNS and meshed WireGuard tunnels will suffice?</p><p>Anyway, idealist gushing aside, they do have their work cut out. The hard part
+balancers when some smart DNS and meshed WireGuard tunnels will suffice?</p>
+<p>Anyway, idealist gushing aside, they do have their work cut out. The hard part
 in all of this is not the WireGuard data plane, but the control plane that
 manages it. I had a small side project going at work last year to allow temporal
 privileged access to cloud resources for our platform engineers using WireGuard,
@@ -24,34 +105,57 @@ and solving the keypair distribution/rotation and tunnel auto-configuration for
 multiple OSes was <em>not</em> trivial! For Tailscale there&rsquo;s also the issue of IAM /
 2FA, DNS support and not least the tedious NAT traversal tricks that will be
 required for them to become a universally useful end-user SaaS. Good luck to
-them!</p><h2 id=support-for-openbsd>Support for OpenBSD</h2><p>I&rsquo;ve been using <a href=https://www.openbsd.org/>OpenBSD</a> on and off since I was a teenager. It is without a doubt
+them!</p>
+<h2 id=support-for-openbsd>Support for OpenBSD</h2>
+<p>I&rsquo;ve been using <a href=https://www.openbsd.org/>OpenBSD</a> on and off since I was a teenager. It is without a doubt
 my favourite OS, and while I don&rsquo;t use it as my daily driver anymore, it has
-remained steadfast at the helm of my <a href=https://github.com/martinbaillie/homebrew-openbsd-pcengines-router>homebrew router</a> for many years.</p><p>I&rsquo;ve also been using WireGuard to interconnect all of my machines for a while,
+remained steadfast at the helm of my <a href=https://github.com/martinbaillie/homebrew-openbsd-pcengines-router>homebrew router</a> for many years.</p>
+<p>I&rsquo;ve also been using WireGuard to interconnect all of my machines for a while,
 but after switching them over to Tailscale last week my OpenBSD router was a
-<em>notable omission</em>.</p><hr><p>Fret not! Thankfully Tailscale&rsquo;s core is open source and on <a href=https://github.com/tailscale/tailscale>GitHub</a>. It happened
+<em>notable omission</em>.</p>
+<hr>
+<p>Fret not! Thankfully Tailscale&rsquo;s core is open source and on <a href=https://github.com/tailscale/tailscale>GitHub</a>. It happened
 to utilise the same <a href=https://git.zx2c4.com/wireguard-go/about/><code>wireguard-go</code></a> userspace library I was already familiar with
 from my work side project. Happily, they accepted my <a href=https://github.com/tailscale/tailscale/pull/36>pull request</a> and now
-Tailscale knows OpenBSD!</p><figure><img src=/ox-hugo/tailscale_openbsd.png alt="OpenBSD support for Tailscale" width=50%></figure><p>Fair warning, it does not take advantage of OpenBSD&rsquo;s standout <a href=https://man.openbsd.org/pledge.2><code>pledge(2)</code></a> /
+Tailscale knows OpenBSD!</p>
+<figure><img src=/ox-hugo/tailscale_openbsd.png alt="OpenBSD support for Tailscale" width=50%>
+</figure>
+<p>Fair warning, it does not take advantage of OpenBSD&rsquo;s standout <a href=https://man.openbsd.org/pledge.2><code>pledge(2)</code></a> /
 <a href=https://man.openbsd.org/unveil><code>unveil(2)</code></a> security features yet but it should be able to given Go has the
-requisite syscall support (<a href=https://github.com/golang/sys/blob/master/unix/pledge%5Fopenbsd.go>pledge</a>, <a href=https://github.com/golang/sys/blob/master/unix/unveil%5Fopenbsd.go>unveil</a>).</p><p>The rest of this post will go into how you can get yourself hooked upto
-Tailscale from an OpenBSD userspace.</p><h2 id=installing-tailscale-on-openbsd>Installing Tailscale on OpenBSD</h2><p>There is no native WireGuard in the OpenBSD kernel yet, and anyway Tailscale
+requisite syscall support (<a href=https://github.com/golang/sys/blob/master/unix/pledge%5Fopenbsd.go>pledge</a>, <a href=https://github.com/golang/sys/blob/master/unix/unveil%5Fopenbsd.go>unveil</a>).</p>
+<p>The rest of this post will go into how you can get yourself hooked upto
+Tailscale from an OpenBSD userspace.</p>
+<h2 id=installing-tailscale-on-openbsd>Installing Tailscale on OpenBSD</h2>
+<p>There is no native WireGuard in the OpenBSD kernel yet, and anyway Tailscale
 runs off a temporary fork of the <a href=https://github.com/tailscale/wireguard-go><code>wireguard-go</code></a> implementation for now (which,
 incidentally, also means you cannot use the upstream version from OpenBSD&rsquo;s
-ports).</p><blockquote><p>20200621 UPDATE: WireGuard has since landed natively in OpenBSD-CURRENT as
-<a href=https://man.openbsd.org/wg.4><code>wg(4)</code></a>! I have yet to have a play but it will be in 6.8-STABLE.</p></blockquote><p>So, and accepting the arguably negligible hit for crossing the kernel&lt;>userspace
+ports).</p>
+<blockquote>
+<p>20200621 UPDATE: WireGuard has since landed natively in OpenBSD-CURRENT as
+<a href=https://man.openbsd.org/wg.4><code>wg(4)</code></a>! I have yet to have a play but it will be in 6.8-STABLE.</p>
+</blockquote>
+<p>So, and accepting the arguably negligible hit for crossing the kernel&lt;>userspace
 border for each packet, the first thing you&rsquo;ll want to do is grab the latest
-Tailscale source code for local compilation.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> git clone --depth <span class=m>1</span> https://github.com/tailscale/tailscale.git
+Tailscale source code for local compilation.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> git clone --depth <span class=m>1</span> https://github.com/tailscale/tailscale.git
 </code></pre></div><p>You will also need a sufficiently modern Go toolchain (but do not necessarily
-need to be on an OpenBSD host).</p><blockquote><p>20201012 UPDATE: As I rebuilt to latest Tailscale for my own router I noticed
+need to be on an OpenBSD host).</p>
+<blockquote>
+<p>20201012 UPDATE: As I rebuilt to latest Tailscale for my own router I noticed
 their repository has changed slightly. I&rsquo;ve updated the following instructions
-to match the current structure as of this date.</p></blockquote><p>Build OpenBSD compatible Tailscale binaries and move them to your target machine
-(presuming you&rsquo;re not already on it):</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> <span class=nb>cd</span> tailscale
+to match the current structure as of this date.</p>
+</blockquote>
+<p>Build OpenBSD compatible Tailscale binaries and move them to your target machine
+(presuming you&rsquo;re not already on it):</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> <span class=nb>cd</span> tailscale
 <span class=p>;</span> <span class=nv>GOOS</span><span class=o>=</span>openbsd go build ./cmd/tailscale
 <span class=p>;</span> <span class=nv>GOOS</span><span class=o>=</span>openbsd go build ./cmd/tailscaled
 <span class=p>;</span> scp tailscale<span class=o>{</span>,d<span class=o>}</span> root@openbsd:/usr/local/bin
 </code></pre></div><p>On OpenBSD, <code>tailscaled</code> will correctly use <code>/var/db/tailscale</code> as its state
-directory and <code>/var/run/tailscale/tailscale.sock</code> for its UNIX socket.</p><p>This is the rc script I use (<code>/etc/rc.d/tailscaled</code>). Don&rsquo;t forget to make it
-executable!</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=cp>#!/bin/ksh
+directory and <code>/var/run/tailscale/tailscale.sock</code> for its UNIX socket.</p>
+<p>This is the rc script I use (<code>/etc/rc.d/tailscaled</code>). Don&rsquo;t forget to make it
+executable!</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=cp>#!/bin/ksh
 </span><span class=cp></span><span class=nv>daemon</span><span class=o>=</span><span class=s2>&#34;/usr/local/bin/tailscaled&#34;</span>
 
 . /etc/rc.d/rc.subr
@@ -62,12 +166,38 @@ rc_start<span class=o>()</span> <span class=o>{</span>
 
 rc_cmd <span class=nv>$1</span>
 </code></pre></div><p>Pair this with an entry in <code>/etc/rc.conf.local</code>, optionally passing any
-Tailscale daemon flags (or use <code>rcctl enable tailscaled</code>):</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=nv>tailscaled_flags</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
-</code></pre></div><p>Start the daemon to make sure it is working:</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> doas rcctl start tailscaled
+Tailscale daemon flags (or use <code>rcctl enable tailscaled</code>):</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=nv>tailscaled_flags</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</code></pre></div><p>Start the daemon to make sure it is working:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> doas rcctl start tailscaled
 <span class=c1># tailscaled(ok)</span>
 </code></pre></div><p>And that&rsquo;s it! You should have Tailscale logs streaming in <code>/var/log/messages</code>
-and have a plumbed <code>tunX</code> device by now.</p><p>I&rsquo;ve had my Tailscale state db configured for a while, but if you see
-authentication errors in the logs then you may need to run an initial:</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> tailscale up
-</code></pre></div></div></section><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/openbsd>openbsd</a></li><li><a href=/tags/tailscale>tailscale</a></li><li><a href=/tags/go>go</a></li><li><a href=/tags/wireguard>wireguard</a></li><li><a href=/tags/security>security</a></li></ul></nav></div></article></main><footer><hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
+and have a plumbed <code>tunX</code> device by now.</p>
+<p>I&rsquo;ve had my Tailscale state db configured for a while, but if you see
+authentication errors in the logs then you may need to run an initial:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=p>;</span> tailscale up
+</code></pre></div>
+</div>
+</section>
+<div class=post-tags>
+<nav class="nav tags">
+<ul class=tags>
+<li><a href=/tags/openbsd>openbsd</a></li>
+<li><a href=/tags/tailscale>tailscale</a></li>
+<li><a href=/tags/go>go</a></li>
+<li><a href=/tags/wireguard>wireguard</a></li>
+<li><a href=/tags/security>security</a></li>
+</ul>
+</nav>
+</div>
+</article>
+</main>
+<footer>
+<hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
 <a class=menu href=/id>$id</a>
-<span class="active menu">fieldnotes</span></footer><script src=https://martin.baillie.id/js/footer.min.28ef130186726a0df510071a5be15530d6861d48b3bd20da5f164370ecc400914afdc175b237ca1a21d9a09b59fe738344e299f812348b8f77c8a9f5c30ed91f.js integrity="sha512-KO8TAYZyag31EAcaW+FVMNaGHUizvSDaXxZDcOzEAJFK/cF1sjfKGiHZoJtZ/nODROKZ+BI0i493yKn1ww7ZHw==" crossorigin=anonymous async></script></div></body></html>
+<span class="active menu">fieldnotes</span>
+</footer>
+<script src=https://martin.baillie.id/js/footer.min.444ed87071ed3ce3927a6b9c2d891214f17da0a66e9956a5efb26a575eee4dd899bffb64b731153407d893252e02d63c32688d9732b74df3f3d43a3c722cf607.js integrity="sha512-RE7YcHHtPOOSemucLYkSFPF9oKZumVal77JqV17uTdiZv/tktzEVNAfYkyUuAtY8MmiNlzK3TfPz1Do8ciz2Bw==" crossorigin=anonymous async></script>
+</div>
+</body>
+</html>

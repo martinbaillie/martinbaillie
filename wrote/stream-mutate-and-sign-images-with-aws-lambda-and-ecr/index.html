@@ -1,0 +1,247 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<script>localStorage.theme!=""&&document.documentElement.setAttribute("data-theme",localStorage.theme)</script>
+<link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous>
+<title>Martin Baillie | Stream, Mutate and Sign Images with AWS Lambda and ECR</title>
+<meta name=robots content="index, follow">
+<meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel=canonical href=https://martin.baillie.id/wrote/stream-mutate-and-sign-images-with-aws-lambda-and-ecr/>
+<meta property="og:title" content="Stream, Mutate and Sign Images with AWS Lambda and ECR">
+<meta name=description content="Image promotion In my experience, an organisation working with container images in any form will typically have a runtime supply chain that first takes an image from an &ldquo;untrusted&rdquo; origin (e.g. a public upstream or the organisation&rsquo;s own permissive development registry), then scans its contents for attributes classified non-compliant to the organisation&rsquo;s security posture, before finally promoting it to a &ldquo;trusted&rdquo; registry (oftentimes after having mutated it to have mandatory annotations and/or a verifiable signature).">
+<meta property="og:image" content="https://martin.baillie.id//img/me.jpg">
+<meta itemprop=name content="Stream, Mutate and Sign Images with AWS Lambda and ECR">
+<meta name=application-name content="Martin Baillie">
+<meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Stream, Mutate and Sign Images with AWS Lambda and ECR">
+<meta property="og:description" content="Image promotion In my experience, an organisation working with container images in any form will typically have a runtime supply chain that first takes an image from an &ldquo;untrusted&rdquo; origin (e.g. a public upstream or the organisation&rsquo;s own permissive development registry), then scans its contents for attributes classified non-compliant to the organisation&rsquo;s security posture, before finally promoting it to a &ldquo;trusted&rdquo; registry (oftentimes after having mutated it to have mandatory annotations and/or a verifiable signature).">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://martin.baillie.id/wrote/stream-mutate-and-sign-images-with-aws-lambda-and-ecr/"><meta property="article:section" content="wrote">
+<meta property="article:published_time" content="2021-10-28T21:59:00+11:00">
+<meta property="article:modified_time" content="2021-10-28T21:59:00+11:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Stream, Mutate and Sign Images with AWS Lambda and ECR">
+<meta name=twitter:description content="Image promotion In my experience, an organisation working with container images in any form will typically have a runtime supply chain that first takes an image from an &ldquo;untrusted&rdquo; origin (e.g. a public upstream or the organisation&rsquo;s own permissive development registry), then scans its contents for attributes classified non-compliant to the organisation&rsquo;s security posture, before finally promoting it to a &ldquo;trusted&rdquo; registry (oftentimes after having mutated it to have mandatory annotations and/or a verifiable signature).">
+<meta name=twitter:site content="@martinbaillie">
+<meta name=twitter:creator content="@martinbaillie">
+<meta name=twitter:image content="https://martin.baillie.id//img/me.jpg">
+<link rel=authorization_endpoint href=https://indieauth.com/auth>
+<link rel=token_endpoint href=https://tokens.indieauth.com/token>
+<link rel=webmention href=https://webmention.io/martin.baillie.id/webmention>
+<link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc>
+<link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png>
+<link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png>
+<link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png>
+<link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png>
+<link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png>
+<link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png>
+<link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png>
+<link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png>
+<link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png>
+<link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png>
+<link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png>
+<link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png>
+<link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png>
+<link rel=manifest href=/img/favicon/manifest.json>
+<meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png">
+<meta name=msapplication-TileColor content="#ffffff">
+<meta name=theme-color content="#ffffff">
+<script src=https://martin.baillie.id/main.3f3d533c804ec193a3bf2f39185925c3d1c35bbfefbcc4349c90cf1c18a2009e41c963eae886ded936140dbda2c8582f58d13a955cfb56af2eae72817fde756c.js integrity="sha512-Pz1TPIBOwZOjvy85GFklw9HDW7/vvMQ0nJDPHBiiAJ5ByWPq6Ibe2TYUDb2iyFgvWNE6lVz7Vq8urnKBf951bA==" crossorigin=anonymous async></script>
+</head>
+<body>
+<div class=content><header>
+<div class=main>
+<a href=https://martin.baillie.id/>Martin Baillie</a>
+</div>
+<nav>
+<a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a>
+<a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a>
+<a class=soc id=mode style=cursor:pointer onclick=toggleMode() title="Switch Theme"><i data-feather=moon></i></a>
+</nav>
+</header>
+<main>
+<article>
+<div class=title>
+<h1>Stream, Mutate and Sign Images with AWS Lambda and ECR</h1>
+</div>
+<div class=meta>
+<div class=posted><i data-feather=edit-3></i>20211028</div>
+<div class=reading><i data-feather=clock></i>~13 mins </div>
+</div>
+<div class=tldr>
+<strong>tl;dr:</strong>
+You can probably do better than that heavyweight Docker pull/build/push pipeline you've been using since 2015
+</div>
+<section class=body>
+<div class=single>
+<h2 id=image-promotion>Image promotion</h2>
+<p>In my experience, an organisation working with container images in any form will
+typically have a runtime supply chain that first takes an image from an
+&ldquo;untrusted&rdquo; origin (e.g. a public upstream or the organisation&rsquo;s own permissive
+development registry), then scans its contents for attributes classified
+non-compliant to the organisation&rsquo;s security posture, before finally <em>promoting</em>
+it to a &ldquo;trusted&rdquo; registry (oftentimes after having mutated it to have mandatory
+annotations and/or a verifiable signature).</p>
+<p>It follows that the trusted registry is the only approved origin for at least
+the subsequent production runtime. In AWS that runtime might be Kubernetes
+(EKS), ECS, Lambda or any of the other <a href=https://www.lastweekinaws.com/blog/the-17-ways-to-run-containers-on-aws>seventeen (<strong>17!</strong>) ways to run a
+container</a>. Taking Kubernetes as an example, an admission controller can be
+utilised to deny any image not originating from that trusted registry, or whose
+signature cannot be verified to have passed through the compliance check
+gauntlet.</p>
+<p>Since the compliance check portion of this typical supply chain is subjective to
+each organisation, I wanted to focus this fieldnote<sup><a href=/wrote/fieldnotes>(?)</a></sup> on the image promotion process that I reckon everyone ends up having to solve themselves despite its
+non-differentiating qualities.</p>
+<p>It&rsquo;s true that some other providers have fancy <a href=https://github.com/kubernetes-sigs/promo-tools#server-side-operations>server-side promotion</a> options
+when your images are within their walled garden but today I&rsquo;m writing about
+promoting images where the source could be any registry and the destination is
+AWS ECR.</p>
+<p>In AWS you might performing this promotion from the likes of a CodeBuild job, a
+VPC-based 3rd party CI/CD agent or even a GitHub Action SaaS runner (using the
+eagerly anticipated OIDC&lt;=>STS <code>AssumeRoleWithWebIdentity</code> <a href=https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services>support</a> of course!).</p>
+<p>In this context it would be <em>naive but forgivable</em> to reach for familiar Docker
+tooling to accomplish the task. Something like:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=c1># Pull all source layers into local disk storage</span>
+<span class=p>;</span> docker pull busybox:latest
+
+<span class=c1># Mutate the image to add some labels and tag for destination repository</span>
+<span class=p>;</span> <span class=nb>echo</span> -e <span class=s2>&#34;FROM busybox:latest\nLABEL owner martin\nLABEL team foo&#34;</span> <span class=p>|</span> <span class=se>\
+</span><span class=se></span>    docker build -t 111111111111.dkr.ecr.ap-southeast-2.amazonaws.com/busybox:1.0.0 -
+
+<span class=c1># Push all layers to destination repository</span>
+<span class=p>;</span> docker push 111111111111.dkr.ecr.ap-southeast-2.amazonaws.com/busybox:1.0.0
+</code></pre></div><h2 id=heavyweight>Heavyweight</h2>
+<p>Let&rsquo;s talk briefly about what&rsquo;s going on above before getting into why friends
+don&rsquo;t let friends do things this way in the year of 2021.</p>
+<p>Firstly, despite only dealing with moving and mutating blobs from A to B, we&rsquo;ve
+got a highly privileged Docker daemon in the mix. This might not matter to you
+so much (security-wise) if you&rsquo;re performing this task on ephemeral SaaS CI/CD
+agents, but if not, you&rsquo;re presumably running more traditional shared CI/CD
+infrastructure and it therefore merits consideration. In any case, why are we
+pulling all image layers into local storage to assemble a complete image—we&rsquo;re
+not going to actually <span class=underline>run</span> it? This is wasteful in terms of storage and this
+Docker daemon is basically a glorified <code>wget</code> with the SUID bit set.</p>
+<p>Moving on. To add layers to this image, we&rsquo;ve essentially had to create a
+dynamic <code>Dockerfile</code> to build and tag a derivative using the daemon.</p>
+<p>Finally, we&rsquo;ve pushed all blobs to the destination registry with no regard to
+what was already there. AWS ECR is <a href=https://github.com/opencontainers/distribution-spec/>OCI distribution</a>-compliant
+(<em>enough</em><sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup><sup>, </sup><sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup>) such that it can be queried by blob digest and even told
+to cross-mount a blob from another image the consumer has permission to access,
+saving the need to upload at all.</p>
+<blockquote>
+<p>Incidentally, AWS ECR is also somewhat <a href=https://github.com/opencontainers/artifacts/blob/main/artifact-authors.md>OCI artifact</a>-compliant and supports a
+range of custom OCI <a href=https://aws.amazon.com/blogs/containers/oci-artifact-support-in-amazon-ecr/>artifacts</a> like WASM modules, Helm charts, OPA bundles or
+<strong>image signatures</strong> as I&rsquo;ll touch on next.</p>
+</blockquote>
+<h2 id=registry-oriented-tooling>Registry-oriented tooling</h2>
+<p>You can take advantage of these new (well they&rsquo;re not really <span class=underline>that new</span>)
+registry features by using more appropriate tooling. For efficiently moving and
+mutating images, my personal favourite is <a href=https://github.com/google/go-containerregistry/blob/main/cmd/crane/doc/crane.md>crane</a> coming out of Google. It has a
+large feature set of advanced commands beyond basic copy operations. There&rsquo;s
+also <a href=https://github.com/containers/skopeo>skopeo</a> under the containers project that came from <del>RedHat</del> IBM
+originally I believe, and may make sense especially if you&rsquo;re in that OpenShift /
+Podman ecosystem.</p>
+<p>These tools know how to negotiate uploads intelligently with registries,
+streaming only the missing blobs, layer-by-layer in memory from source to
+destination, and can even add or mutate layers on the fly. So that&rsquo;s: no Docker daemon;
+no local storage.</p>
+<p>For registry image signing there&rsquo;s a few options but the Linux Foundation&rsquo;s
+<a href=https://www.sigstore.dev/>Sigstore</a> project and its tangential relation to the <a href=https://slsa.dev/>SLSA</a> framework and the
+nascent supply chain security space has my interest because of the potential to
+use it wider than just the container image portion of things. Sigstore has a
+tool called <a href=https://github.com/sigstore/cosign>cosign</a> that makes simple work of container image signing,
+verification and storage in an OCI artifact-compliant registry like ECR. Its use
+of PKI is pluggable with many popular KMS implementations, including AWS KMS.</p>
+<p>So if you&rsquo;re not already using something like <code>crane</code> to move and mutate your
+images, or otherwise thinking about firming up your supply chain code provenance
+with something like <code>cosign</code> then definitely check them out!</p>
+<blockquote>
+<p><code>crane</code> especially has the potential to shave many minutes off your &ldquo;Mean Lead
+Time for Changes&rdquo; <a href=https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance>DORA metric</a> through the smart copy techniques mentioned above,
+but also the <a href=https://github.com/google/go-containerregistry/blob/main/cmd/crane/doc/crane%5Fappend.md>append</a> operation that provides the ability add a new layer (e.g.
+your workload binary) to an existing remote base image, creating a new
+derivative image.</p>
+</blockquote>
+<p>Anyway, it so happened that I made mention on a recent Twitter thread that I was
+using the libraries backing these registry-oriented tools to efficiently stream,
+mutate and sign images into AWS ECR as described above, but perhaps novelly,
+from a Lambda context. There was some interest in seeing how it all hung
+together so I made note to write this up and extract some code to show.</p>
+<p>The result can be found on my GitHub as <a href=https://github.com/martinbaillie/ocistow>ocistow</a>.</p>
+<h2 id=introducing-ocistow>Introducing <code>ocistow</code></h2>
+<p>The <code>ocistow</code> (OCI Stow) codebase houses an example Lambda (and bonus CLI) that
+can efficiently stream and mutate upstream container image layers into an ECR
+destination and subsequently sign them with KMS.</p>
+<figure><img src=/ox-hugo/ocistow.png alt="Stream, Mutate, Sign">
+</figure>
+<p>That is, given an invoke payload of:</p>
+<ol>
+<li>A source image reference (any public container registry / private ECR)</li>
+<li>A destination image reference (private ECR)</li>
+<li>Some annotations to add</li>
+</ol>
+<p>It will:</p>
+<ol>
+<li>Stream only the missing image layers from source registry to destination ECR whilst handling ECR authentication</li>
+<li>Do so in memory (with Lambda&rsquo;s meagre 512mb filesystem remaining unused)</li>
+<li>Optionally mutate the image during this process to have user provided OCI
+annotations and legacy Docker image labels (mimicking the sort of mandatory
+tagging policy an organisation might have)</li>
+<li>And finally sign the image digests in AWS ECR using a KMS signing key for
+later assertion of provenance at runtime (e.g. using a Kubernetes admission
+controller like <a href=https://github.com/dlorenc/cosigned>cosigned</a>).</li>
+</ol>
+<p>Performance gains can be had by throwing more memory at the Lambda as this
+results in more allocated CPU and critically, network (at AWS' discretion).
+Empirically (though not very scientifically), I saw the following with the
+massive <strong>3+ gigabyte</strong> TensorFlow images from <a href=https://gcr.io>gcr.io</a>.</p>
+<ul>
+<li>Test 1 (vanilla Lambda settings 128mb memory): 8.06 minutes</li>
+<li>Test 2 (maxed out Lambda settings 10240mb memory): <strong>1.35 minutes</strong></li>
+</ul>
+<p>No shared layers existed in my destination ECR between tests—all blobs were
+streamed from source to destination.</p>
+<blockquote>
+<p>NOTE: This would be interesting to give a run through the <a href=https://github.com/alexcasalboni/aws-lambda-power-tuning>AWS Lambda Power Tuner</a>.</p>
+</blockquote>
+<h2 id=try-it-yourself>Try it yourself</h2>
+<p>I can’t imagine anyone using the <code>ocistow</code> Lambda (nor CLI) verbatim in their
+workflow unless it happened to solve an exact gap (let me know if you do!).
+However, the codebase may be a useful reference for informing your own build. It
+ships with a working Lambda and a basic CDK stack if you wanted to kick the
+tyres in your own account. The CLI uses the same codepaths sans Lambda, should
+you wish to try it locally instead.</p>
+<p>I think I&rsquo;ll stop this note here now and add more information in the <a href=https://github.com/martinbaillie/ocistow%20>README</a>.</p>
+<section class=footnotes role=doc-endnotes>
+<hr>
+<ol>
+<li id=fn:1 role=doc-endnote>
+<p><a href=https://oci-conformance.s3.amazonaws.com/distribution-spec/ecr/push/report.html>ECR Conformance to OCI Distribution (Push)</a>&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+<li id=fn:2 role=doc-endnote>
+<p><a href=https://oci-conformance.s3.amazonaws.com/distribution-spec/ecr/pull/report.html>ECR Conformance to OCI Distribution (Pull)</a>&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</div>
+</section>
+<div class=post-tags>
+<nav class="nav tags">
+<ul class=tags>
+<li><a href=/tags/aws>aws</a></li>
+<li><a href=/tags/supplychain>supplychain</a></li>
+</ul>
+</nav>
+</div>
+</article>
+</main>
+<footer>
+<hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
+<a class=menu href=/id>$id</a>
+<span class="active menu">fieldnotes</span>
+</footer>
+<script src=https://martin.baillie.id/js/footer.min.444ed87071ed3ce3927a6b9c2d891214f17da0a66e9956a5efb26a575eee4dd899bffb64b731153407d893252e02d63c32688d9732b74df3f3d43a3c722cf607.js integrity="sha512-RE7YcHHtPOOSemucLYkSFPF9oKZumVal77JqV17uTdiZv/tktzEVNAfYkyUuAtY8MmiNlzK3TfPz1Do8ciz2Bw==" crossorigin=anonymous async></script>
+</div>
+</body>
+</html>

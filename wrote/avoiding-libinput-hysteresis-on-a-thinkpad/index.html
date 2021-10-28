@@ -1,21 +1,103 @@
-<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><script>if(localStorage.theme!="")document.documentElement.setAttribute("data-theme",localStorage.theme)</script><link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous><title>Martin Baillie | Avoiding Libinput Hysteresis on a ThinkPad</title><meta name=robots content="index, follow"><meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><link rel=canonical href=https://martin.baillie.id/wrote/avoiding-libinput-hysteresis-on-a-thinkpad/><meta property="og:title" content="Avoiding Libinput Hysteresis on a ThinkPad"><meta name=description content="Making a touchpad work on Linux as well as it does on macOS/Windows. It&rsquo;s a problem as old as time itself, or at least as old as the &ldquo;year of Linux on the desktop&rdquo; meme.
-The days of calibrating obscure values that I don&rsquo;t fully understand on the old X11 synaptics driver were supposed to be a thing of the past with libinput, and to be fair they have been, for the most part."><meta property="og:image" content="https://martin.baillie.id//img/me.jpg"><meta itemprop=name content="Avoiding Libinput Hysteresis on a ThinkPad"><meta name=application-name content="Martin Baillie"><meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Avoiding Libinput Hysteresis on a ThinkPad"><meta property="og:description" content="Making a touchpad work on Linux as well as it does on macOS/Windows. It&rsquo;s a problem as old as time itself, or at least as old as the &ldquo;year of Linux on the desktop&rdquo; meme.
-The days of calibrating obscure values that I don&rsquo;t fully understand on the old X11 synaptics driver were supposed to be a thing of the past with libinput, and to be fair they have been, for the most part."><meta property="og:type" content="article"><meta property="og:url" content="https://martin.baillie.id/wrote/avoiding-libinput-hysteresis-on-a-thinkpad/"><meta property="article:published_time" content="2020-12-20T16:21:00+11:00"><meta property="article:modified_time" content="2020-12-20T16:21:00+11:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Avoiding Libinput Hysteresis on a ThinkPad"><meta name=twitter:description content="Making a touchpad work on Linux as well as it does on macOS/Windows. It&rsquo;s a problem as old as time itself, or at least as old as the &ldquo;year of Linux on the desktop&rdquo; meme.
-The days of calibrating obscure values that I don&rsquo;t fully understand on the old X11 synaptics driver were supposed to be a thing of the past with libinput, and to be fair they have been, for the most part."><meta name=twitter:site content="@martinbaillie"><meta name=twitter:creator content="@martinbaillie"><meta name=twitter:image content="https://martin.baillie.id//img/me.jpg"><link rel=authorization_endpoint href=https://indieauth.com/auth><link rel=token_endpoint href=https://tokens.indieauth.com/token><link rel=webmention href=https://webmention.io/martin.baillie.id/webmention><link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc><link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png><link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png><link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png><link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png><link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png><link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png><link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png><link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png><link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png><link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png><link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png><link rel=manifest href=/img/favicon/manifest.json><meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png"><meta name=msapplication-TileColor content="#ffffff"><meta name=theme-color content="#ffffff"><script src=https://martin.baillie.id/main.2886ed11170936a33d9c58c04cac23204ead8d0a4e228982a00ba971f39d3b391b3cdc6dadb283cdc42af9286068e8901d6998bff909b9edb6482bc2629ebb92.js integrity="sha512-KIbtERcJNqM9nFjATKwjIE6tjQpOIomCoAupcfOdOzkbPNxtrbKDzcQq+ShgaOiQHWmYv/kJue22SCvCYp67kg==" crossorigin=anonymous async></script></head><body><div class=content><header><div class=main><a href=https://martin.baillie.id/>Martin Baillie</a></div><nav><a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a><a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a><a class=soc id=mode style=cursor:pointer onclick=toggleMode(); title="Switch Theme"><i data-feather=moon></i></a></nav></header><main><article><div class=title><h1>Avoiding Libinput Hysteresis on a ThinkPad</h1></div><div class=meta><div class=posted><i data-feather=edit-3></i>20201220</div><div class=reading><i data-feather=clock></i>~05 mins</div></div><div class=tldr><strong>tl;dr:</strong>
-Avoid triggering hysteresis with this one dirty trick.</div><section class=body><div class=single><p>Making a touchpad work on Linux as well as it does on macOS/Windows. It&rsquo;s a
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<script>localStorage.theme!=""&&document.documentElement.setAttribute("data-theme",localStorage.theme)</script>
+<link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous>
+<title>Martin Baillie | Avoiding Libinput Hysteresis on a ThinkPad</title>
+<meta name=robots content="index, follow">
+<meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel=canonical href=https://martin.baillie.id/wrote/avoiding-libinput-hysteresis-on-a-thinkpad/>
+<meta property="og:title" content="Avoiding Libinput Hysteresis on a ThinkPad">
+<meta name=description content="Making a touchpad work on Linux as well as it does on macOS/Windows. It&rsquo;s a problem as old as time itself, or at least as old as the &ldquo;year of Linux on the desktop&rdquo; meme.
+The days of calibrating obscure values that I don&rsquo;t fully understand on the old X11 synaptics driver were supposed to be a thing of the past with libinput, and to be fair they have been, for the most part.">
+<meta property="og:image" content="https://martin.baillie.id//img/me.jpg">
+<meta itemprop=name content="Avoiding Libinput Hysteresis on a ThinkPad">
+<meta name=application-name content="Martin Baillie">
+<meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Avoiding Libinput Hysteresis on a ThinkPad">
+<meta property="og:description" content="Making a touchpad work on Linux as well as it does on macOS/Windows. It&rsquo;s a problem as old as time itself, or at least as old as the &ldquo;year of Linux on the desktop&rdquo; meme.
+The days of calibrating obscure values that I don&rsquo;t fully understand on the old X11 synaptics driver were supposed to be a thing of the past with libinput, and to be fair they have been, for the most part.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://martin.baillie.id/wrote/avoiding-libinput-hysteresis-on-a-thinkpad/"><meta property="article:section" content="wrote">
+<meta property="article:published_time" content="2020-12-20T16:21:00+11:00">
+<meta property="article:modified_time" content="2020-12-20T16:21:00+11:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Avoiding Libinput Hysteresis on a ThinkPad">
+<meta name=twitter:description content="Making a touchpad work on Linux as well as it does on macOS/Windows. It&rsquo;s a problem as old as time itself, or at least as old as the &ldquo;year of Linux on the desktop&rdquo; meme.
+The days of calibrating obscure values that I don&rsquo;t fully understand on the old X11 synaptics driver were supposed to be a thing of the past with libinput, and to be fair they have been, for the most part.">
+<meta name=twitter:site content="@martinbaillie">
+<meta name=twitter:creator content="@martinbaillie">
+<meta name=twitter:image content="https://martin.baillie.id//img/me.jpg">
+<link rel=authorization_endpoint href=https://indieauth.com/auth>
+<link rel=token_endpoint href=https://tokens.indieauth.com/token>
+<link rel=webmention href=https://webmention.io/martin.baillie.id/webmention>
+<link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc>
+<link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png>
+<link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png>
+<link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png>
+<link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png>
+<link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png>
+<link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png>
+<link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png>
+<link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png>
+<link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png>
+<link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png>
+<link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png>
+<link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png>
+<link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png>
+<link rel=manifest href=/img/favicon/manifest.json>
+<meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png">
+<meta name=msapplication-TileColor content="#ffffff">
+<meta name=theme-color content="#ffffff">
+<script src=https://martin.baillie.id/main.3f3d533c804ec193a3bf2f39185925c3d1c35bbfefbcc4349c90cf1c18a2009e41c963eae886ded936140dbda2c8582f58d13a955cfb56af2eae72817fde756c.js integrity="sha512-Pz1TPIBOwZOjvy85GFklw9HDW7/vvMQ0nJDPHBiiAJ5ByWPq6Ibe2TYUDb2iyFgvWNE6lVz7Vq8urnKBf951bA==" crossorigin=anonymous async></script>
+</head>
+<body>
+<div class=content><header>
+<div class=main>
+<a href=https://martin.baillie.id/>Martin Baillie</a>
+</div>
+<nav>
+<a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a>
+<a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a>
+<a class=soc id=mode style=cursor:pointer onclick=toggleMode() title="Switch Theme"><i data-feather=moon></i></a>
+</nav>
+</header>
+<main>
+<article>
+<div class=title>
+<h1>Avoiding Libinput Hysteresis on a ThinkPad</h1>
+</div>
+<div class=meta>
+<div class=posted><i data-feather=edit-3></i>20201220</div>
+<div class=reading><i data-feather=clock></i>~05 mins</div>
+</div>
+<div class=tldr>
+<strong>tl;dr:</strong>
+Avoid triggering hysteresis with this one dirty trick.
+</div>
+<section class=body>
+<div class=single>
+<p>Making a touchpad work on Linux as well as it does on macOS/Windows. It&rsquo;s a
 problem as old as time itself, or at least as old as the <em>&ldquo;year of Linux on the
-desktop&rdquo;</em> meme.</p><p>The days of calibrating obscure values that I don&rsquo;t fully understand on the old
+desktop&rdquo;</em> meme.</p>
+<p>The days of calibrating obscure values that I don&rsquo;t fully understand on the old
 X11 <code>synaptics</code> driver were supposed to be a thing of the past with <code>libinput</code>,
 and to be fair they have been, <em>for the most part</em>. Things are definitely more
-in tune with what you&rsquo;ve come to expect from other OSes out of the box.</p><p>Unfortunately I seem to have landed myself a ThinkPad with a touchpad (clickpad)
+in tune with what you&rsquo;ve come to expect from other OSes out of the box.</p>
+<p>Unfortunately I seem to have landed myself a ThinkPad with a touchpad (clickpad)
 revision that triggers a hysteresis in <code>libinput</code> unnecessarily, making it
 difficult to conduct precise, narrow gestures (like carefully circling a small
-number of pixels for example).</p><p>This is a core issue being <a href=https://gitlab.freedesktop.org/libinput/libinput/-/issues/286>tracked</a> by the <code>libinput</code> developers that is
+number of pixels for example).</p>
+<p>This is a core issue being <a href=https://gitlab.freedesktop.org/libinput/libinput/-/issues/286>tracked</a> by the <code>libinput</code> developers that is
 prevalent in various ThinkPad revisions but not yet resolved. The gist seems to
 be yet unexplained heuristics causing wobbling detection to trigger a hysteresis
 instantly. This is probably a hard thing to fix and way beyond me. However,
 turning off wobbling detection altogether is not. And while a quick, temporary
-and dirty fix, it <em>does</em> seem to help!</p><h2 id=disable-wobbling-detection>Disable wobbling detection</h2><p>To do so requires a <em>very</em> simple patch.</p><div class=highlight><pre class=chroma><code class=language-diff data-lang=diff><span class=gd>--- a/src/evdev-mt-touchpad.c 2020-12-20 12:16:11.039665884 +1100
+and dirty fix, it <em>does</em> seem to help!</p>
+<h2 id=disable-wobbling-detection>Disable wobbling detection</h2>
+<p>To do so requires a <em>very</em> simple patch.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-diff data-lang=diff><span class=gd>--- a/src/evdev-mt-touchpad.c 2020-12-20 12:16:11.039665884 +1100
 </span><span class=gd></span><span class=gi>+++ b/src/evdev-mt-touchpad.c 2020-12-20 12:16:02.846795394 +1100
 </span><span class=gi></span><span class=gu>@@ -1754,7 +1754,7 @@
 </span><span class=gu></span>
@@ -26,23 +108,49 @@ and dirty fix, it <em>does</em> seem to help!</p><h2 id=disable-wobbling-detecti
 </span><span class=gi></span> 		tp_motion_hysteresis(tp, t);
  		tp_motion_history_push(t);
 </code></pre></div><p>With this in place I no longer have hysteresis issues and haven&rsquo;t noticed any
-negative effects of disabled wobbling protection.</p><p>Apply the above patch to a recent <code>libinput</code> source and compile then install in
-a way that suits your OS.</p><h3 id=nix>Nix</h3><p>Below is an excerpt from how I do both in my NixOS package overlays.</p><div class=highlight><pre class=chroma><code class=language-nix data-lang=nix><span class=n>nixpkgs</span><span class=o>.</span><span class=n>overlays</span> <span class=err>=</span> <span class=p>[</span>
+negative effects of disabled wobbling protection.</p>
+<p>Apply the above patch to a recent <code>libinput</code> source and compile then install in
+a way that suits your OS.</p>
+<h3 id=nix>Nix</h3>
+<p>Below is an excerpt from how I do both in my NixOS package overlays.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-nix data-lang=nix><span class=n>nixpkgs</span><span class=o>.</span><span class=n>overlays</span> <span class=err>=</span> <span class=p>[</span>
     <span class=p>(</span><span class=n>self</span><span class=p>:</span> <span class=n>super</span><span class=p>:</span> <span class=p>{</span>
         <span class=n>libinput</span> <span class=o>=</span> <span class=n>super</span><span class=o>.</span><span class=n>libinput</span><span class=o>.</span><span class=n>overrideAttrs</span>
             <span class=p>(</span><span class=n>o</span><span class=p>:</span> <span class=p>{</span> <span class=n>patches</span> <span class=o>=</span> <span class=n>o</span><span class=o>.</span><span class=n>patches</span> <span class=o>++</span> <span class=p>[</span> <span class=n>libinput</span><span class=o>.</span><span class=n>patch</span> <span class=p>];</span> <span class=p>});</span>
     <span class=p>})</span>
 <span class=p>];</span>
 </code></pre></div><p>This means any Nix expression in my system making use of <code>libinput</code> gets my
-patched version.</p><h2 id=a-note-on-synaptics-rmi4-over-smbus>A note on Synaptics RMI4 over SMBus</h2><p>As I was digging into this problem I realised that my ThinkPad&rsquo;s Synaptics
+patched version.</p>
+<h2 id=a-note-on-synaptics-rmi4-over-smbus>A note on Synaptics RMI4 over SMBus</h2>
+<p>As I was digging into this problem I realised that my ThinkPad&rsquo;s Synaptics
 clickpad runs their RMI4 protocol. This is a native protocol that has had Linux
 kernel support as of 4.6 and means you can ditch the HID/PS2 emulation
-(<code>psmouse</code> module).</p><p>This should have been automatic for me but it seems my device&rsquo;s PnP ID is not in
+(<code>psmouse</code> module).</p>
+<p>This should have been automatic for me but it seems my device&rsquo;s PnP ID is not in
 the current kernel&rsquo;s <a href=https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/tree/drivers/input/mouse/synaptics.c#n164>list</a>. I can force it with the kernel parameter
 <code>psmouse.synaptics_intertouch=1</code> but then it seems I then hit another <a href=https://gitlab.freedesktop.org/libinput/libinput/-/issues/402>issue</a> in
 <code>libinput</code> that causes my clickpad buttons to not get discovered by the probing
-code.</p><p>Alas, the situation is still good enough that I don&rsquo;t need to reach for the
+code.</p>
+<p>Alas, the situation is still good enough that I don&rsquo;t need to reach for the
 <code>synaptics</code> driver, and there is better <a href="https://www.phoronix.com/scan.php?page=news%5Fitem&px=Linux-5.10-Synaptics-RMI4-F3A">support</a> landing in the 5.10 kernels so
-I&rsquo;m happy to hold out for now.</p></div></section><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/nix>nix</a></li></ul></nav></div></article></main><footer><hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
+I&rsquo;m happy to hold out for now.</p>
+</div>
+</section>
+<div class=post-tags>
+<nav class="nav tags">
+<ul class=tags>
+<li><a href=/tags/nix>nix</a></li>
+</ul>
+</nav>
+</div>
+</article>
+</main>
+<footer>
+<hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
 <a class=menu href=/id>$id</a>
-<span class="active menu">fieldnotes</span></footer><script src=https://martin.baillie.id/js/footer.min.28ef130186726a0df510071a5be15530d6861d48b3bd20da5f164370ecc400914afdc175b237ca1a21d9a09b59fe738344e299f812348b8f77c8a9f5c30ed91f.js integrity="sha512-KO8TAYZyag31EAcaW+FVMNaGHUizvSDaXxZDcOzEAJFK/cF1sjfKGiHZoJtZ/nODROKZ+BI0i493yKn1ww7ZHw==" crossorigin=anonymous async></script></div></body></html>
+<span class="active menu">fieldnotes</span>
+</footer>
+<script src=https://martin.baillie.id/js/footer.min.444ed87071ed3ce3927a6b9c2d891214f17da0a66e9956a5efb26a575eee4dd899bffb64b731153407d893252e02d63c32688d9732b74df3f3d43a3c722cf607.js integrity="sha512-RE7YcHHtPOOSemucLYkSFPF9oKZumVal77JqV17uTdiZv/tktzEVNAfYkyUuAtY8MmiNlzK3TfPz1Do8ciz2Bw==" crossorigin=anonymous async></script>
+</div>
+</body>
+</html>

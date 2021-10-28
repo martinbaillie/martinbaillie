@@ -1,58 +1,192 @@
-<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><script>if(localStorage.theme!="")document.documentElement.setAttribute("data-theme",localStorage.theme)</script><link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous><title>Martin Baillie | Emacs TRAMP over AWS SSM APIs</title><meta name=robots content="index, follow"><meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><link rel=canonical href=https://martin.baillie.id/wrote/emacs-tramp-over-aws-ssm-apis/><meta property="og:title" content="Emacs TRAMP over AWS SSM APIs"><meta name=description content="Cattle not pets The majority of AWS EC2 I need to operate these days are members of Kubernetes clusters. For remote access to them I&rsquo;m more commonly authenticating to the Kube API to spawn a privileged ephemeral debugger pod rather than accessing the host directly. I have little need for host access even for the remaining minority of ancillary EC2 services I&rsquo;m responsible for because all the observability pillars are pulled or pushed somewhere else, and if something is misbehaving or needing replaced I&rsquo;m more likely to shoot it than debug or patch it."><meta property="og:image" content="https://martin.baillie.id//img/me.jpg"><meta itemprop=name content="Emacs TRAMP over AWS SSM APIs"><meta name=application-name content="Martin Baillie"><meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Emacs TRAMP over AWS SSM APIs"><meta property="og:description" content="Cattle not pets The majority of AWS EC2 I need to operate these days are members of Kubernetes clusters. For remote access to them I&rsquo;m more commonly authenticating to the Kube API to spawn a privileged ephemeral debugger pod rather than accessing the host directly. I have little need for host access even for the remaining minority of ancillary EC2 services I&rsquo;m responsible for because all the observability pillars are pulled or pushed somewhere else, and if something is misbehaving or needing replaced I&rsquo;m more likely to shoot it than debug or patch it."><meta property="og:type" content="article"><meta property="og:url" content="https://martin.baillie.id/wrote/emacs-tramp-over-aws-ssm-apis/"><meta property="article:published_time" content="2021-02-07T15:18:00+11:00"><meta property="article:modified_time" content="2021-02-07T15:18:00+11:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Emacs TRAMP over AWS SSM APIs"><meta name=twitter:description content="Cattle not pets The majority of AWS EC2 I need to operate these days are members of Kubernetes clusters. For remote access to them I&rsquo;m more commonly authenticating to the Kube API to spawn a privileged ephemeral debugger pod rather than accessing the host directly. I have little need for host access even for the remaining minority of ancillary EC2 services I&rsquo;m responsible for because all the observability pillars are pulled or pushed somewhere else, and if something is misbehaving or needing replaced I&rsquo;m more likely to shoot it than debug or patch it."><meta name=twitter:site content="@martinbaillie"><meta name=twitter:creator content="@martinbaillie"><meta name=twitter:image content="https://martin.baillie.id//img/me.jpg"><link rel=authorization_endpoint href=https://indieauth.com/auth><link rel=token_endpoint href=https://tokens.indieauth.com/token><link rel=webmention href=https://webmention.io/martin.baillie.id/webmention><link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc><link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png><link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png><link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png><link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png><link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png><link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png><link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png><link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png><link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png><link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png><link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png><link rel=manifest href=/img/favicon/manifest.json><meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png"><meta name=msapplication-TileColor content="#ffffff"><meta name=theme-color content="#ffffff"><script src=https://martin.baillie.id/main.2886ed11170936a33d9c58c04cac23204ead8d0a4e228982a00ba971f39d3b391b3cdc6dadb283cdc42af9286068e8901d6998bff909b9edb6482bc2629ebb92.js integrity="sha512-KIbtERcJNqM9nFjATKwjIE6tjQpOIomCoAupcfOdOzkbPNxtrbKDzcQq+ShgaOiQHWmYv/kJue22SCvCYp67kg==" crossorigin=anonymous async></script></head><body><div class=content><header><div class=main><a href=https://martin.baillie.id/>Martin Baillie</a></div><nav><a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a><a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a><a class=soc id=mode style=cursor:pointer onclick=toggleMode(); title="Switch Theme"><i data-feather=moon></i></a></nav></header><main><article><div class=title><h1>Emacs TRAMP over AWS SSM APIs</h1></div><div class=meta><div class=posted><i data-feather=edit-3></i>20210207</div><div class=reading><i data-feather=clock></i>~07 mins</div></div><div class=tldr><strong>tl;dr:</strong>
-Securely preside over your EC2 darlings with TRAMP mode.</div><section class=body><div class=single><h2 id=cattle-not-pets>Cattle not pets</h2><p>The majority of AWS EC2 I need to operate these days are members of Kubernetes
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<script>localStorage.theme!=""&&document.documentElement.setAttribute("data-theme",localStorage.theme)</script>
+<link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous>
+<title>Martin Baillie | Emacs TRAMP over AWS SSM APIs</title>
+<meta name=robots content="index, follow">
+<meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel=canonical href=https://martin.baillie.id/wrote/emacs-tramp-over-aws-ssm-apis/>
+<meta property="og:title" content="Emacs TRAMP over AWS SSM APIs">
+<meta name=description content="Cattle not pets The majority of AWS EC2 I need to operate these days are members of Kubernetes clusters. For remote access to them I&rsquo;m more commonly authenticating to the Kube API to spawn a privileged ephemeral debugger pod rather than accessing the host directly. I have little need for host access even for the remaining minority of ancillary EC2 services I&rsquo;m responsible for because all the observability pillars are pulled or pushed somewhere else, and if something is misbehaving or needing replaced I&rsquo;m more likely to shoot it than debug or patch it.">
+<meta property="og:image" content="https://martin.baillie.id//img/me.jpg">
+<meta itemprop=name content="Emacs TRAMP over AWS SSM APIs">
+<meta name=application-name content="Martin Baillie">
+<meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Emacs TRAMP over AWS SSM APIs">
+<meta property="og:description" content="Cattle not pets The majority of AWS EC2 I need to operate these days are members of Kubernetes clusters. For remote access to them I&rsquo;m more commonly authenticating to the Kube API to spawn a privileged ephemeral debugger pod rather than accessing the host directly. I have little need for host access even for the remaining minority of ancillary EC2 services I&rsquo;m responsible for because all the observability pillars are pulled or pushed somewhere else, and if something is misbehaving or needing replaced I&rsquo;m more likely to shoot it than debug or patch it.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://martin.baillie.id/wrote/emacs-tramp-over-aws-ssm-apis/"><meta property="article:section" content="wrote">
+<meta property="article:published_time" content="2021-02-07T15:18:00+11:00">
+<meta property="article:modified_time" content="2021-02-07T15:18:00+11:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Emacs TRAMP over AWS SSM APIs">
+<meta name=twitter:description content="Cattle not pets The majority of AWS EC2 I need to operate these days are members of Kubernetes clusters. For remote access to them I&rsquo;m more commonly authenticating to the Kube API to spawn a privileged ephemeral debugger pod rather than accessing the host directly. I have little need for host access even for the remaining minority of ancillary EC2 services I&rsquo;m responsible for because all the observability pillars are pulled or pushed somewhere else, and if something is misbehaving or needing replaced I&rsquo;m more likely to shoot it than debug or patch it.">
+<meta name=twitter:site content="@martinbaillie">
+<meta name=twitter:creator content="@martinbaillie">
+<meta name=twitter:image content="https://martin.baillie.id//img/me.jpg">
+<link rel=authorization_endpoint href=https://indieauth.com/auth>
+<link rel=token_endpoint href=https://tokens.indieauth.com/token>
+<link rel=webmention href=https://webmention.io/martin.baillie.id/webmention>
+<link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc>
+<link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png>
+<link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png>
+<link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png>
+<link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png>
+<link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png>
+<link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png>
+<link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png>
+<link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png>
+<link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png>
+<link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png>
+<link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png>
+<link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png>
+<link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png>
+<link rel=manifest href=/img/favicon/manifest.json>
+<meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png">
+<meta name=msapplication-TileColor content="#ffffff">
+<meta name=theme-color content="#ffffff">
+<script src=https://martin.baillie.id/main.3f3d533c804ec193a3bf2f39185925c3d1c35bbfefbcc4349c90cf1c18a2009e41c963eae886ded936140dbda2c8582f58d13a955cfb56af2eae72817fde756c.js integrity="sha512-Pz1TPIBOwZOjvy85GFklw9HDW7/vvMQ0nJDPHBiiAJ5ByWPq6Ibe2TYUDb2iyFgvWNE6lVz7Vq8urnKBf951bA==" crossorigin=anonymous async></script>
+</head>
+<body>
+<div class=content><header>
+<div class=main>
+<a href=https://martin.baillie.id/>Martin Baillie</a>
+</div>
+<nav>
+<a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a>
+<a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a>
+<a class=soc id=mode style=cursor:pointer onclick=toggleMode() title="Switch Theme"><i data-feather=moon></i></a>
+</nav>
+</header>
+<main>
+<article>
+<div class=title>
+<h1>Emacs TRAMP over AWS SSM APIs</h1>
+</div>
+<div class=meta>
+<div class=posted><i data-feather=edit-3></i>20210207</div>
+<div class=reading><i data-feather=clock></i>~07 mins</div>
+</div>
+<div class=tldr>
+<strong>tl;dr:</strong>
+Securely preside over your EC2 darlings with TRAMP mode.
+</div>
+<section class=body>
+<div class=single>
+<h2 id=cattle-not-pets>Cattle not pets</h2>
+<p>The majority of AWS EC2 I need to operate these days are members of Kubernetes
 clusters. For remote access to them I&rsquo;m more commonly authenticating to the Kube
 API to spawn a privileged ephemeral debugger pod rather than accessing the host
 directly. I have little need for host access even for the remaining minority of
 ancillary EC2 services I&rsquo;m responsible for because all the observability pillars
 are pulled or pushed somewhere else, and if something is misbehaving or needing
-replaced I&rsquo;m more likely to shoot it than debug or patch it.</p><p>To be clear, I think this is a good thing. It is a testament to the efficacy of
+replaced I&rsquo;m more likely to shoot it than debug or patch it.</p>
+<p>To be clear, I think this is a good thing. It is a testament to the efficacy of
 the immutable infrastructure pattern, infrastructure as code and modern platform
-tooling.</p><p>So the preface here is I rarely need to pop a shell on an EC2 instance, and
-<strong>very</strong> rarely need to extract a file from one.</p><p>However, one of these very rare occurrences presented itself last week and
-prompted my writing of this quick <a href=/wrote/fieldnotes>fieldnote</a>, if for no one else but myself!</p><h2 id=aws-ssm>AWS SSM</h2><p>For a good wee while now, AWS SSM (or AWS Systems Manager as I see they are
+tooling.</p>
+<p>So the preface here is I rarely need to pop a shell on an EC2 instance, and
+<strong>very</strong> rarely need to extract a file from one.</p>
+<p>However, one of these very rare occurrences presented itself last week and
+prompted my writing of this quick <a href=/wrote/fieldnotes>fieldnote</a>, if for no one else but myself!</p>
+<h2 id=aws-ssm>AWS SSM</h2>
+<p>For a good wee while now, AWS SSM (or AWS Systems Manager as I see they are
 calling it nowadays) has arguably been the most secure way to permit controlled
-and audited access to an EC2 instance.</p><blockquote><p>NOTE: You can also run the SSM agent on other cloud or on-premises VMs. I have
+and audited access to an EC2 instance.</p>
+<blockquote>
+<p>NOTE: You can also run the SSM agent on other cloud or on-premises VMs. I have
 used to the latter in a hybrid context to good effect at a previous client. For
 the former, most other clouds have their own solutions and those are probably
-the smarter choice.</p></blockquote><p>If you <em>are</em> in AWS then some features to like about the SSM approach over
-traditional SSH are:</p><ul><li>No direct network path required. There is no need to punch holes in your
-VPC layers and chain bastions.</li><li>Instance authentication controlled through IAM and by extension whichever IdP
-you may be federating human access with.</li><li>Initial access and every userspace command audited and logged. To create
-break-glass alerts or &ldquo;taint&rdquo; instances that have been accessed is a breeze.</li></ul><p>When compared to an SSH session there is no notable performance difference when
+the smarter choice.</p>
+</blockquote>
+<p>If you <em>are</em> in AWS then some features to like about the SSM approach over
+traditional SSH are:</p>
+<ul>
+<li>No direct network path required. There is no need to punch holes in your
+VPC layers and chain bastions.</li>
+<li>Instance authentication controlled through IAM and by extension whichever IdP
+you may be federating human access with.</li>
+<li>Initial access and every userspace command audited and logged. To create
+break-glass alerts or &ldquo;taint&rdquo; instances that have been accessed is a breeze.</li>
+</ul>
+<p>When compared to an SSH session there is no notable performance difference when
 accessing an instance over the SSM APIs either. I do recall some lag in the
 early days of the service but that seems fixed if you&rsquo;re doing run-of-the-mill
 sysadmin things. Just don&rsquo;t go pasting many megabytes of junk into the pty from
-your clipboard!</p><p>The only downside I feel is the need for an opaque client-side binary called the
+your clipboard!</p>
+<p>The only downside I feel is the need for an opaque client-side binary called the
 <a href=https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html><code>ssm-session-manager-plugin</code></a> which is paired with the <code>aws</code> CLI (presuming you
-want to use your terminal rather than a window in the AWS console).</p><blockquote><p>NOTE: I packaged the plugin binary for Nix/NixOS a while back. It&rsquo;s currently
-in <a href="https://search.nixos.org/packages?channel=unstable&show=ssm-session-manager-plugin&from=0&size=50&sort=relevance&query=ssm-session-manager-plugin">stable</a>.</p></blockquote><h2 id=ssh>SSH</h2><p>Perhaps more interesting, though, is that for the last couple of years AWS has
+want to use your terminal rather than a window in the AWS console).</p>
+<blockquote>
+<p>NOTE: I packaged the plugin binary for Nix/NixOS a while back. It&rsquo;s currently
+in <a href="https://search.nixos.org/packages?channel=unstable&show=ssm-session-manager-plugin&from=0&size=50&sort=relevance&query=ssm-session-manager-plugin">stable</a>.</p>
+</blockquote>
+<h2 id=ssh>SSH</h2>
+<p>Perhaps more interesting, though, is that for the last couple of years AWS has
 supported tunneling the SSH protocol over their SSM APIs if you use the SSM
-&ldquo;document&rdquo; called <code>AWS-StartSSHSession</code>.</p><p>They do this by proxying the SSH data arriving at the <code>amazon-ssm-agent</code> on the
+&ldquo;document&rdquo; called <code>AWS-StartSSHSession</code>.</p>
+<p>They do this by proxying the SSH data arriving at the <code>amazon-ssm-agent</code> on the
 target host laterally to the <code>sshd</code> on the same host over loopback. So while
 this means you need to run an SSH daemon again, you only need to bind it on a
-local interface.</p><p>As above, there&rsquo;s not much to be gained for an interactive SSH session (that I&rsquo;m
+local interface.</p>
+<p>As above, there&rsquo;s not much to be gained for an interactive SSH session (that I&rsquo;m
 aware of) since the SSM sessions are good enough performance wise. Plus, you
 actually lose a fair amount of the benefits listed above and you have the hassle
 of getting your public key into the target host user&rsquo;s <code>authorized_keys</code> if it&rsquo;s
-not already baked in.</p><p>What it <em>does</em> do, however, is open up <code>scp</code>! You can now copy files to and fro
+not already baked in.</p>
+<p>What it <em>does</em> do, however, is open up <code>scp</code>! You can now copy files to and fro
 that target host which is something you couldn&rsquo;t do before with a pure SSM
-session.</p><h3 id=how>How?</h3><p>Presuming your public key is already trusted by the target user on the host, all
+session.</p>
+<h3 id=how>How?</h3>
+<p>Presuming your public key is already trusted by the target user on the host, all
 you need to do is to modify your local SSH config (normally <code>~/.ssh/config</code>) to
 tell it to proxy all session requests headed towards AWS instance names via the
-AWS CLI.</p><div class=highlight><pre class=chroma><code class=language-sh data-lang=sh>host i-* mi-*
+AWS CLI.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>host i-* mi-*
 ProxyCommand sh -c <span class=s2>&#34;aws ssm start-session \
 </span><span class=s2>    --target %h \
 </span><span class=s2>    --document-name AWS-StartSSHSession \
 </span><span class=s2>    --parameters &#39;portNumber=%p&#39;&#34;</span>
-</code></pre></div><p>With that done, and with an IAM session in tow, you can <code>ssh user@i-00deadbeef</code> or <code>scp user@i-00deadbeef</code>.</p><blockquote><p>NOTE: It&rsquo;s not the scope of this post, but you could conceivably configure SSH
+</code></pre></div><p>With that done, and with an IAM session in tow, you can <code>ssh user@i-00deadbeef</code> or <code>scp user@i-00deadbeef</code>.</p>
+<blockquote>
+<p>NOTE: It&rsquo;s not the scope of this post, but you could conceivably configure SSH
 tunnels here as well. There&rsquo;s also a <code>AWS-StartPortForwardingSession</code> document
-that uses pure SSM to similar effect, and is probably more optimised.</p></blockquote><h2 id=emacs-tramp>Emacs TRAMP</h2><p>My work scenario from mid-week had me copying files to and from different
+that uses pure SSM to similar effect, and is probably more optimised.</p>
+</blockquote>
+<h2 id=emacs-tramp>Emacs TRAMP</h2>
+<p>My work scenario from mid-week had me copying files to and from different
 locations on an EC2 instance. Fortunately I tried good old TRAMP mode on a whim
 and learned that it works flawlessly using SSH proxied over SSM (I am not sure
-why I was surprised by that).</p><p>In a stock Emacs, <code>C-x C-f /ssh:user@i-00deadbeef:path</code> can be used to pop a
+why I was surprised by that).</p>
+<p>In a stock Emacs, <code>C-x C-f /ssh:user@i-00deadbeef:path</code> can be used to pop a
 remote Dired directory buffer or edit a target file in whatever major mode is
-appropriate.</p><figure><img src=/ox-hugo/tramp_dired.png alt="TRAMP Dired"></figure><p>You can also move around the remote filesystem as if it were local, and the
+appropriate.</p>
+<figure><img src=/ox-hugo/tramp_dired.png alt="TRAMP Dired">
+</figure>
+<p>You can also move around the remote filesystem as if it were local, and the
 likes of <code>M-x dired-do-copy</code> and friends can be used to transparently copy files
-between local and remote.</p><figure><img src=/ox-hugo/tramp_minibuffer.png alt="TRAMP Minibuffer"></figure></div></section><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/emacs>emacs</a></li><li><a href=/tags/aws>aws</a></li></ul></nav></div></article></main><footer><hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
+between local and remote.</p>
+<figure><img src=/ox-hugo/tramp_minibuffer.png alt="TRAMP Minibuffer">
+</figure>
+</div>
+</section>
+<div class=post-tags>
+<nav class="nav tags">
+<ul class=tags>
+<li><a href=/tags/emacs>emacs</a></li>
+<li><a href=/tags/aws>aws</a></li>
+</ul>
+</nav>
+</div>
+</article>
+</main>
+<footer>
+<hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
 <a class=menu href=/id>$id</a>
-<span class="active menu">fieldnotes</span></footer><script src=https://martin.baillie.id/js/footer.min.28ef130186726a0df510071a5be15530d6861d48b3bd20da5f164370ecc400914afdc175b237ca1a21d9a09b59fe738344e299f812348b8f77c8a9f5c30ed91f.js integrity="sha512-KO8TAYZyag31EAcaW+FVMNaGHUizvSDaXxZDcOzEAJFK/cF1sjfKGiHZoJtZ/nODROKZ+BI0i493yKn1ww7ZHw==" crossorigin=anonymous async></script></div></body></html>
+<span class="active menu">fieldnotes</span>
+</footer>
+<script src=https://martin.baillie.id/js/footer.min.444ed87071ed3ce3927a6b9c2d891214f17da0a66e9956a5efb26a575eee4dd899bffb64b731153407d893252e02d63c32688d9732b74df3f3d43a3c722cf607.js integrity="sha512-RE7YcHHtPOOSemucLYkSFPF9oKZumVal77JqV17uTdiZv/tktzEVNAfYkyUuAtY8MmiNlzK3TfPz1Do8ciz2Bw==" crossorigin=anonymous async></script>
+</div>
+</body>
+</html>

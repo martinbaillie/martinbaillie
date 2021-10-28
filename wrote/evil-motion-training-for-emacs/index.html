@@ -1,56 +1,181 @@
-<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><script>if(localStorage.theme!="")document.documentElement.setAttribute("data-theme",localStorage.theme)</script><link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous><title>Martin Baillie | Emacs Evil Motion Training</title><meta name=robots content="index, follow"><meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><link rel=canonical href=https://martin.baillie.id/wrote/evil-motion-training-for-emacs/><meta property="og:title" content="Emacs Evil Motion Training"><meta name=description content="I made the switch to Emacs last year after having been a resolute vim user ever since I dual booted Slackware on my family&rsquo;s first computer as an early teen.
-Needless to say the power of the Emacs pseudo lisp machine quickly opened my eyes. I immediately lunged into consolidating practically all my text use cases sans browsing into Emacs: programming, note taking, RSS, mail, git porcelain, GitHub PRs and issues, IRC/Slack."><meta property="og:image" content="https://martin.baillie.id//img/me.jpg"><meta itemprop=name content="Emacs Evil Motion Training"><meta name=application-name content="Martin Baillie"><meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Emacs Evil Motion Training"><meta property="og:description" content="I made the switch to Emacs last year after having been a resolute vim user ever since I dual booted Slackware on my family&rsquo;s first computer as an early teen.
-Needless to say the power of the Emacs pseudo lisp machine quickly opened my eyes. I immediately lunged into consolidating practically all my text use cases sans browsing into Emacs: programming, note taking, RSS, mail, git porcelain, GitHub PRs and issues, IRC/Slack."><meta property="og:type" content="article"><meta property="og:url" content="https://martin.baillie.id/wrote/evil-motion-training-for-emacs/"><meta property="article:published_time" content="2020-06-28T10:33:00+10:00"><meta property="article:modified_time" content="2020-06-28T10:33:00+10:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Emacs Evil Motion Training"><meta name=twitter:description content="I made the switch to Emacs last year after having been a resolute vim user ever since I dual booted Slackware on my family&rsquo;s first computer as an early teen.
-Needless to say the power of the Emacs pseudo lisp machine quickly opened my eyes. I immediately lunged into consolidating practically all my text use cases sans browsing into Emacs: programming, note taking, RSS, mail, git porcelain, GitHub PRs and issues, IRC/Slack."><meta name=twitter:site content="@martinbaillie"><meta name=twitter:creator content="@martinbaillie"><meta name=twitter:image content="https://martin.baillie.id//img/me.jpg"><link rel=authorization_endpoint href=https://indieauth.com/auth><link rel=token_endpoint href=https://tokens.indieauth.com/token><link rel=webmention href=https://webmention.io/martin.baillie.id/webmention><link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc><link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png><link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png><link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png><link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png><link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png><link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png><link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png><link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png><link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png><link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png><link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png><link rel=manifest href=/img/favicon/manifest.json><meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png"><meta name=msapplication-TileColor content="#ffffff"><meta name=theme-color content="#ffffff"><script src=https://martin.baillie.id/main.2886ed11170936a33d9c58c04cac23204ead8d0a4e228982a00ba971f39d3b391b3cdc6dadb283cdc42af9286068e8901d6998bff909b9edb6482bc2629ebb92.js integrity="sha512-KIbtERcJNqM9nFjATKwjIE6tjQpOIomCoAupcfOdOzkbPNxtrbKDzcQq+ShgaOiQHWmYv/kJue22SCvCYp67kg==" crossorigin=anonymous async></script></head><body><div class=content><header><div class=main><a href=https://martin.baillie.id/>Martin Baillie</a></div><nav><a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a><a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a><a class=soc id=mode style=cursor:pointer onclick=toggleMode(); title="Switch Theme"><i data-feather=moon></i></a></nav></header><main><article><div class=title><h1>Emacs Evil Motion Training</h1></div><div class=meta><div class=posted><i data-feather=edit-3></i>20200628</div><div class=reading><i data-feather=clock></i>~07 mins</div></div><div class=tldr><strong>tl;dr:</strong>
-Punish yourself for poorly chosen evil motions in Emacs.</div><section class=body><div class=single><p>I made the switch to Emacs last year after having been a resolute vim user ever
-since I dual booted Slackware on my family&rsquo;s first computer as an early teen.</p><p>Needless to say the power of the Emacs pseudo <a href=https://en.wikipedia.org/wiki/Lisp%5Fmachine>lisp machine</a> quickly opened my
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<script>localStorage.theme!=""&&document.documentElement.setAttribute("data-theme",localStorage.theme)</script>
+<link rel="stylesheet preload prefetch" as=style type=text/css media=screen href=https://martin.baillie.id/main.60aec2f2e6c07375dfe74807e7dc14a15f8cb0e9d5dbca91bc05311d6e58627e1aef795f341332a861be094a5e5fc8c3c249d63994f5b77f661cd03d56645731.css integrity="sha512-YK7C8ubAc3Xf50gH59wUoV+MsOnV28qRvAUxHW5YYn4a73lfNBMyqGG+CUpeX8jDwknWOZT1t39mHNA9VmRXMQ==" crossorigin=anonymous>
+<title>Martin Baillie | Emacs Evil Motion Training</title>
+<meta name=robots content="index, follow">
+<meta name=googlebot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name=bingbot content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel=canonical href=https://martin.baillie.id/wrote/evil-motion-training-for-emacs/>
+<meta property="og:title" content="Emacs Evil Motion Training">
+<meta name=description content="I made the switch to Emacs last year after having been a resolute vim user ever since I dual booted Slackware on my family&rsquo;s first computer as an early teen.
+Needless to say the power of the Emacs pseudo lisp machine quickly opened my eyes. I immediately lunged into consolidating practically all my text use cases sans browsing into Emacs: programming, note taking, RSS, mail, git porcelain, GitHub PRs and issues, IRC/Slack.">
+<meta property="og:image" content="https://martin.baillie.id//img/me.jpg">
+<meta itemprop=name content="Emacs Evil Motion Training">
+<meta name=application-name content="Martin Baillie">
+<meta property="og:site_name" content="Martin Baillie"><meta property="og:title" content="Emacs Evil Motion Training">
+<meta property="og:description" content="I made the switch to Emacs last year after having been a resolute vim user ever since I dual booted Slackware on my family&rsquo;s first computer as an early teen.
+Needless to say the power of the Emacs pseudo lisp machine quickly opened my eyes. I immediately lunged into consolidating practically all my text use cases sans browsing into Emacs: programming, note taking, RSS, mail, git porcelain, GitHub PRs and issues, IRC/Slack.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://martin.baillie.id/wrote/evil-motion-training-for-emacs/"><meta property="article:section" content="wrote">
+<meta property="article:published_time" content="2020-06-28T10:33:00+10:00">
+<meta property="article:modified_time" content="2020-06-28T10:33:00+10:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Emacs Evil Motion Training">
+<meta name=twitter:description content="I made the switch to Emacs last year after having been a resolute vim user ever since I dual booted Slackware on my family&rsquo;s first computer as an early teen.
+Needless to say the power of the Emacs pseudo lisp machine quickly opened my eyes. I immediately lunged into consolidating practically all my text use cases sans browsing into Emacs: programming, note taking, RSS, mail, git porcelain, GitHub PRs and issues, IRC/Slack.">
+<meta name=twitter:site content="@martinbaillie">
+<meta name=twitter:creator content="@martinbaillie">
+<meta name=twitter:image content="https://martin.baillie.id//img/me.jpg">
+<link rel=authorization_endpoint href=https://indieauth.com/auth>
+<link rel=token_endpoint href=https://tokens.indieauth.com/token>
+<link rel=webmention href=https://webmention.io/martin.baillie.id/webmention>
+<link rel=pingback href=https://webmention.io/martin.baillie.id/xmlrpc>
+<link rel=apple-touch-icon sizes=57x57 href=/img/favicon/apple-icon-57x57.png>
+<link rel=apple-touch-icon sizes=60x60 href=/img/favicon/apple-icon-60x60.png>
+<link rel=apple-touch-icon sizes=72x72 href=/img/favicon/apple-icon-72x72.png>
+<link rel=apple-touch-icon sizes=76x76 href=/img/favicon/apple-icon-76x76.png>
+<link rel=apple-touch-icon sizes=114x114 href=/img/favicon/apple-icon-114x114.png>
+<link rel=apple-touch-icon sizes=120x120 href=/img/favicon/apple-icon-120x120.png>
+<link rel=apple-touch-icon sizes=144x144 href=/img/favicon/apple-icon-144x144.png>
+<link rel=apple-touch-icon sizes=152x152 href=/img/favicon/apple-icon-152x152.png>
+<link rel=apple-touch-icon sizes=180x180 href=/img/favicon/apple-icon-180x180.png>
+<link rel=icon type=image/png sizes=192x192 href=/img/favicon/android-icon-192x192.png>
+<link rel=icon type=image/png sizes=32x32 href=/img/favicon/favicon-32x32.png>
+<link rel=icon type=image/png sizes=96x96 href=/img/favicon/favicon-96x96.png>
+<link rel=icon type=image/png sizes=16x16 href=/img/favicon/favicon-16x16.png>
+<link rel=manifest href=/img/favicon/manifest.json>
+<meta name=msapplication-TileImage content="/img/favicon/ms-icon-144x144.png">
+<meta name=msapplication-TileColor content="#ffffff">
+<meta name=theme-color content="#ffffff">
+<script src=https://martin.baillie.id/main.3f3d533c804ec193a3bf2f39185925c3d1c35bbfefbcc4349c90cf1c18a2009e41c963eae886ded936140dbda2c8582f58d13a955cfb56af2eae72817fde756c.js integrity="sha512-Pz1TPIBOwZOjvy85GFklw9HDW7/vvMQ0nJDPHBiiAJ5ByWPq6Ibe2TYUDb2iyFgvWNE6lVz7Vq8urnKBf951bA==" crossorigin=anonymous async></script>
+</head>
+<body>
+<div class=content><header>
+<div class=main>
+<a href=https://martin.baillie.id/>Martin Baillie</a>
+</div>
+<nav>
+<a class=soc id=tags href=/tags title=Tags><i data-feather=tag></i></a>
+<a class=soc id=feed href=/index.xml title="RSS Feed"><i data-feather=rss></i></a>
+<a class=soc id=mode style=cursor:pointer onclick=toggleMode() title="Switch Theme"><i data-feather=moon></i></a>
+</nav>
+</header>
+<main>
+<article>
+<div class=title>
+<h1>Emacs Evil Motion Training</h1>
+</div>
+<div class=meta>
+<div class=posted><i data-feather=edit-3></i>20200628</div>
+<div class=reading><i data-feather=clock></i>~07 mins</div>
+</div>
+<div class=tldr>
+<strong>tl;dr:</strong>
+Punish yourself for poorly chosen evil motions in Emacs.
+</div>
+<section class=body>
+<div class=single>
+<p>I made the switch to Emacs last year after having been a resolute vim user ever
+since I dual booted Slackware on my family&rsquo;s first computer as an early teen.</p>
+<p>Needless to say the power of the Emacs pseudo <a href=https://en.wikipedia.org/wiki/Lisp%5Fmachine>lisp machine</a> quickly opened my
 eyes. I immediately lunged into consolidating practically all my text use cases
 sans browsing into Emacs: programming, note taking, RSS, mail, <code>git</code> porcelain,
 GitHub PRs and issues, IRC/Slack. I even entirely replaced my use of a separate
 terminal emulator. My browser has since clawed back the mail, Slack and <em>some</em>
 GitHub use cases from Emacs' grasp, but if it weren&rsquo;t for me staunchly trying to
-stick to Wayland I am quite sure I&rsquo;d be writing this from inside <a href=https://github.com/ch11ng/exwm>EXWM</a> by now.</p><p>However, the old adage goes:</p><blockquote><p>&ldquo;Emacs is a great operating system missing a great editor.&rdquo;</p></blockquote><p>And it was true for me, but fixable.</p><h2 id=evil-mode>Evil Mode</h2><p>I tried Emacs native key chords for all of a day or two before giving up and
+stick to Wayland I am quite sure I&rsquo;d be writing this from inside <a href=https://github.com/ch11ng/exwm>EXWM</a> by now.</p>
+<p>However, the old adage goes:</p>
+<blockquote>
+<p>&ldquo;Emacs is a great operating system missing a great editor.&rdquo;</p>
+</blockquote>
+<p>And it was true for me, but fixable.</p>
+<h2 id=evil-mode>Evil Mode</h2>
+<p>I tried Emacs native key chords for all of a day or two before giving up and
 enabling <a href=https://github.com/emacs-evil/evil>evil mode</a>. It could be that I&rsquo;m too far gone, but I simply could not
 live without modal editing and the intuitive verb-object <code>vi</code> key bindings that I
-had become accustomed to.</p><p>For me, having <a href=#proficiency>proficiency</a> at moving around a buffer and manipulating text in
+had become accustomed to.</p>
+<p>For me, having <a href=#proficiency>proficiency</a> at moving around a buffer and manipulating text in
 this manner means anything else feels like a bit of a regression. What&rsquo;s more,
 I&rsquo;ve always used <code>vi</code> styled bindings anywhere I can, be it in terminal readline
 mode, my tiling window manager <a href=https://swaywm.org/>du jour</a>, or Firefox (<a href=https://github.com/tridactyl/tridactyl>Tridactyl</a> is my pick of the
 post-<a href=https://en.wikipedia.org/wiki/XUL>XUL era</a> bunch). Even back in my enterprise Java days, when forced to dip into
 the heavyweight IDE world with the likes of Eclipse and IntelliJ IDEA, I&rsquo;d still
-reach for a plugin.</p><hr><p>I think with evil mode and Emacs you&rsquo;re truly getting the best of both worlds.
+reach for a plugin.</p>
+<hr>
+<p>I think with evil mode and Emacs you&rsquo;re truly getting the best of both worlds.
 Emacs can be the great editor (neo)vi(m) is. It can be just as snappy (see
 <a href=https://www.emacswiki.org/emacs/GccEmacs>native-comp</a>), start just as fast (see <a href=https://www.emacswiki.org/emacs/EmacsClient>emacsclient</a> / <a href=https://github.com/hlissner/doom-emacs>Doom</a>&rsquo;s optimisations), and
 has all the modern trimmings you would expect in an editor (e.g. <a href=https://github.com/emacs-lsp/lsp-mode>LSP</a>, <a href=https://lists.gnu.org/archive/html/emacs-devel/2019-06/msg00123.html>ligatures</a>,
-<a href=https://github.com/masm11/emacs>pgtk</a>).</p><p>It is, however, the famed Emacs extensibility that sets it apart from the crowd
+<a href=https://github.com/masm11/emacs>pgtk</a>).</p>
+<p>It is, however, the famed Emacs extensibility that sets it apart from the crowd
 for me. Vimscript, Neovim&rsquo;s Lua extensions, even VSCode&rsquo;s extensions API are—to
 butcher <a href=https://en.wikipedia.org/wiki/Greenspun%27s%5Ftenth%5Frule>Greenspun&rsquo;s aphorism</a>—just <em>ad hoc, informally-specified, bug-ridden,
-slow implementations of half of</em> <del>Common Lisp</del> <em>Elisp</em>.</p><p>With Elisp packages, Emacs can become a cybernetic extension of your arm. Though
+slow implementations of half of</em> <del>Common Lisp</del> <em>Elisp</em>.</p>
+<p>With Elisp packages, Emacs can become a cybernetic extension of your arm. Though
 package authors are not really writing an extension, they&rsquo;re just writing more
-Emacs. That, I think, is the crux of it.</p><p>Speaking of packages, there are of course all the usual big hitter packages that
+Emacs. That, I think, is the crux of it.</p>
+<p>Speaking of packages, there are of course all the usual big hitter packages that
 you&rsquo;ll find on any list, like <a href=https://magit.vc/>Magit</a>, <a href=https://orgmode.org/>Org</a>, <a href=https://www.emacswiki.org/emacs/TrampMode>TRAMP</a>, <a href=https://github.com/bbatsov/projectile>Projectile</a>, <a href=https://github.com/abo-abo/swiper>Ivy</a> and <a href=https://www.emacswiki.org/emacs/DiredMode>Dired</a> to
 name a few. However, today I&rsquo;m showcasing a small package to improve proficiency
-in evil motions.</p><h2 id=proficiency>Proficiency</h2><p>Not long before my switch to Emacs I had started trying to kick some bad habits
+in evil motions.</p>
+<h2 id=proficiency>Proficiency</h2>
+<p>Not long before my switch to Emacs I had started trying to kick some bad habits
 with vim. Let&rsquo;s call them lazy motions. I <em>knew</em> better ways of moving the
 cursor from a to b, but the cognitive overhead, or lack of muscle memory
 perhaps, was too much to overcome. If you&rsquo;re also a vim user then there&rsquo;s a
 chance you know what I mean: <code>hhhhhhhhhhhhjjjjjjjjkkkkkllllhjk</code>. That is,
 favouring a single character/line oriented movement over a more esoteric (but
-known to you!) and undeniably precise movement.</p><p>The word-wise motions (e.g. <code>wW</code>, <code>bB</code>, <code>eE</code>, <code>ge</code>), character searches (e.g.
+known to you!) and undeniably precise movement.</p>
+<p>The word-wise motions (e.g. <code>wW</code>, <code>bB</code>, <code>eE</code>, <code>ge</code>), character searches (e.g.
 <code>fF</code>, <code>tT</code>, <code>,</code>, <code>;</code>) and line jumps (e.g. <code>10j</code> <code>5k</code>) will almost always get
-you where you want to be with less keystrokes.</p><p>I was slowly beginning to fix this through a somewhat Pavlovian vim plugin
+you where you want to be with less keystrokes.</p>
+<p>I was slowly beginning to fix this through a somewhat Pavlovian vim plugin
 called <a href=https://github.com/takac/vim-hardtime><code>vim-hardtime</code></a> which would tase me when I repeatedly used these keys in
 succession. Unfortunately I lost this with the switch to Emacs and the return to
 familiar modal surroundings in evil mode, and sure enough the bad habits came
-back.</p><p>To my dismay I could not find a directly equivalent Emacs package so today I&rsquo;m
-releasing the <a href=https://github.com/martinbaillie/evil-motion-trainer><code>evil-motion-trainer</code></a> on GitHub.</p><h2 id=evil-motion-trainer>Evil Motion Trainer</h2><p>Just like the vim plugin, entering <code>evil-motion-trainer-mode</code> means Emacs will
+back.</p>
+<p>To my dismay I could not find a directly equivalent Emacs package so today I&rsquo;m
+releasing the <a href=https://github.com/martinbaillie/evil-motion-trainer><code>evil-motion-trainer</code></a> on GitHub.</p>
+<h2 id=evil-motion-trainer>Evil Motion Trainer</h2>
+<p>Just like the vim plugin, entering <code>evil-motion-trainer-mode</code> means Emacs will
 drop lazily repeated hjkl-based motions after a configurable threshold, forcing
-you to think about a more efficient motion:</p><figure><img src=/ox-hugo/evil_motion_trainer.gif></figure><h3 id=configuration>Configuration</h3><p>Enable in a buffer with:</p><div class=highlight><pre class=chroma><code class=language-elisp data-lang=elisp><span class=p>(</span><span class=nv>evil-motion-trainer-mode</span><span class=p>)</span>
-</code></pre></div><p>Turn on for all buffers:</p><div class=highlight><pre class=chroma><code class=language-elisp data-lang=elisp><span class=p>(</span><span class=nv>global-evil-motion-trainer-mode</span> <span class=mi>1</span><span class=p>)</span>
-</code></pre></div><p>Configure the number of permitted repeated key presses:</p><div class=highlight><pre class=chroma><code class=language-elisp data-lang=elisp><span class=p>(</span><span class=nb>setq</span> <span class=nv>evil-motion-trainer-threshold</span> <span class=mi>6</span><span class=p>)</span>
-</code></pre></div><p>Enable a super annoying mode that pops a warning in a buffer:</p><div class=highlight><pre class=chroma><code class=language-elisp data-lang=elisp><span class=p>(</span><span class=nb>setq</span> <span class=nv>evil-motion-trainer-super-annoying-mode</span> <span class=no>t</span><span class=p>)</span>
-</code></pre></div><p>Add to the suggested alternatives for a key:</p><div class=highlight><pre class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp><span class=p>(</span><span class=nv>emt-add-suggestion</span> <span class=ss>&#39;evil-next-line</span> <span class=ss>&#39;evil-avy-goto-char-timer</span><span class=p>)</span>
+you to think about a more efficient motion:</p>
+<figure><img src=/ox-hugo/evil_motion_trainer.gif>
+</figure>
+<h3 id=configuration>Configuration</h3>
+<p>Enable in a buffer with:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-elisp data-lang=elisp><span class=p>(</span><span class=nv>evil-motion-trainer-mode</span><span class=p>)</span>
+</code></pre></div><p>Turn on for all buffers:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-elisp data-lang=elisp><span class=p>(</span><span class=nv>global-evil-motion-trainer-mode</span> <span class=mi>1</span><span class=p>)</span>
+</code></pre></div><p>Configure the number of permitted repeated key presses:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-elisp data-lang=elisp><span class=p>(</span><span class=nb>setq</span> <span class=nv>evil-motion-trainer-threshold</span> <span class=mi>6</span><span class=p>)</span>
+</code></pre></div><p>Enable a super annoying mode that pops a warning in a buffer:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-elisp data-lang=elisp><span class=p>(</span><span class=nb>setq</span> <span class=nv>evil-motion-trainer-super-annoying-mode</span> <span class=no>t</span><span class=p>)</span>
+</code></pre></div><p>Add to the suggested alternatives for a key:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-emacs-lisp data-lang=emacs-lisp><span class=p>(</span><span class=nv>emt-add-suggestion</span> <span class=ss>&#39;evil-next-line</span> <span class=ss>&#39;evil-avy-goto-char-timer</span><span class=p>)</span>
 <span class=c1>;; See also: (emt-add-suggestions)</span>
-</code></pre></div></div></section><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/emacs>emacs</a></li><li><a href=/tags/release>release</a></li></ul></nav></div></article></main><footer><hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
+</code></pre></div>
+</div>
+</section>
+<div class=post-tags>
+<nav class="nav tags">
+<ul class=tags>
+<li><a href=/tags/emacs>emacs</a></li>
+<li><a href=/tags/release>release</a></li>
+</ul>
+</nav>
+</div>
+</article>
+</main>
+<footer>
+<hr><a class=soc rel=me href=https://github.com/martinbaillie title=GitHub><i data-feather=github></i></a><a class=soc rel=me href=https://linkedin.com/in/martinbaillie title=LinkedIn><i data-feather=linkedin></i></a><a class=soc rel=me href=https://twitter.com/martinbaillie title=Twitter><i data-feather=twitter></i></a><a class=soc rel=me href=mailto:martin@baillie.id title=Email><i data-feather=mail></i></a><a class="soc gpg" href=https://github.com/martinbaillie.gpg title="GPG Public Key">C2F0 79DE D64B 7361 006A A099 2A56 EA64 591E 15E4</a>
 <a class=menu href=/id>$id</a>
-<span class="active menu">fieldnotes</span></footer><script src=https://martin.baillie.id/js/footer.min.28ef130186726a0df510071a5be15530d6861d48b3bd20da5f164370ecc400914afdc175b237ca1a21d9a09b59fe738344e299f812348b8f77c8a9f5c30ed91f.js integrity="sha512-KO8TAYZyag31EAcaW+FVMNaGHUizvSDaXxZDcOzEAJFK/cF1sjfKGiHZoJtZ/nODROKZ+BI0i493yKn1ww7ZHw==" crossorigin=anonymous async></script></div></body></html>
+<span class="active menu">fieldnotes</span>
+</footer>
+<script src=https://martin.baillie.id/js/footer.min.444ed87071ed3ce3927a6b9c2d891214f17da0a66e9956a5efb26a575eee4dd899bffb64b731153407d893252e02d63c32688d9732b74df3f3d43a3c722cf607.js integrity="sha512-RE7YcHHtPOOSemucLYkSFPF9oKZumVal77JqV17uTdiZv/tktzEVNAfYkyUuAtY8MmiNlzK3TfPz1Do8ciz2Bw==" crossorigin=anonymous async></script>
+</div>
+</body>
+</html>
