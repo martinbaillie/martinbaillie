@@ -1,38 +1,45 @@
 name: Pages
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-          fetch-depth: 0    # Fetch all history for Hugo .GitInfo and .Lastmod.
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Fetch all history for Hugo .GitInfo and .Lastmod.
 
-    - name: Nix
-      uses: cachix/install-nix-action@v13
+      - name: Nix
+        uses: cachix/install-nix-action@v14
+        with:
+          install_url: https://nixos-nix-install-tests.cachix.org/serve/vij683ly7sl95nnhb67bdjjfabclr85m/install
+          install_options: "--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve"
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-    - name: Deps
-      run: nix-shell --pure --run 'npm i'
+      - name: Deps
+        run: nix develop --command bash -c 'npm i'
 
-    - name: Hugo
-      run: nix-shell --pure --run 'HUGO_ENV=production hugo --gc --minify'
+      - name: Hugo
+        run: nix develop --command bash -c 'HUGO_ENV=production hugo --gc --minify'
 
-    - name: CNAME
-      run: echo 'martin.baillie.id' > public/CNAME
+      - name: CNAME
+        run: echo 'martin.baillie.id' > public/CNAME
 
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
 
-    - name: Purge Cloudflare Cache
-      uses: jakejarvis/cloudflare-purge-action@v0.3.0
-      env:
-        CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
-        CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-      if: env.CLOUDFLARE_TOKEN != null
+      - name: Purge Cloudflare Cache
+        uses: jakejarvis/cloudflare-purge-action@v0.3.0
+        env:
+          CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+        if: env.CLOUDFLARE_TOKEN != null
