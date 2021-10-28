@@ -85,8 +85,8 @@ it to a &ldquo;trusted&rdquo; registry (oftentimes after having mutated it to ha
 annotations and/or a verifiable signature).</p>
 <p>It follows that the trusted registry is the only approved origin for at least
 the subsequent production runtime. In AWS that runtime might be Kubernetes
-(EKS), ECS, Lambda or any of the other <a href=https://www.lastweekinaws.com/blog/the-17-ways-to-run-containers-on-aws>seventeen (<strong>17!</strong>) ways to run a
-container</a>. Taking Kubernetes as an example, an admission controller can be
+(EKS), ECS, Lambda or any of the other <a href=https://www.lastweekinaws.com/blog/the-17-ways-to-run-containers-on-aws>seventeen (<strong>17!</strong>)</a> ways to run a
+container. Taking Kubernetes as an example, an admission controller can be
 utilised to deny any image not originating from that trusted registry, or whose
 signature cannot be verified to have passed through the compliance check
 gauntlet.</p>
@@ -212,7 +212,7 @@ However, the codebase may be a useful reference for informing your own build. It
 ships with a working Lambda and a basic CDK stack if you wanted to kick the
 tyres in your own account. The CLI uses the same codepaths sans Lambda, should
 you wish to try it locally instead.</p>
-<p>I think I&rsquo;ll stop this note here now and add more information in the <a href=https://github.com/martinbaillie/ocistow%20>README</a>.</p>
+<p>I think I&rsquo;ll stop this note here now and add more information in the <a href=https://github.com/martinbaillie/ocistow>README</a>.</p>
 <section class=footnotes role=doc-endnotes>
 <hr>
 <ol>
