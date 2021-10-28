@@ -19,8 +19,8 @@ annotations and/or a verifiable signature).
 
 It follows that the trusted registry is the only approved origin for at least
 the subsequent production runtime. In AWS that runtime might be Kubernetes
-(EKS), ECS, Lambda or any of the other [seventeen (**17!**) ways to run a
-container](https://www.lastweekinaws.com/blog/the-17-ways-to-run-containers-on-aws). Taking Kubernetes as an example, an admission controller can be
+(EKS), ECS, Lambda or any of the other [seventeen (**17!**)](https://www.lastweekinaws.com/blog/the-17-ways-to-run-containers-on-aws) ways to run a
+container. Taking Kubernetes as an example, an admission controller can be
 utilised to deny any image not originating from that trusted registry, or whose
 signature cannot be verified to have passed through the compliance check
 gauntlet.
@@ -172,7 +172,7 @@ ships with a working Lambda and a basic CDK stack if you wanted to kick the
 tyres in your own account. The CLI uses the same codepaths sans Lambda, should
 you wish to try it locally instead.
 
-I think I'll stop this note here now and add more information in the [README](https://github.com/martinbaillie/ocistow%20).
+I think I'll stop this note here now and add more information in the [README](https://github.com/martinbaillie/ocistow).
 
 [^fn:1]: [ECR Conformance to OCI Distribution (Push)](https://oci-conformance.s3.amazonaws.com/distribution-spec/ecr/push/report.html)
 [^fn:2]: [ECR Conformance to OCI Distribution (Pull)](https://oci-conformance.s3.amazonaws.com/distribution-spec/ecr/pull/report.html)
