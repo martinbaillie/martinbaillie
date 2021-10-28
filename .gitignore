@@ -4,3 +4,4 @@ node_modules
 .log
 todo.org
 notes.org
+/.direnv

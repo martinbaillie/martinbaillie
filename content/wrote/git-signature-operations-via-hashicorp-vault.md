@@ -2,7 +2,7 @@
 title = "Git Signature Operations via HashiCorp Vault"
 author = ["Martin Baillie"]
 date = 2020-10-04T12:59:00+11:00
-tags = ["vault", "git", "security", "release"]
+tags = ["vault", "git", "security", "release", "supplychain"]
 draft = false
 tldr = "Vaultsign is a helper tool for performing Git signature operations using Vault."
 +++
@@ -23,6 +23,7 @@ _ice_ (object store, OCI registry, SCM repository tag etc.) whilst instances of
 it are validated in the N pre-production environments in the delivery pipeline.
 This is fine for most organisations, but an additional code provenance strategy
 is sometimes required in regulated and other high security environments.
+
 
 ## Code Provenance {#code-provenance}
 
@@ -60,6 +61,7 @@ Framework (TUF)](https://github.com/theupdateframework/specification/blob/master
 with tools like [Vault](https://www.vaultproject.io/), [Notary](https://docs.docker.com/notary/getting%5Fstarted/), [OPA](https://www.openpolicyagent.org/)/[Gatekeeper](https://github.com/open-policy-agent/gatekeeper), and cloud services like [GCP
 Binary Authorization](https://cloud.google.com/binary-authorization), and [AWS Signer](https://docs.aws.amazon.com/signer/latest/api/Welcome.html) all able to help in this regard.
 
+
 ## Vault {#vault}
 
 This post is about using HashiCorp's Vault in the previously outlined context of
@@ -92,6 +94,7 @@ tag SHA.
 
 Another is to make use of a tool I am releasing today called [`vaultsign`](https://github.com/martinbaillie/vaultsign)!
 
+
 ## Vaultsign {#vaultsign}
 
 `vaultsign` is a small CLI that can be used as a Git helper to sign (and verify)
@@ -109,6 +112,7 @@ artefacts in the release. Then they can then all be verified together during the
 subsequent runtime steps in the chain. All the usual signature related Git
 porcelain continues to function and you can even have forges like GitHub verify
 and show the coveted green tick if you take the Vault GPG plugin option.
+
 
 ### Example Usage {#example-usage}
 

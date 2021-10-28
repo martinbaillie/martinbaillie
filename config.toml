@@ -10,6 +10,9 @@ pygmentscodefencesguesssyntax = true
 pygmentsuseclasses = true
 pluralizelisttitles="false"
 
+[markup.goldmark.renderer]
+unsafe= true
+
 [outputs]
 home = ["HTML", "RSS"]
 
